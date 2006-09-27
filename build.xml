@@ -1,1 +1,67 @@
-FIXME write 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- JIRA Commit Acceptance plugin build-script -->
+<!-- $Id$ -->
+<project basedir="." default="compile" name="jira-commitacceptance-plugin">
+  <description>JIRA Commit Acceptance plugin</description>
+
+  <!-- read basic properties -->
+  <property environment="env"/>
+  <property file="build.properties"/>
+
+  <!-- generated paths -->
+  <property name="src.dir" location="src"/>
+  <property name="lib.dir" location="lib"/>
+
+  <path id="full.classpath">
+	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+  </path>
+
+  <!-- targets -->
+  <target name="init">
+	<echo message="============================================================"/>
+	<echo message="${project.name} - ${project.version}"/>
+	<echo message="Copyright 2006 (C) Midori  http://www.midori.hu"/>
+	<echo message="============================================================"/>
+	<tstamp>
+	  <format pattern="dd/MMM/yy HH:mm:ss" property="build.date"/>
+	</tstamp>
+  </target>
+
+  <target name="clean" depends="init" description="Cleans up temporary files created during previous builds">
+	<!-- FIXME -->
+  </target>
+
+  <target name="compile" depends="init" description="Compiles Java source files">
+	<!-- FIXME -->
+  </target>
+
+  <target name="all" depends="clean,compile" description="Recompiles all Java source files"/>
+
+  <target name="undeploy.client" depends="init" description="Undeploys the client module">
+	<!-- FIXME -->
+  </target>
+
+  <target name="deploy.client" depends="compile" description="Deploys the client module">
+	<!-- FIXME -->
+  </target>
+
+  <target name="redeploy.client" depends="undeploy.client, deploy.client" description="Redeploys the client module"/>
+
+  <target name="undeploy.server" depends="init" description="Undeploys the server module from the container">
+	<!-- FIXME -->
+  </target>
+
+  <target name="deploy.server" depends="compile" description="Deploys the server module to the container">
+	<!-- FIXME -->
+  </target>
+
+  <target name="redeploy.server" depends="undeploy.client, deploy.client" description="Redeploys the server module to the container"/>
+
+  <target name="dist-serc" depends="init,all" description="Prepares all source distributables">
+	<!-- FIXME -->
+  </target>
+
+ <target name="dist-bin" depends="init,all" description="Prepares all binary distributables">
+	<!-- FIXME -->
+  </target>
+</project>
