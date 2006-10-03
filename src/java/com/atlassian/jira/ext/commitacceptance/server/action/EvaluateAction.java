@@ -8,6 +8,10 @@ import java.util.Set;
 
 import org.apache.commons.collections.Predicate;
 
+import com.atlassian.core.user.UserUtils;
+import com.opensymphony.user.EntityNotFoundException;
+import com.opensymphony.user.User;
+
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInStatePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
@@ -21,6 +25,24 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIss
  * @version $Id$
  */
 public class EvaluateAction {
+    public String acceptCommit(String username, String password, String commiter, String commitMessage)
+    {
+        try
+        {
+            User user = UserUtils.getUser(username);
+            if ((user == null) || (!user.authenticate(password)))
+            {
+            	throw new EntityNotFoundException();
+            }
+        }
+        catch (EntityNotFoundException e)
+        {
+            return "false|Sorry, cannot connect to the JIRA.";
+        }
+        
+        return "true|Commiter: " + commiter + ", Message: " + commitMessage;
+    }
+
 	public void execute() {// TODO move login to Evaluator
 		// TODO prepare parameters
 		String logMessage = null;// TODO get

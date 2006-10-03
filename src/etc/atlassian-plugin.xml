@@ -1,0 +1,15 @@
+<atlassian-plugin key="com.atlassian.jira.ext.commitacceptance" name="JIRA Commit Acceptance Plugin">
+
+    <plugin-info>
+        <description>JIRA Commit Acceptance plugin.</description>
+        <version>0.1</version>
+        <application-version min="3.6" max="3.6"/>
+        <vendor name="Midori" url="http://www.midori.hu"/>
+    </plugin-info>
+
+    <rpc-xmlrpc key="xmlrpc" name="JIRA Commit Acceptance XML-RPC service" class="com.atlassian.jira.ext.commitacceptance.server.action.EvaluateAction">
+        <description>JIRA Commit Acceptance XML-RPC service.</description>
+        <service-path>commitacc</service-path>
+    </rpc-xmlrpc>
+
+</atlassian-plugin>
