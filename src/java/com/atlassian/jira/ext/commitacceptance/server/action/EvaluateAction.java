@@ -17,12 +17,26 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIss
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 
 /**
+ * Joins parameters boolean and string into the string using '|' as delimiter.
+ * It is used for passing boolean/string pair to XML-RPC client.
+ * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
+ */
+class Result {
+	static String toString(boolean acceptance, String comment)
+	{
+		String result = Boolean.toString(acceptance);
+		result += '|';
+		result += comment;
+		return result;
+	}
+}
+
+/**
  * Invoked when receiving a commit request.
  * Writes "true" (accepted) or "false" (rejected) to the Response
  * based on the log message and the settings.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
- * @version $Id$
  */
 public class EvaluateAction {
     public String acceptCommit(String username, String password, String commiter, String commitMessage)
@@ -37,10 +51,10 @@ public class EvaluateAction {
         }
         catch (EntityNotFoundException e)
         {
-            return "false|Sorry, cannot connect to the JIRA.";
+            return Result.toString(false, "Wrong login name or password.");
         }
         
-        return "true|Commiter: " + commiter + ", Message: " + commitMessage;
+        return Result.toString(true, "Commiter: " + commiter + ", Message: " + commitMessage);
     }
 
 	public void execute() {// TODO move login to Evaluator
