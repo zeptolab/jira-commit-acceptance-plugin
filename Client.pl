@@ -12,8 +12,8 @@ my $jiraBaseURL = "http://127.0.0.1:8080";
 my $scmLogin = "root";
 my $scmPassword = "root";
 
-my $commiter = "testUser"; #TODO: GET FROM SVN/CVS
-my $commitMessage = "Test commit message"; #TODO: GET FROM SVN/CVS
+my $commiter = "root"; #TODO: GET FROM SVN/CVS
+my $commitMessage = "Test commit message "; #TODO: GET FROM SVN/CVS
 
 $jiraBaseURL =~ s/\/+$//; # Remove trailing '/' if exists
 

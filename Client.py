@@ -11,8 +11,8 @@ jiraBaseURL = 'http://127.0.0.1:8080'
 scmLogin = 'root'
 scmPassword = 'root'
 
-commiter = 'testUser' #TODO: GET FROM SVN/CVS
-commitMessage = 'Test commit message' #TODO: GET FROM SVN/CVS
+commiter = 'root' #TODO: GET FROM SVN/CVS
+commitMessage = 'Test commit message TST-2' #TODO: GET FROM SVN/CVS
 
 try:
 	s = xmlrpclib.ServerProxy(urlparse.urljoin(jiraBaseURL, '/rpc/xmlrpc'))

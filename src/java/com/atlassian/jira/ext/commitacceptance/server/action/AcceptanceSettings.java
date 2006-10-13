@@ -26,7 +26,7 @@ public class AcceptanceSettings {
 	 * that the UI can be re-initialized with that.
 	 * @see #mustBeAssignedToSpecificUser
 	 */
-	private String assigneeName; // TODO different type?
+	private String assigneeName;
 
 	/**
 	 * If <code>true</code>, all the issues must be in 
@@ -43,6 +43,11 @@ public class AcceptanceSettings {
 	 */
 	private String statusName; // TODO different type?
 
+    /**
+     * If <code>true</code>, all the issues must be unresolved.
+     */
+    private boolean mustBeUnresolved;
+    
 	public boolean isMustHaveIssue() {
 		return mustHaveIssue;
 	}
@@ -82,4 +87,12 @@ public class AcceptanceSettings {
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
+    
+    public boolean isMustBeUnresolved() {
+        return mustBeUnresolved;
+    }
+
+    public void setMustBeUnresolved(boolean mustBeUnresolved) {
+        this.mustBeUnresolved = mustBeUnresolved;
+    }
 }

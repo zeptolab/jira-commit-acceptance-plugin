@@ -1,13 +1,51 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import com.atlassian.core.user.UserUtils;
+import com.atlassian.jira.issue.Issue;
+import com.opensymphony.user.EntityNotFoundException;
+import com.opensymphony.user.User;
+
+import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
+
 /**
  * FIXME
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
- * @version $Id$
  */
-public class AreIssuesAssignedToPredicate extends AbstractJiraPredicate {
-	public boolean evaluate(Object arg0) {
-		return false; // TODO
+public class AreIssuesAssignedToPredicate implements JiraPredicate {
+    private String assigneeName;
+    
+    public AreIssuesAssignedToPredicate(String assigneeName)
+    {
+        this.assigneeName = assigneeName;
+    }
+    
+	public void evaluate(Set issues)
+    {
+        for (Iterator it=issues.iterator(); it.hasNext();)
+        {
+            Issue issue = (Issue)it.next();
+
+            // if at least one issue is not assigned to the correct person.
+            if (!issue.getAssigneeId().equals(assigneeName))
+            {
+
+                String cause = issue.getKey() + " issue";
+                try
+                {
+                    User name = UserUtils.getUser(assigneeName);
+                    cause += " must be assigned to " + name.getFullName() + ".";
+                }
+                catch (EntityNotFoundException e)
+                {
+                    cause += " is not assigned to the correct person.";
+                }
+                
+                throw new AcceptanceException(cause);
+            }
+        }
 	}
 }

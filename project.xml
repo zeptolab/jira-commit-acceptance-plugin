@@ -40,32 +40,28 @@
     <dependency>
       <id>atlassian-core</id>
       <version>2.5.2</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
+    </dependency>
+    <dependency>
+      <id>atlassian-jira</id>
+      <version>3.6</version>
+    </dependency>
+    <dependency>
+      <id>ofbcore+entity</id>
+      <version>2.1.1-atlassian-20Dec05</version>
     </dependency>
     <!-- Jakarta dependencies -->
     <dependency>
       <id>commons-collections</id>
       <version>3.1</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
     </dependency>
     <dependency>
       <id>commons-lang</id>
       <version>2.1</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
     </dependency>
     <!-- OS dependencies -->
     <dependency>
       <id>osuser</id>
       <version>1.0-dev-log4j-1.4jdk-7Dec05</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
     </dependency>
   </dependencies>
 
