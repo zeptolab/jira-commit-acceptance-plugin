@@ -3,10 +3,11 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 import java.util.Set;
 
 /**
- * A predicate to implement by concrete predicates.
+ * Predicate interface to implement by concrete predicates.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
+ * @version $Id$
  */
 public interface JiraPredicate {
-    public void evaluate(Set issues);
+	void evaluate(Set issues);
 }

@@ -8,13 +8,14 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
  * FIXME
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
+ * @version $Id$
  */
 public class HasIssuePredicate implements JiraPredicate {
 	public void evaluate(Set issues)
-    {
+	{
 		if (issues.isEmpty())
-        {
-		    throw new AcceptanceException("A commit message must contain at least one issue key.");
-        }
+		{
+			throw new AcceptanceException("A commit message must contain at least one issue key.");
+		}
 	}
 }

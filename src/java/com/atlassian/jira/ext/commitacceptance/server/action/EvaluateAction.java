@@ -24,7 +24,9 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
 /**
  * Joins parameters boolean and string into the string using '|' as delimiter.
  * It is used for passing boolean/string pair to XML-RPC client.
+ * 
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
+ * @version $Id$
  */
 class Result {
 	static String toString(boolean acceptance, String comment)
@@ -42,141 +44,158 @@ class Result {
  * based on the log message and the settings.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
+ * @version $Id$
  */
 public class EvaluateAction {
-   
-    private IssueManager issueManager;
-    private PermissionManager permissionManager;
-    
-    public EvaluateAction(IssueManager issueManager, PermissionManager permissionManager)
-    {
-        this.issueManager = issueManager;
-        this.permissionManager = permissionManager;
-    }
-    
-    public String acceptCommit(String userName, String password, String commiterName, String commitMessage)
-    {
-    	try
-    	{
-    		// Test SCM login and password.
-	    	testUser(userName, password);
-	        
-	    	// Test a commiter name.
-	    	User commiter = getCommiter(commiterName);
+	/*
+	 * JIRA services.
+	 */
+	private IssueManager issueManager;
+	private PermissionManager permissionManager;
 
-            // Parse the commit message and collect issues.
-            Set issues = getIssues(commitMessage, commiter);
+	public EvaluateAction(IssueManager issueManager, PermissionManager permissionManager) {
+		this.issueManager = issueManager;
+		this.permissionManager = permissionManager;
+	}
 
-            // Load settings and construct criteria.
-            AcceptanceSettings settings = new AcceptanceSettings(); // TODO load
-            // Initial (phase 1) rules. 
-            settings.setMustHaveIssue(true);
-            settings.setMustBeAssignedToSpecificUser(true);
-            settings.setAssigneeName(commiterName);
-            settings.setMustBeUnresolved(true);
+	/**
+	 * TODO
+	 */
+	public String acceptCommit(String userName, String password, String commiterName, String commitMessage) {
+		try {
+			// Test SCM login and password.
+			testUser(userName, password);
 
-            // Check issues with acceptance settings. 
-            checkIssuesAcceptance(issues, settings);            
-    	}
-    	catch(AcceptanceException e)
-    	{
-    		return Result.toString(false, e.getMessage());
-    	}
-    	
-        return Result.toString(true, "Accepted.");
-    }
-    
-    private void testUser(String userName, String password)
-    {
-        try
-        {
-            User user = UserUtils.getUser(userName);
-            if ((user == null) || (!user.authenticate(password)))
-            {
-                throw new EntityNotFoundException();
-            }
-        }
-        catch (EntityNotFoundException e)
-        {
-            throw new AcceptanceException("Wrong user name or password.");
-        }
-    }
-    
-    private User getCommiter(String commiterName)
-    {
-        User commiter = null;
-        try
-        {
-            commiter = UserUtils.getUser(commiterName);
-        }
-        catch (EntityNotFoundException e)
-        {
-            throw new AcceptanceException("Wrong commiter name.");
-        }
-        
-        return commiter;
-    }
-    
-    private Issue getIssue(String issueKey, User commiter)
-    {
-        Issue issue = issueManager.getIssueObject(issueKey);
-        
-        try
-        {
-            // Ensure that an issue key is valid.
-            if (issue == null || 
-                !permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), commiter))
-            {
-                throw new Exception();
-            }
-        }
-        catch(Exception e)
-        {
-            throw new AcceptanceException(issueKey + " issue does not exist or you don't have permission.");
-        }
+			// Test a commiter name.
+			User commiter = getCommiter(commiterName);
 
-        return issue;
-    }
-    
-    private Set getIssues(String commitMessage, User commiter)
-    {
-        // Parse a commit message and get issue keys it contains.
-        List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
+			// Parse the commit message and collect issues.
+			Set issues = getIssues(commitMessage, commiter);
 
-        // Collect issues.
-        Set issues = new HashSet();
-        for (Iterator it=issueKeys.iterator(); it.hasNext();)
-        {
-            Issue issue = getIssue((String)it.next(), commiter);
-            // Put it into the set of issues.
-            issues.add(issue);
-        }
-        
-        return issues;
-    }
-    
-    private void checkIssuesAcceptance(Set issues, AcceptanceSettings settings)
-    {
-        Set predicates = new HashSet();
+			// Load settings and construct criteria.
+			AcceptanceSettings settings = new AcceptanceSettings(); // TODO load
+			// Initial (phase 1) rules.
+			settings.setMustHaveIssue(true);
+			settings.setMustBeAssignedToSpecificUser(true);
+			settings.setAssigneeName(commiterName);
+			settings.setMustBeUnresolved(true);
 
-        // construct
-        if(settings.isMustHaveIssue()) {
-            predicates.add(new HasIssuePredicate());
-        }
-        if(settings.isMustBeAssignedToSpecificUser()) {
-            predicates.add(new AreIssuesAssignedToPredicate(settings.getAssigneeName()));
-        }
-        if(settings.isMustBeInSpecificState()) {
-            predicates.add(new AreIssuesInStatePredicate());
-        }
-        if(settings.isMustBeUnresolved()) {
-            predicates.add(new AreIssuesUnresolvedPredicate());
-        }
+			// Check issues with acceptance settings.
+			checkIssuesAcceptance(issues, settings);
+		}
+		catch(AcceptanceException e)
+		{
+			return Result.toString(false, e.getMessage());
+		}
 
-        // evaluate
-        for(Iterator it = predicates.iterator(); it.hasNext();)
-        {
-            ((JiraPredicate)it.next()).evaluate(issues);
-        }
-    }
+		return Result.toString(true, "Accepted.");
+	}
+
+	/**
+	 * TODO
+	 */
+	private void testUser(String userName, String password)
+	{
+		try
+		{
+			User user = UserUtils.getUser(userName);
+			if ((user == null) || (!user.authenticate(password)))
+			{
+				throw new EntityNotFoundException();
+			}
+		}
+		catch (EntityNotFoundException e)
+		{
+			throw new AcceptanceException("Invalid user name or password.");
+		}
+	}
+
+	/**
+	 * TODO
+	 */
+	private User getCommiter(String commiterName)
+	{
+		User commiter = null;
+		try
+		{
+			commiter = UserUtils.getUser(commiterName);
+		}
+		catch (EntityNotFoundException e)
+		{
+			throw new AcceptanceException("Wrong commiter name.");
+		}
+
+		return commiter;
+	}
+
+	/**
+	 * TODO
+	 */
+	private Issue getIssue(String issueKey, User commiter)
+	{
+		Issue issue = issueManager.getIssueObject(issueKey);
+
+		try
+		{
+			// Ensure that an issue key is valid.
+			if (issue == null ||
+				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), commiter))
+			{
+				throw new Exception();
+			}
+		}
+		catch(Exception e)
+		{
+			throw new AcceptanceException(issueKey + " issue does not exist or you don't have permission.");
+		}
+
+		return issue;
+	}
+
+	/**
+	 * TODO
+	 */
+	private Set getIssues(String commitMessage, User commiter)
+	{
+		// Parse a commit message and get issue keys it contains.
+		List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
+
+		// Collect issues.
+		Set issues = new HashSet();
+		for (Iterator it=issueKeys.iterator(); it.hasNext();)
+		{
+			Issue issue = getIssue((String)it.next(), commiter);
+			// Put it into the set of issues.
+			issues.add(issue);
+		}
+
+		return issues;
+	}
+
+	/**
+	 * TODO
+	 */
+	private void checkIssuesAcceptance(Set issues, AcceptanceSettings settings)
+	{
+		Set predicates = new HashSet();
+
+		// construct
+		if(settings.isMustHaveIssue()) {
+			predicates.add(new HasIssuePredicate());
+		}
+		if(settings.isMustBeAssignedToSpecificUser()) {
+			predicates.add(new AreIssuesAssignedToPredicate(settings.getAssigneeName()));
+		}
+		if(settings.isMustBeInSpecificState()) {
+			predicates.add(new AreIssuesInStatePredicate());
+		}
+		if(settings.isMustBeUnresolved()) {
+			predicates.add(new AreIssuesUnresolvedPredicate());
+		}
+
+		// evaluate
+		for(Iterator it = predicates.iterator(); it.hasNext();) {
+			((JiraPredicate)it.next()).evaluate(issues);
+		}
+	}
 }
