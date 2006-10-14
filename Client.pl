@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+# JIRA commit acceptance perl client
+# Author: istvan.vamosi@midori.hu
+# $Id$
+
 use strict;
 use warnings;
 

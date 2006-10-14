@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+# JIRA commit acceptance python client
+# Author: istvan.vamosi@midori.hu
+# $Id$
+
 import sys
 import urlparse
 import xmlrpclib
