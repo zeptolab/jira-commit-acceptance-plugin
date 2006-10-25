@@ -1,5 +1,6 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +15,6 @@ import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
 
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInStatePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
@@ -28,9 +28,8 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
  */
-class Result {
-	static String toString(boolean acceptance, String comment)
-	{
+class AcceptanceResult {
+	static String toString(boolean acceptance, String comment) {
 		String result = Boolean.toString(acceptance);
 		result += '|';
 		result += comment;
@@ -52,14 +51,25 @@ public class EvaluateAction {
 	 */
 	private IssueManager issueManager;
 	private PermissionManager permissionManager;
-
-	public EvaluateAction(IssueManager issueManager, PermissionManager permissionManager) {
+    
+	private AcceptanceSettingsManager settingsManager;
+	
+	public EvaluateAction(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
 		this.issueManager = issueManager;
 		this.permissionManager = permissionManager;
+		this.settingsManager = settingsManager;
 	}
 
 	/**
-	 * TODO
+	 * Evaluates acceptance rules for the given commit information and accepts or rejects the commit.
+     * This is only method that exposed and can be executed by a user through XML-RPC.
+     * 
+     * @param userName, a login name of the SCM account.
+     * @param password, a password of the SCM account.
+     * @param commiterName, a name of the person that commiting a code.
+     * @param commitMessage, a message that a commiter entered before commiting.
+     * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is
+     *         accepted and <code>false</code> if rejected.    
 	 */
 	public String acceptCommit(String userName, String password, String commiterName, String commitMessage) {
 		try {
@@ -72,56 +82,46 @@ public class EvaluateAction {
 			// Parse the commit message and collect issues.
 			Set issues = getIssues(commitMessage, commiter);
 
-			// Load settings and construct criteria.
-			AcceptanceSettings settings = new AcceptanceSettings(); // TODO load
-			// Initial (phase 1) rules.
-			settings.setMustHaveIssue(true);
-			settings.setMustBeAssignedToSpecificUser(true);
-			settings.setAssigneeName(commiterName);
-			settings.setMustBeUnresolved(true);
-
 			// Check issues with acceptance settings.
-			checkIssuesAcceptance(issues, settings);
-		}
-		catch(AcceptanceException e)
-		{
-			return Result.toString(false, e.getMessage());
+			checkIssuesAcceptance(issues, commiterName);
+            
+		} catch(AcceptanceException e) {
+			return AcceptanceResult.toString(false, e.getMessage());
 		}
 
-		return Result.toString(true, "Accepted.");
+		return AcceptanceResult.toString(true, "Accepted.");
 	}
 
 	/**
-	 * TODO
+	 * Tries to login to JIRA with given account information and
+     * throws <code>AcceptanceException</code> if something goes wrong.
+     * 
+     * @param userName, a login name to be used.
+     * @param password, a password to be used.
 	 */
-	private void testUser(String userName, String password)
-	{
-		try
-		{
+	private void testUser(String userName, String password) {
+		try {
 			User user = UserUtils.getUser(userName);
-			if ((user == null) || (!user.authenticate(password)))
-			{
+			if ((user == null) || (!user.authenticate(password))) {
 				throw new EntityNotFoundException();
 			}
-		}
-		catch (EntityNotFoundException e)
-		{
+		} catch (EntityNotFoundException e) {
 			throw new AcceptanceException("Invalid user name or password.");
 		}
 	}
 
 	/**
-	 * TODO
+	 * Tests a given commiter name with JIRA. It throws <code>AcceptanceException</code>
+     * if the name is wrong and returns a corresponding <code>User</code> object otherwise.
+     * 
+     * @param commiterName, a name of the commiter to be tested.
+     * @return a <code>User</code> object for the given commiter name. 
 	 */
-	private User getCommiter(String commiterName)
-	{
+	private User getCommiter(String commiterName) {
 		User commiter = null;
-		try
-		{
+		try {
 			commiter = UserUtils.getUser(commiterName);
-		}
-		catch (EntityNotFoundException e)
-		{
+		} catch (EntityNotFoundException e) {
 			throw new AcceptanceException("Wrong commiter name.");
 		}
 
@@ -129,23 +129,23 @@ public class EvaluateAction {
 	}
 
 	/**
-	 * TODO
+	 * Returns an issue for the given issue key only if it exists in JIRA and a commiter
+     * has permission to browse it. Throws <code>AcceptanceException</code> otherwise.
+     *  
+     * @param issueKey, an issue key.
+     * @param commiter, a commiter.
+     * @return an <code>Issue</code> object for the given issue key.
 	 */
-	private Issue getIssue(String issueKey, User commiter)
-	{
+	private Issue getIssue(String issueKey, User commiter) {
 		Issue issue = issueManager.getIssueObject(issueKey);
 
-		try
-		{
+		try {
 			// Ensure that an issue key is valid.
 			if (issue == null ||
-				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), commiter))
-			{
+				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), commiter)) {
 				throw new Exception();
 			}
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			throw new AcceptanceException(issueKey + " issue does not exist or you don't have permission.");
 		}
 
@@ -153,17 +153,19 @@ public class EvaluateAction {
 	}
 
 	/**
-	 * TODO
+	 * Extracts issue keys from the commit message and collects issues.
+     * 
+     * @param commitMessage, a commit message.
+     * @param commiter, a commiter.
+     * @return a set of issues extracted from the commit message.
 	 */
-	private Set getIssues(String commitMessage, User commiter)
-	{
+	private Set getIssues(String commitMessage, User commiter) {
 		// Parse a commit message and get issue keys it contains.
 		List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
 
 		// Collect issues.
 		Set issues = new HashSet();
-		for (Iterator it=issueKeys.iterator(); it.hasNext();)
-		{
+		for (Iterator it=issueKeys.iterator(); it.hasNext();) {
 			Issue issue = getIssue((String)it.next(), commiter);
 			// Put it into the set of issues.
 			issues.add(issue);
@@ -173,21 +175,23 @@ public class EvaluateAction {
 	}
 
 	/**
-	 * TODO
+	 * Checks issues with the given acceptance settings.
+     * Throws <code>AcceptanceException</code> if at least one issue doesn't
+     * meet the acceptance settings.
+     * 
+     * @param issues, a set of issues to be checked.
+     * @param commiterName, a commiter name.
 	 */
-	private void checkIssuesAcceptance(Set issues, AcceptanceSettings settings)
-	{
-		Set predicates = new HashSet();
-
+	private void checkIssuesAcceptance(Set issues, String commiterName) {
+		List predicates = new ArrayList();
+        ReadOnlyAcceptanceSettings settings = settingsManager.getSettings();
+        
 		// construct
 		if(settings.isMustHaveIssue()) {
 			predicates.add(new HasIssuePredicate());
 		}
-		if(settings.isMustBeAssignedToSpecificUser()) {
-			predicates.add(new AreIssuesAssignedToPredicate(settings.getAssigneeName()));
-		}
-		if(settings.isMustBeInSpecificState()) {
-			predicates.add(new AreIssuesInStatePredicate());
+		if(settings.isMustBeAssignedToCommiter()) {
+			predicates.add(new AreIssuesAssignedToPredicate(commiterName));
 		}
 		if(settings.isMustBeUnresolved()) {
 			predicates.add(new AreIssuesUnresolvedPredicate());

@@ -7,9 +7,21 @@
         <vendor name="Midori" url="http://www.midori.hu"/>
     </plugin-info>
 
+    <component key="commitAcceptanceSettingsManager" name="Commit Acceptance Settings Manager" class="com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManagerImpl">
+        <interface>com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager</interface>
+    </component>
+
     <rpc-xmlrpc key="xmlrpc" name="JIRA Commit Acceptance XML-RPC service" class="com.atlassian.jira.ext.commitacceptance.server.action.EvaluateAction">
         <description>JIRA Commit Acceptance XML-RPC service.</description>
         <service-path>commitacc</service-path>
     </rpc-xmlrpc>
+
+    <webwork1 key="ConfigureAction_key" name="Commit Acceptance Configuration action" class="java.lang.Object">
+        <actions>
+            <action name="com.atlassian.jira.ext.commitacceptance.server.action.ConfigureAction" alias="CommitAcceptanceConfigure">
+                <view name="success">/templates/commitacceptance_configure.vm</view>
+            </action>
+        </actions>
+    </webwork1>
 
 </atlassian-plugin>

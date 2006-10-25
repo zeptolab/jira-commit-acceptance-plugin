@@ -16,7 +16,7 @@ scmLogin = 'root'
 scmPassword = 'root'
 
 commiter = 'root' #TODO: GET FROM SVN/CVS
-commitMessage = 'Test commit message TST-2' #TODO: GET FROM SVN/CVS
+commitMessage = 'Test commit message TST-1' #TODO: GET FROM SVN/CVS
 
 try:
 	s = xmlrpclib.ServerProxy(urlparse.urljoin(jiraBaseURL, '/rpc/xmlrpc'))

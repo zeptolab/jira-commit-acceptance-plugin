@@ -9,7 +9,8 @@ import com.atlassian.jira.issue.resolution.Resolution;
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 
 /**
- * FIXME
+ * All issues passed to this predicate should be in UNRESOLVED. If it's not true,
+ * <code>AcceptanceException</code> will be thrown.
  *
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$

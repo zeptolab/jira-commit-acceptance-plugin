@@ -7,6 +7,8 @@ package com.atlassian.jira.ext.commitacceptance.server.exception;
  * @version $Id$
  */
 public class AcceptanceException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
 	public AcceptanceException() {
 	}
 

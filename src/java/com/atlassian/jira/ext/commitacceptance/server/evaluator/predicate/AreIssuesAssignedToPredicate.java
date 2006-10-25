@@ -11,7 +11,9 @@ import com.opensymphony.user.User;
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 
 /**
- * FIXME
+ * All issues passed to this predicate should be assigned to the given person
+ * (<code>assigneeName</code>). If it's not true, <code>AcceptanceException</code>
+ * will be thrown.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$

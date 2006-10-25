@@ -63,6 +63,11 @@
       <id>osuser</id>
       <version>1.0-dev-log4j-1.4jdk-7Dec05</version>
     </dependency>
+    <!-- Webwork dependencies -->
+    <dependency>
+      <id>webwork</id>
+      <version>12Dec05-jiratld</version>
+    </dependency>
   </dependencies>
 
   <build>
