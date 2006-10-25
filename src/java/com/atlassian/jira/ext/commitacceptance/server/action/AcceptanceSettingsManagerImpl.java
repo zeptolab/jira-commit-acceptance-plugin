@@ -9,9 +9,9 @@ import com.atlassian.jira.config.properties.ApplicationProperties;
  * @version $Id$
  */
 public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager {
-    private static final String mustHaveIssueKey = "jira.plugins.commitacceptance.settings.MustHaveIssue";
-    private static final String mustBeAssignedToCommiterKey = "jira.plugins.commitacceptance.settings.MustBeAssignedToCommiter";
-    private static final String mustBeUnresolvedKey = "jira.plugins.commitacceptance.settings.MustBeUnresolved";
+    private static final String mustHaveIssueKey = "jira.plugins.commitacceptance.settings.MustHaveIssue";// TODO should be MUST_HAVE_ISSUE_KEY
+    private static final String mustBeAssignedToCommiterKey = "jira.plugins.commitacceptance.settings.MustBeAssignedToCommiter";// TODO uppercase name
+    private static final String mustBeUnresolvedKey = "jira.plugins.commitacceptance.settings.MustBeUnresolved";// TODO uppercase name
     
     /**
      * Stores the side-wide acceptance settings.
