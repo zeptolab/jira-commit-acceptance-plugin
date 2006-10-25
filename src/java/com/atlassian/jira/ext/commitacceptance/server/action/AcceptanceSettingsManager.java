@@ -1,6 +1,5 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
-
 /**
  * Manages the site-wide acceptance settings.
  *

@@ -21,28 +21,22 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
 public class AreIssuesAssignedToPredicate implements JiraPredicate {
 	private String assigneeName;
 
-	public AreIssuesAssignedToPredicate(String assigneeName)
-	{
+	public AreIssuesAssignedToPredicate(String assigneeName) {
 		this.assigneeName = assigneeName;
 	}
 
-	public void evaluate(Set issues)
-	{
-		for (Iterator it=issues.iterator(); it.hasNext();)
-		{
+	public void evaluate(Set issues) {
+		for (Iterator it=issues.iterator(); it.hasNext();) {
 			Issue issue = (Issue)it.next();
 
 			// if at least one issue is not assigned to the correct person.
-			if (!issue.getAssigneeId().equals(assigneeName))
-			{
+			if (!issue.getAssigneeId().equals(assigneeName)) {
 				String cause = issue.getKey() + " issue";
-				try
-				{
+				try {
 					User name = UserUtils.getUser(assigneeName);
 					cause += " must be assigned to " + name.getFullName() + ".";
 				}
-				catch (EntityNotFoundException e)
-				{
+				catch (EntityNotFoundException e) {
 					cause += " is not assigned to the correct person.";
 				}
 
