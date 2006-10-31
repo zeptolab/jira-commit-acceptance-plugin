@@ -1,1 +1,11 @@
+Server installation
+# Copy the plugin JAR to $JIRA_HOME/.../WEB-INF/lib
+# Go to Administration / Plugins to double check whether the plugin was successfully deployed
+
+Client installation
+
+Perl client
+TODO
+
+Python client
 TODO
