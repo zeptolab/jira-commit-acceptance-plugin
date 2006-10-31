@@ -1,5 +1,5 @@
 
-<h2>SVN Commit Acceptance</h2>
+<h2>Subversion / CVS Commit Acceptance</h2>
 
 <form action="CommitAcceptanceConfigure.jspa" method="post">
 	<p><input type="checkbox" name="mustHaveIssue" value="true"
