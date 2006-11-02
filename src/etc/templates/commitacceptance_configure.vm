@@ -1,12 +1,29 @@
+<table class="jiraform  maxWidth">
 
-<h2>Subversion / CVS Commit Acceptance</h2>
+<tr>
+    <td class="jiraformheader">
+        <h3 class="formtitle">Subversion / CVS Commit Acceptance</h3>
+    </td>
+</tr>
 
-<form action="CommitAcceptanceConfigure.jspa" method="post">
-	<p><input type="checkbox" name="mustHaveIssue" value="true"
-		#if ($mustHaveIssue) checked="checked" #end/> Commit must have Issue Key</p>
-	<p><input type="checkbox" name="mustBeUnresolved" value="true"
-		#if ($mustBeUnresolved) checked="checked" #end/> Issue must be in UNRESOLVED</p>
-	<p><input type="checkbox" name="mustBeAssignedToCommiter" value="true"
-		#if ($mustBeAssignedToCommiter) checked="checked" #end/> Issue must be assigned to COMMITTER</p>
-	<p><input type="submit" name="submitted" value="Save changes"/></p>
-</form>
+<tr>
+    <td "jiraformbody">
+        <form action="CommitAcceptanceConfigure.jspa" method="post">
+	    <p><input type="checkbox" name="mustHaveIssue" value="true"
+		#if ($mustHaveIssue) checked="checked" #end/>Commit message must contain issue key(s)<br/>
+                <span class="small">If it doesn't contain any, the commit will be rejected.</span>
+            </p>
+	    <p><input type="checkbox" name="mustBeUnresolved" value="true"
+		#if ($mustBeUnresolved) checked="checked" #end/>Issue must be in <b>UNRESOLVED</b><br/>
+                <span class="small">If any of the related issues does not match it, the commit will be rejected.</span>
+            </p>
+            <p><input type="checkbox" name="mustBeAssignedToCommiter" value="true"
+		#if ($mustBeAssignedToCommiter) checked="checked" #end/>Issue must be assigned to the committer<br/>
+                <span class="small">If any of the related issue is unsassigned or assigned to someone else, the commit will be rejected.</span>
+            </p>
+            <p><input type="submit" name="submitted" value="Save Changes"/></p>
+        </form>
+    </td>
+</tr>
+
+</table>
