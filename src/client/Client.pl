@@ -17,7 +17,7 @@ my $scmLogin = "root";
 my $scmPassword = "root";
 
 my $commiter = "root"; #TODO: GET FROM SVN/CVS
-my $commitMessage = "Test commit message "; #TODO: GET FROM SVN/CVS
+my $commitMessage = "Test commit message [TEST-1]"; #TODO: GET FROM SVN/CVS
 
 $jiraBaseURL =~ s/\/+$//; # Remove trailing '/' if exists
 
@@ -31,11 +31,11 @@ eval {
 };
 
 if ($@) {
-	($acceptance, $comment) = ("false", "Sorry, cannot connect to the JIRA.");
+	($acceptance, $comment) = ("false", "Unable to connect to the JIRA server at \"" . $jiraBaseURL . "\".");
 };
 
 
-print $acceptance . "\n"; #TODO: CONVERT TO BOOLEAN AND PASS TO SVN/CVS
+print "Commit accepted: " . $acceptance . "\n"; #TODO: CONVERT acceptance TO BOOLEAN AND PASS TO SVN/CVS
 
 select(STDERR);
 print $comment . "\n";

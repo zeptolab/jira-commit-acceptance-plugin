@@ -83,13 +83,12 @@ public class EvaluateAction {
 			Set issues = getIssues(commitMessage, commiter);
 
 			// Check issues with acceptance settings.
-			checkIssuesAcceptance(issues, commiterName);
-            
+			checkIssuesAcceptance(issues, commiterName);            
 		} catch(AcceptanceException e) {
 			return AcceptanceResult.toString(false, e.getMessage());
 		}
 
-		return AcceptanceResult.toString(true, "Accepted.");
+		return AcceptanceResult.toString(true, "Commit accepted by JIRA.");
 	}
 
 	/**
@@ -122,7 +121,7 @@ public class EvaluateAction {
 		try {
 			commiter = UserUtils.getUser(commiterName);
 		} catch (EntityNotFoundException e) {
-			throw new AcceptanceException("Wrong commiter name.");
+			throw new AcceptanceException("Invalid commiter name.");
 		}
 
 		return commiter;
@@ -146,7 +145,7 @@ public class EvaluateAction {
 				throw new Exception();
 			}
 		} catch(Exception e) {
-			throw new AcceptanceException(issueKey + " issue does not exist or you don't have permission.");
+			throw new AcceptanceException("Issue " + issueKey + " does not exist or you don't have permission.");
 		}
 
 		return issue;

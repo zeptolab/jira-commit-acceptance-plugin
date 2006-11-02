@@ -14,7 +14,7 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
 public class HasIssuePredicate implements JiraPredicate {
 	public void evaluate(Set issues) {
 		if (issues.isEmpty()) {
-			throw new AcceptanceException("A commit message must contain at least one issue key.");
+			throw new AcceptanceException("Commit messages must contain at least one issue key.");
 		}
 	}
 }

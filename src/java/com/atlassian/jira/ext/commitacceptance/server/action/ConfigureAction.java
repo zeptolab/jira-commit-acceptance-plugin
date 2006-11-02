@@ -18,8 +18,7 @@ public class ConfigureAction extends JiraWebActionSupport {
     private AcceptanceSettings settings = new AcceptanceSettings();
     private String submitted;
     
-	public ConfigureAction(AcceptanceSettingsManager settingsManager)
-	{
+	public ConfigureAction(AcceptanceSettingsManager settingsManager) {
 		this.settingsManager = settingsManager;
 	}
 	
