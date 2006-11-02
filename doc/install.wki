@@ -1,18 +1,26 @@
 Server installation
-# Copy the plugin JAR to $JIRA_HOME/.../WEB-INF/lib
-# Go to Administration / Plugins to double check whether the plugin was successfully deployed
+The server side component is a regular JIRA plugin, so the installation process is a simple copy operation:
+# Copy the plugin JAR (jira-commitacceptance-plugin-${version}.jar) to $JIRA_HOME/.../WEB-INF/lib
+# To check whether it was successfully installed, go to the following URL: http://localhost:8080/secure/CommitAcceptanceConfigure.jspa or blablab
 
 Client installation
 
 Perl client
-Download here: TODO
-Read the installation documentation here: TODO
+Download here: [ActivePerl|http://www.activestate.com/Products/ActivePerl/] is currently the most popular way to get Perl for Windows.
+Read the installation documentation here: [Win32 Perl Wiki|http://win32.perl.org/wiki/index.php?title=Main_Page]
 FAQ: TODO
 
 Python client
 Download here: TODO
 Read the installation documentation here: TODO
 FAQ: TODO
+
+Subversion xxx
+The SVN client is implemented as a so-called pre-commit hook. To get familiar with it, please read http://svnbook.red-bean.com/en/1.1/ch05s02.html.
+
+
+CVS xxx
+
 
 FAQ
 Q. What Subversion client can I use with this?
@@ -21,3 +29,5 @@ A. Any.
 Q. What CVS client can I use with this?
 A. Any.
    
+Q. I get "javax.servlet.ServletException: Remote API not activated for this JIRA installation." when trying to commit a change.
+A. You have to enable remote API calls at the 'Administration' section. Go to 'General Configuration' and turn it on using 'Edit Configuration'.
