@@ -1,33 +1,44 @@
-Server installation
-The server side component is a regular JIRA plugin, so the installation process is a simple copy operation:
-# Copy the plugin JAR (jira-commitacceptance-plugin-${version}.jar) to $JIRA_HOME/.../WEB-INF/lib
-# To check whether it was successfully installed, go to the following URL: http://localhost:8080/secure/CommitAcceptanceConfigure.jspa or blablab
+h2. Server installation
 
-Client installation
+The server side component is a regular JIRA plug-in, installing it is very simple:
+# Copy the plug-in JAR file (_jira-commitacceptance-plugin-xxx.jar_) to the _JIRA_HOME/atlassian-jira/WEB-INF/lib_ directory
+# To check whether it has been successfully installed, go to the following URL: [http://localhost:8080/secure/CommitAcceptanceConfigure.jspa]. You should see the plug-in configuration screen here if everything was fine. Alternatively, you can go to the plug-in list in the administration screen screen and check whether you can see this plug-in listed there.
 
-Perl client
-Download here: [ActivePerl|http://www.activestate.com/Products/ActivePerl/] is currently the most popular way to get Perl for Windows.
-Read the installation documentation here: [Win32 Perl Wiki|http://win32.perl.org/wiki/index.php?title=Main_Page]
-FAQ: TODO
+h2. Client installation
 
-Python client
-Download here: TODO
-Read the installation documentation here: TODO
-FAQ: TODO
+We provide two equivalent clients implemented in Perl and Python. You can freely choose between them depending on which runtime environment is available in your system.
 
-Subversion xxx
-The SVN client is implemented as a so-called pre-commit hook. To get familiar with it, please read http://svnbook.red-bean.com/en/1.1/ch05s02.html.
+You can deploy any of these clients to the two version control systems supported, Subversion and CVS.
 
+h4. Perl client
 
-CVS xxx
+* Download here: [ActivePerl|http://www.activestate.com/Products/ActivePerl/] is currently the most popular way to get Perl for Windows.
+* Read the installation documentation here: [Win32 Perl Wiki|http://win32.perl.org/wiki/index.php?title=Main_Page]
+* FAQ: TODO
 
+h4. Python client
 
-FAQ
+* Download here: TODO
+* Read the installation documentation here: TODO
+* FAQ: TODO
+
+h4. Deploying the client to Subversion
+
+The Subversion client is implemented as a so-called pre-commit hook. To get familiar with the concept of Subversion hooks, please read [http://svnbook.red-bean.com/en/1.1/ch05s02.html].
+# Copy _jira-client.pl_ and _pre-commit.bat_ (or _pre-commit.sh_ on UNIX) to the _REPOSITORY_HOME/hooks_ directory
+
+h4. Deploying the client to CVS
+
+The CVS client is implemented as a _verifymsg_ program. To get familiar with the concept of CVS _verifymsg_ programs, please read [http://www.network-theory.co.uk/docs/cvsmanual/cvs_167.html].
+# Copy _jira-client.pl_ and _verifymsg_ to the _CVS_HOME/CVSROOT_ directory
+
+h2. FAQ
+
 Q. What Subversion client can I use with this?
-A. Any.
+A. You can use any client (including the commandline client, TortoiseSVN, Subclipse, whatever).
 
 Q. What CVS client can I use with this?
-A. Any.
-   
+A. You can use any client.
+
 Q. I get "javax.servlet.ServletException: Remote API not activated for this JIRA installation." when trying to commit a change.
 A. You have to enable remote API calls at the 'Administration' section. Go to 'General Configuration' and turn it on using 'Edit Configuration'.
