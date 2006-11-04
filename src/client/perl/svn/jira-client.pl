@@ -29,13 +29,13 @@ print "Transaction: " . $ARGV[1] . "\n";
 print "Committer: " . $committer . "\n";
 print "Commit message: \"" . $commitMessage . "\"\n";
 
-#  invoke JIRA web service
+# invoke JIRA web service
 # TODO move this common  part to a separate.pl and use it also from the SVN client,
 my $acceptance;
 my $comment;
 
 eval {
-	$jiraBaseURL =~ s/\/+$//; # Remove trailing '/' if exists
+	$jiraBaseURL =~ s/\/+$//; # remove trailing '/' if exists
 	my $s = XMLRPC::Lite->proxy($jiraBaseURL . "/rpc/xmlrpc");
 	my $result = $s->call("commitacc.acceptCommit", $jiraLogin, $jiraPassword, $committer, $commitMessage)->result();
 	($acceptance, $comment) = split('\|', $result);
