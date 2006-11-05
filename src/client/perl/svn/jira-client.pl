@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # JIRA commit acceptance perl client for Subversion
-# Author: istvan.vamosi@midori.hu
+# Author: ferenc.kiss@midori.hu
 # $Id$
 
 use strict;
@@ -19,17 +19,25 @@ my $svnlookPath = "C:\\Progra~1\\svn-win32-1.4.0\\bin\\svnlook.exe";
 
 # get committer
 open IN, '-|', "$svnlookPath author $ARGV[0] --transaction $ARGV[1]" or die "Unable to get committer with svnlook.\n";
-my $buffer1 = <IN>;
+my $committer = <IN>;
 close IN;
-chomp($buffer1);
-my $committer = $buffer1;
+chomp($committer);
 
 # get commit message
+my $holdTerminator = $/;
+undef $/;
+
 open IN, '-|', "$svnlookPath log $ARGV[0] --transaction $ARGV[1]" or die "Unable to get commit message with svnlook.\n";
-my $buffer2 = <IN>;
+my $buffer = <IN>;
 close IN;
-chomp($buffer2);
-my $commitMessage = $buffer2;
+
+$/ = $holdTerminator;
+my @lines = split /$holdTerminator/, $buffer;
+$buffer = "init";
+$buffer = join $holdTerminator, @lines;
+chomp($buffer);
+
+my $commitMessage = $buffer;
 
 # print arguments
 select(STDERR);
