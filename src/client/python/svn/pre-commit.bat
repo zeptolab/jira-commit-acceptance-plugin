@@ -1,0 +1,1 @@
+@python.exe jira-client.py %1 %2
