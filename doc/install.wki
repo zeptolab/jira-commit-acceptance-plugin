@@ -25,7 +25,6 @@ Inside JIRA, you can configure the rules behavior on a separate screen. (This co
 
 h2. Installation
 
-
 h3. Server installation
 
 The server side component is a regular JIRA plug-in, installing it is very simple:
@@ -41,7 +40,7 @@ h4. Perl client
 
 * Download here: [ActivePerl|http://www.activestate.com/Products/ActivePerl/] is currently the most popular way to get Perl for Windows.
 * Read the installation documentation here: [Win32 Perl Wiki|http://win32.perl.org/wiki/index.php?title=Main_Page]
-* FAQ: TODO
+* FAQ: TODO    
 
 h4. Python client
 
@@ -52,12 +51,14 @@ h4. Python client
 h4. Deploying the client to Subversion
 
 The Subversion client is implemented as a so-called pre-commit hook. To get familiar with the concept of Subversion hooks, please read [http://svnbook.red-bean.com/en/1.1/ch05s02.html].
-# Copy _jira-client.pl_ and _pre-commit.bat_ (or _pre-commit.sh_ on UNIX) to the _REPOSITORY_HOME/hooks_ directory
+# Copy _jira-client.pl_ and _pre-commit.bat_ (or _pre-commit.sh_ on UNIX) to the _REPOSITORY_HOME/hooks_ directory.
+# You can configure the JIRA access settings (URL, username and password) in _jira-client.pl_.
 
 h4. Deploying the client to CVS
 
 The CVS client is implemented as a _verifymsg_ program. To get familiar with the concept of CVS _verifymsg_ programs, please read [http://www.network-theory.co.uk/docs/cvsmanual/cvs_167.html].
-# &nbsp;Copy _jira-client.pl_ and _verifymsg_ to the _CVS_HOME/CVSROOT_ directory
+# Copy _jira-client.pl_ and _verifymsg_ to the _CVS_HOME/CVSROOT_ directory.
+# You can configure the JIRA access settings (URL, username and password) and _svnlook_ path in _jira-client.pl_.
 
 h2. Usage
 
@@ -71,7 +72,7 @@ h2. Version History
 h2. FAQ
 
 Q. What Subversion client can I use with this?
-A. You can use any client (including the commandline client, TortoiseSVN, Subclipse, whatever).
+A. As all the fun happens on the serverside, you can use any client (including the commandline client, TortoiseSVN, Subclipse, whatever).
 
 Q. What CVS client can I use with this?
 A. You can use any client.
