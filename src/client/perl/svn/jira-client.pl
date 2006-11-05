@@ -14,18 +14,25 @@ my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "root";
 my $jiraPassword = "root";
 
-# get committer
-my $committer = "root"; #TODO: GET FROM SVN/CVS
+# configure svnlook path
+my $svnlookPath = "C:\\Progra~1\\svn-win32-1.4.0\\bin\\svnlook.exe";
 
-# Set path to svnlook executable
-my $svnlookPath = "C:\Program Files\svn-win32-1.4.0\bin\svnlook.exe"
-# TODO call svnlook 
-my $commitMessage = "Test commit message [TEST-1]"; #TODO: GET FROM SVN/CVS
+# get committer
+open IN, '-|', "$svnlookPath author $ARGV[0] --transaction $ARGV[1]" or die "Unable to get committer with svnlook.\n";
+my $buffer1 = <IN>;
+close IN;
+chomp($buffer1);
+my $committer = $buffer1;
+
+# get commit message
+open IN, '-|', "$svnlookPath log $ARGV[0] --transaction $ARGV[1]" or die "Unable to get commit message with svnlook.\n";
+my $buffer2 = <IN>;
+close IN;
+chomp($buffer2);
+my $commitMessage = $buffer2;
 
 # print arguments
 select(STDERR);
-print "Repository: " . $ARGV[0] . "\n";
-print "Transaction: " . $ARGV[1] . "\n";
 print "Committer: " . $committer . "\n";
 print "Commit message: \"" . $commitMessage . "\"\n";
 
