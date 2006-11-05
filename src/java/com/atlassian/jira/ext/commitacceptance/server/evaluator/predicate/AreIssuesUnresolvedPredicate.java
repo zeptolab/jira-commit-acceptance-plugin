@@ -17,13 +17,13 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceExcept
  */
 public class AreIssuesUnresolvedPredicate implements JiraPredicate {
 	public void evaluate(Set issues) {
-		for (Iterator it=issues.iterator(); it.hasNext();) {
+		for (Iterator it = issues.iterator(); it.hasNext();) {
 			Issue issue = (Issue)it.next();
 			Resolution resolution = issue.getResolutionObject();
 
 			// If at least one issue is resolved.
 			if (resolution != null)	{
-				throw new AcceptanceException(issue.getKey() + " issue must be in UNRESOLVED.");
+				throw new AcceptanceException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
 			}
 		}
 	}

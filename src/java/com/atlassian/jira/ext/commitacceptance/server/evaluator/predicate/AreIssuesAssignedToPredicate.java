@@ -31,13 +31,13 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 
 			// if at least one issue is not assigned to the correct person.
 			if (!issue.getAssigneeId().equals(assigneeName)) {
-				String cause = issue.getKey() + " issue";
+				String cause = "Issue [" + issue.getKey() + "] ";
 				try {
-					User name = UserUtils.getUser(assigneeName);
-					cause += " must be assigned to " + name.getFullName() + ".";
+					User assignee = UserUtils.getUser(assigneeName);
+					cause += "must be assigned to " + assigneeName + " (" + assignee.getFullName() + ").";
 				}
 				catch (EntityNotFoundException e) {
-					cause += " is not assigned to the correct person.";
+					cause += "is not assigned to the correct person.";
 				}
 
 				throw new AcceptanceException(cause);

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.issue.*;
 import com.atlassian.jira.security.PermissionManager;
@@ -66,24 +68,24 @@ public class EvaluateAction {
      * 
      * @param userName, a login name of the SCM account.
      * @param password, a password of the SCM account.
-     * @param commiterName, a name of the person that commiting a code.
-     * @param commitMessage, a message that a commiter entered before commiting.
-     * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is
-     *         accepted and <code>false</code> if rejected.    
+     * @param committerName a name of the person that commiting a code.
+     * @param commitMessage a message that a committer entered before commiting.
+     * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.    
 	 */
-	public String acceptCommit(String userName, String password, String commiterName, String commitMessage) {
+	public String acceptCommit(String userName, String password, String committerName, String commitMessage) {
 		try {
 			// Test SCM login and password.
-			testUser(userName, password);
+			authenticateUser(userName, password);
 
-			// Test a commiter name.
-			User commiter = getCommiter(commiterName);
+			// convert committer name to lowercase (JIRA user names are lowercase) and load committer
+			committerName = StringUtils.lowerCase(committerName);
+			User committer = getCommitter(committerName);
 
 			// Parse the commit message and collect issues.
-			Set issues = getIssues(commitMessage, commiter);
+			Set issues = loadIssuesByMessage(committer, commitMessage);
 
 			// Check issues with acceptance settings.
-			checkIssuesAcceptance(issues, commiterName);            
+			checkIssuesAcceptance(issues, committerName);            
 		} catch(AcceptanceException e) {
 			return AcceptanceResult.toString(false, e.getMessage());
 		}
@@ -98,7 +100,7 @@ public class EvaluateAction {
      * @param userName, a login name to be used.
      * @param password, a password to be used.
 	 */
-	private void testUser(String userName, String password) {
+	private void authenticateUser(String userName, String password) {
 		try {
 			User user = UserUtils.getUser(userName);
 			if ((user == null) || (!user.authenticate(password))) {
@@ -110,42 +112,42 @@ public class EvaluateAction {
 	}
 
 	/**
-	 * Tests a given commiter name with JIRA. It throws <code>AcceptanceException</code>
+	 * Tests a given committer name with JIRA. It throws <code>AcceptanceException</code>
      * if the name is wrong and returns a corresponding <code>User</code> object otherwise.
      * 
-     * @param commiterName, a name of the commiter to be tested.
-     * @return a <code>User</code> object for the given commiter name. 
+     * @param committerName a name of the committer to be tested.
+     * @return a <code>User</code> object for the given committer name. 
 	 */
-	private User getCommiter(String commiterName) {
-		User commiter = null;
+	private User getCommitter(String committerName) {
+		User committer = null;
 		try {
-			commiter = UserUtils.getUser(commiterName);
+			committer = UserUtils.getUser(committerName);
 		} catch (EntityNotFoundException e) {
-			throw new AcceptanceException("Invalid commiter name.");
+			throw new AcceptanceException("Invalid committer name \"" + committerName + "\".");
 		}
 
-		return commiter;
+		return committer;
 	}
 
 	/**
-	 * Returns an issue for the given issue key only if it exists in JIRA and a commiter
+	 * Returns an issue for the given issue key only if it exists in JIRA and a committer
      * has permission to browse it. Throws <code>AcceptanceException</code> otherwise.
+	 * @param issueKey an issue key.
+	 * @param committer a committer.
      *  
-     * @param issueKey, an issue key.
-     * @param commiter, a commiter.
      * @return an <code>Issue</code> object for the given issue key.
 	 */
-	private Issue getIssue(String issueKey, User commiter) {
+	private Issue loadIssue(User committer, String issueKey) {
 		Issue issue = issueManager.getIssueObject(issueKey);
 
 		try {
 			// Ensure that an issue key is valid.
 			if (issue == null ||
-				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), commiter)) {
+				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), committer)) {
 				throw new Exception();
 			}
 		} catch(Exception e) {
-			throw new AcceptanceException("Issue " + issueKey + " does not exist or you don't have permission.");
+			throw new AcceptanceException("Issue [" + issueKey + "] does not exist or you don't have permission.");
 		}
 
 		return issue;
@@ -153,19 +155,19 @@ public class EvaluateAction {
 
 	/**
 	 * Extracts issue keys from the commit message and collects issues.
+	 * @param committer a committer.
+	 * @param commitMessage a commit message.
      * 
-     * @param commitMessage, a commit message.
-     * @param commiter, a commiter.
      * @return a set of issues extracted from the commit message.
 	 */
-	private Set getIssues(String commitMessage, User commiter) {
+	private Set loadIssuesByMessage(User committer, String commitMessage) {
 		// Parse a commit message and get issue keys it contains.
 		List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
 
 		// Collect issues.
 		Set issues = new HashSet();
 		for (Iterator it=issueKeys.iterator(); it.hasNext();) {
-			Issue issue = getIssue((String)it.next(), commiter);
+			Issue issue = loadIssue(committer, (String)it.next());
 			// Put it into the set of issues.
 			issues.add(issue);
 		}
@@ -179,9 +181,9 @@ public class EvaluateAction {
      * meet the acceptance settings.
      * 
      * @param issues, a set of issues to be checked.
-     * @param commiterName, a commiter name.
+     * @param committerName, a committer name.
 	 */
-	private void checkIssuesAcceptance(Set issues, String commiterName) {
+	private void checkIssuesAcceptance(Set issues, String committerName) {
 		List predicates = new ArrayList();
         ReadOnlyAcceptanceSettings settings = settingsManager.getSettings();
         
@@ -190,7 +192,7 @@ public class EvaluateAction {
 			predicates.add(new HasIssuePredicate());
 		}
 		if(settings.isMustBeAssignedToCommiter()) {
-			predicates.add(new AreIssuesAssignedToPredicate(commiterName));
+			predicates.add(new AreIssuesAssignedToPredicate(committerName));
 		}
 		if(settings.isMustBeUnresolved()) {
 			predicates.add(new AreIssuesUnresolvedPredicate());
