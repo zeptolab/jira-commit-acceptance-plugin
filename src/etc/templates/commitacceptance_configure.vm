@@ -9,7 +9,7 @@
 </tr>
 <tr>
     <td class="jiraformheader" colspan="2">
-        Some explanation here.
+		You can configure the commit acceptance rules in this page. These settings are site-wide, not project-specific.
     </td>
 </td>
 
@@ -43,7 +43,7 @@
 
 <tr bgcolor="#ffffff">
 	<td class="jiraformfooter fullyCentered" colspan="2">
-		<input type="submit" name="submitted" value="Save Changes"/>
+		<input type="submit" name="submitted" value="Update"/>
 	</td>
 </tr>
 
