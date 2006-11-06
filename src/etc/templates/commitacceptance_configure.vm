@@ -4,12 +4,15 @@
 
 <tr>
     <td class="jiraformheader" colspan="2">
-        <h3 class="formtitle">Subversion / CVS Commit Acceptance</h3>
+        <h3 class="formtitle">Version Control Commit Rules</h3>
     </td>
 </tr>
 <tr>
     <td class="jiraformheader" colspan="2">
-		You can configure the commit acceptance rules in this page. These settings are site-wide, not project-specific.
+    The VCS Commit Acceptance plugin allows you to disallow commits to your version control repository 
+    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
+    scripts (see docs) will contact JIRA and process the commit info and log message based on the 
+    criteria below. These settings are site-wide, not project-specific.
     </td>
 </td>
 
@@ -18,8 +21,7 @@
     	<input type="checkbox" name="mustHaveIssue" value="true" #if ($mustHaveIssue) checked="checked" #end/>
 	</td>
 	<td>
-		Commit message must contain issue key(s)<br/>
-		<span class="small">If it doesn't contain any, the commit will be rejected.</span>
+		The log message must contain a valid JIRA issue key(s).<br/>
 	</td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -27,8 +29,7 @@
 	    <input type="checkbox" name="mustBeUnresolved" value="true" #if ($mustBeUnresolved) checked="checked" #end/>
 	</td>
 	<td>	    	
-	    Issue must be in <b>UNRESOLVED</b><br/>
-		<span class="small">If any of the related issues does not match it, the commit will be rejected.</span>
+	  All issues referenced in the log message must be <b>UNRESOLVED</b>.<br/>
 	</td>
 </tr>
 <tr bgcolor="#ffffff">
@@ -36,14 +37,14 @@
 		<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if ($mustBeAssignedToCommiter) checked="checked" #end/>
 	</td>
 	<td>		
-		Issue must be assigned to the committer<br/>
-        <span class="small">If any of the related issue is unsassigned or assigned to someone else, the commit will be rejected.</span>    	
+		All issues referenced in the log message must be assigned to the committer.<br/>
+   <span class="small">NOTE: Your VCS usernames must match your JIRA usernames.</span>    	
 	</td>
 </tr>
 
 <tr bgcolor="#ffffff">
 	<td class="jiraformfooter fullyCentered" colspan="2">
-		<input type="submit" name="submitted" value="Update"/>
+		<input type="submit" name="submitted" value="Update Rules"/>
 	</td>
 </tr>
 
