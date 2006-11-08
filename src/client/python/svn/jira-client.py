@@ -23,8 +23,9 @@ try:
 	committer = f.read()
 	if f.close():
 		raise 1
+	committer = committer.rstrip("\n\r")
 except:
-	print 'Unable to get committer with svnlook.'
+	print >> sys.stderr, 'Unable to get committer with svnlook.'
 	sys.exit(1)
 
 # get commit message
@@ -33,8 +34,9 @@ try:
 	commitMessage = f.read()
 	if f.close():
 		raise 1
+	commitMessage = commitMessage.rstrip('\n\r')
 except:
-	print 'Unable to get commit message with svnlook.'
+	print >> sys.stderr, 'Unable to get commit message with svnlook.'
 	sys.exit(1)
 
 # print arguments
