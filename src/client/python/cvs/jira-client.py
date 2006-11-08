@@ -1,30 +1,44 @@
 #!/usr/bin/python
 
-# JIRA commit acceptance python client
+# JIRA commit acceptance python client for CVS
 # Author: istvan.vamosi@midori.hu
 # $Id$
-
-# TODO complete this based on the Perl client
 
 import sys
 import urlparse
 import xmlrpclib
 
-# Set URL of the JIRA server
+# configure JIRA access
 jiraBaseURL = 'http://127.0.0.1:8080'
+jiraLogin = 'root'
+jiraPassword = 'root'
 
-# Set login and password to connect to the JIRA
-scmLogin = 'root'
-scmPassword = 'root'
+# get committer passed as arg[1]
+committer = sys.argv[1]
 
-commiter = 'root' #TODO: GET FROM SVN/CVS
-commitMessage = 'Test commit message TST-1' #TODO: GET FROM SVN/CVS
+# slurp log message from log message file passed as arg[2]
+try:
+	f = open(sys.argv[2])
+	commitMessage = f.read()
+	f.close()
+except:
+	print 'Unable to open ' + sys.argv[2] + '.'
+	sys.exit(1)
 
+# print arguments
+print 'Committer: ' + committer
+print 'Commit message: "' + commitMessage + '"'
+
+# invoke JIRA web service
 try:
 	s = xmlrpclib.ServerProxy(urlparse.urljoin(jiraBaseURL, '/rpc/xmlrpc'))
-	acceptance, comment = s.commitacc.acceptCommit(scmLogin, scmPassword, commiter, commitMessage).split('|');
+	acceptance, comment = s.commitacc.acceptCommit(jiraLogin, jiraPassword, committer, commitMessage).split('|');
 except:
-	acceptance, comment = ['false', 'Sorry, cannot connect to the JIRA.']
+	acceptance, comment = ['false', 'Unable to connect to the JIRA server at "' + jiraBaseURL + '".']
 
-print acceptance #TODO: CONVERT TO BOOLEAN AND PASS TO SVN/CVS
-print >> sys.stderr, comment
+if acceptance == 'true':
+	print 'Commit accepted.'
+	sys.exit(0)
+else:
+	print 'Commit rejected: ' + comment
+	sys.exit(1)

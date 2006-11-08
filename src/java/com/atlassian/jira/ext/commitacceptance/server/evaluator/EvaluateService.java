@@ -1,4 +1,4 @@
-package com.atlassian.jira.ext.commitacceptance.server.action;
+package com.atlassian.jira.ext.commitacceptance.server.evaluator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +16,8 @@ import com.atlassian.jira.util.JiraKeyUtils;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
 
+import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
+import com.atlassian.jira.ext.commitacceptance.server.action.ReadOnlyAcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
@@ -23,21 +25,6 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPr
 
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 
-/**
- * Joins parameters boolean and string into the string using '|' as delimiter.
- * It is used for passing boolean/string pair to XML-RPC client.
- * 
- * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
- * @version $Id$
- */
-class AcceptanceResult {
-	static String toString(boolean acceptance, String comment) {
-		String result = Boolean.toString(acceptance);
-		result += '|';
-		result += comment;
-		return result;
-	}
-}
 
 /**
  * Invoked when receiving a commit request.
@@ -47,7 +34,7 @@ class AcceptanceResult {
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class EvaluateAction {
+public class EvaluateService {
 	/*
 	 * JIRA services.
 	 */
@@ -56,7 +43,7 @@ public class EvaluateAction {
     
 	private AcceptanceSettingsManager settingsManager;
 	
-	public EvaluateAction(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
+	public EvaluateService(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
 		this.issueManager = issueManager;
 		this.permissionManager = permissionManager;
 		this.settingsManager = settingsManager;
@@ -64,7 +51,7 @@ public class EvaluateAction {
 
 	/**
 	 * Evaluates acceptance rules for the given commit information and accepts or rejects the commit.
-     * This is only method that exposed and can be executed by a user through XML-RPC.
+	 * This is only method that exposed and can be executed by a user through XML-RPC.
      * 
      * @param userName, a login name of the SCM account.
      * @param password, a password of the SCM account.
@@ -87,12 +74,26 @@ public class EvaluateAction {
 			// Check issues with acceptance settings.
 			checkIssuesAcceptance(issues, committerName);            
 		} catch(AcceptanceException e) {
-			return AcceptanceResult.toString(false, e.getMessage());
+			return acceptanceResultToString(false, e.getMessage());
 		}
 
-		return AcceptanceResult.toString(true, "Commit accepted by JIRA.");
+		return acceptanceResultToString(true, "Commit accepted by JIRA.");
 	}
 
+	/**
+	 * Joins parameters boolean and string into the string using '|' as delimiter.
+	 * It is used for passing boolean/string pair to XML-RPC client.
+	 *
+	 * @param acceptance, <code>true</code> if the commit should be accepted.
+	 * @param comment, a comment to be passed to a commiter.
+	 */
+	private static String acceptanceResultToString(boolean acceptance, String comment) {
+		String result = Boolean.toString(acceptance);
+		result += '|';
+		result += comment;
+		return result;
+	}
+	
 	/**
 	 * Tries to login to JIRA with given account information and
      * throws <code>AcceptanceException</code> if something goes wrong.
