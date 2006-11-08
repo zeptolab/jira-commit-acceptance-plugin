@@ -21,6 +21,7 @@ try:
 	f = open(sys.argv[2])
 	commitMessage = f.read()
 	f.close()
+	commitMessage = commitMessage.rstrip('\n\r')
 except:
 	print 'Unable to open ' + sys.argv[2] + '.'
 	sys.exit(1)
