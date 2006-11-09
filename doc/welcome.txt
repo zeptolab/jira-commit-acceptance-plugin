@@ -4,10 +4,10 @@ Commit Acceptance plugin for JIRA
 This software is distributed under the terms of the FSF Lesser Gnu
 Public License.
 
-Visit for latest info: http://www.midori.hu/en/opensource.html
+Visit for latest info: http://confluence.atlassian.com/display/DEVNET/Commit+Acceptance+Plugin
 
 For detailed information about the project, technical details or
-installation, please read the attached wiki pages.
+installation, please read this wiki page.
 
 
 
