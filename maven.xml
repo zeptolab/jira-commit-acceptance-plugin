@@ -4,10 +4,13 @@
         <copy todir="${maven.dist.bin.assembly.dir}">
             <fileset dir="doc" includes="*.*"/>
         </copy>
+        <copy todir="${maven.dist.bin.assembly.dir}/client">
+            <fileset dir="src/client" includes="**/*"/>
+        </copy>
     </preGoal>
     <preGoal name="dist:build-src">
         <copy todir="${maven.dist.src.assembly.dir}/doc">
-            <fileset dir="doc" includes="*.*"/>
+            <fileset dir="doc" includes="**/*"/>
         </copy>
     </preGoal>
 </project>
