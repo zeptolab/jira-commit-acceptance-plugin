@@ -2,8 +2,8 @@
 
     <plugin-info>
         <description>JIRA Commit Acceptance plugin.</description>
-        <version>0.2-rc1</version>
-        <application-version min="3.6" max="3.6"/>
+        <version>1.0</version>
+        <application-version min="3.6" max="3.7"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
     </plugin-info>
 

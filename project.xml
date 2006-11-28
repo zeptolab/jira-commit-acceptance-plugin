@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 <project>
+
+  <extend>../../project-files/jira-3.7.xml</extend>
   <pomVersion>3</pomVersion>
   <id>jira-commitacceptance-plugin</id>
   <name>${project.name}</name>
@@ -35,48 +37,14 @@
     </developer>
   </developers>
 
-  <dependencies>
-    <!-- Atlassian source dependencies -->
-    <dependency>
-      <id>atlassian-core</id>
-      <version>2.5.2</version>
-    </dependency>
-    <dependency>
-      <id>atlassian-jira</id>
-      <version>3.6</version>
-    </dependency>
-    <dependency>
-      <id>ofbcore+entity</id>
-      <version>2.1.1-atlassian-20Dec05</version>
-    </dependency>
-    <!-- Jakarta dependencies -->
-    <dependency>
-      <id>commons-collections</id>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <id>commons-lang</id>
-      <version>2.1</version>
-    </dependency>
-    <!-- OS dependencies -->
-    <dependency>
-      <id>osuser</id>
-      <version>1.0-dev-log4j-1.4jdk-7Dec05</version>
-    </dependency>
-    <!-- Webwork dependencies -->
-    <dependency>
-      <id>webwork</id>
-      <version>12Dec05-jiratld</version>
-    </dependency>
-  </dependencies>
+
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src/etc/</directory>
-        <include>atlassian-plugin.xml</include>
-        <include>**/*.vm</include>
+        <includes>**/*.*</includes>
       </resource>
     </resources>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
