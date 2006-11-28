@@ -69,7 +69,7 @@ public class EvaluateService {
 			User committer = getCommitter(committerName);
 
 			// Parse the commit message and collect issues.
-			Set issues = loadIssuesByMessage(committer, commitMessage);
+			Set issues = loadIssuesByMessage(commitMessage);
 
 			// Check issues with acceptance settings.
 			checkIssuesAcceptance(issues, committerName);            
@@ -124,7 +124,7 @@ public class EvaluateService {
 		try {
 			committer = UserUtils.getUser(committerName);
 		} catch (EntityNotFoundException e) {
-			throw new AcceptanceException("Invalid committer name \"" + committerName + "\".");
+			//throw new AcceptanceException("Invalid committer name \"" + committerName + "\".");
 		}
 
 		return committer;
@@ -134,17 +134,15 @@ public class EvaluateService {
 	 * Returns an issue for the given issue key only if it exists in JIRA and a committer
      * has permission to browse it. Throws <code>AcceptanceException</code> otherwise.
 	 * @param issueKey an issue key.
-	 * @param committer a committer.
-     *  
+     *
      * @return an <code>Issue</code> object for the given issue key.
 	 */
-	private Issue loadIssue(User committer, String issueKey) {
+	private Issue loadIssue(String issueKey) {
 		Issue issue = issueManager.getIssueObject(issueKey);
 
 		try {
 			// Ensure that an issue key is valid.
-			if (issue == null ||
-				!permissionManager.hasPermission(Permissions.BROWSE, issue.getGenericValue(), committer)) {
+			if (issue == null) {
 				throw new Exception();
 			}
 		} catch(Exception e) {
@@ -156,19 +154,18 @@ public class EvaluateService {
 
 	/**
 	 * Extracts issue keys from the commit message and collects issues.
-	 * @param committer a committer.
 	 * @param commitMessage a commit message.
      * 
      * @return a set of issues extracted from the commit message.
 	 */
-	private Set loadIssuesByMessage(User committer, String commitMessage) {
+	private Set loadIssuesByMessage(String commitMessage) {
 		// Parse a commit message and get issue keys it contains.
 		List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
 
 		// Collect issues.
 		Set issues = new HashSet();
 		for (Iterator it=issueKeys.iterator(); it.hasNext();) {
-			Issue issue = loadIssue(committer, (String)it.next());
+			Issue issue = loadIssue((String)it.next());
 			// Put it into the set of issues.
 			issues.add(issue);
 		}
