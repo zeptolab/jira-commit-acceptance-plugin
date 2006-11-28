@@ -1,3 +1,11 @@
+<html>
+	<head>
+		<title>Version Control Commit Rules</title>
+		<meta name="decorator" content="admin" />
+	</head>
+    <body>
+
+
 <form action="CommitAcceptanceConfigure.jspa" method="post">
 
 <table class="jiraform maxWidth">
@@ -51,3 +59,7 @@
 </table>
 
 </form>
+
+
+</body>
+</html>
