@@ -1,65 +1,86 @@
 <html>
-	<head>
-		<title>Version Control Commit Rules</title>
-		<meta name="decorator" content="admin" />
-	</head>
-    <body>
 
+<head>
+	<title>Version Control Commit Rules</title>
+	<meta name="decorator" content="admin" />
+</head>
+
+<body>
 
 <form action="CommitAcceptanceConfigure.jspa" method="post">
-
 <table class="jiraform maxWidth">
+	<tr>
+	    <td class="jiraformheader" colspan="2">
+	        <h3 class="formtitle">Version Control Commit Rules</h3>
+	    </td>
+	</tr>
+	<tr>
+	    <td class="jiraformheader" colspan="2">
+		    The VCS Commit Acceptance plugin allows you to disallow commits to your version control repository
+		    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
+		    scripts (see <a href="http://confluence.atlassian.com/display/JIRAEXT/Commit+Acceptance+Plugin">docs</a>) will
+		    contact JIRA and process the commit info and log message based on the criteria below.
+	    </td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="jiraformbody" colspan="2">
+			<b>Project:</b>
+	    	<select name="xxx">
+	    		<option value="">Global</option>
+	    		<optgroup label="Projects">
+		    		<option value="MYPR">My Project</option>
+		    		<option value="MYOP">My Other Project</option>
+	    		</optgroup>
+	    	</select>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="instructions" width="1%" nowrap>
+	    	<input type="checkbox" name="xxx" checked="checked" />
+		</td>
+		<td class="instructions">
+			Use the global rules for this project.<br/>
+	   		<span class="small">NOTE: uncheck it to configure specific rules for this project.</span>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="jiraformbody" colspan="2">
+			<b>Rules:</b>
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="jiraformbody" width="1%" nowrap>
+	    	<input type="checkbox" name="mustHaveIssue" value="true" #if ($mustHaveIssue) checked="checked" #end/>
+		</td>
+		<td>
+			The log message must contain a valid JIRA issue key(s).
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="jiraformbody" width="1%" nowrap>
+		    <input type="checkbox" name="mustBeUnresolved" value="true" #if ($mustBeUnresolved) checked="checked" #end/>
+		</td>
+		<td>
+		  All issues referenced in the log message must be <b>UNRESOLVED</b>.
+		</td>
+	</tr>
+	<tr bgcolor="#ffffff">
+		<td class="jiraformbody" width="1%" nowrap>
+			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if ($mustBeAssignedToCommiter) checked="checked" #end/>
+		</td>
+		<td>
+			All issues referenced in the log message must be assigned to the committer.<br/>
+	   		<span class="small">NOTE: Your VCS usernames must match your JIRA usernames.</span>
+		</td>
+	</tr>
 
-<tr>
-    <td class="jiraformheader" colspan="2">
-        <h3 class="formtitle">Version Control Commit Rules</h3>
-    </td>
-</tr>
-<tr>
-    <td class="jiraformheader" colspan="2">
-    The VCS Commit Acceptance plugin allows you to disallow commits to your version control repository 
-    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
-    scripts (see docs) will contact JIRA and process the commit info and log message based on the 
-    criteria below. These settings are site-wide, not project-specific.
-    </td>
-</td>
-
-<tr bgcolor="#ffffff">
-	<td class="jiraformbody" width="1%" nowrap>
-    	<input type="checkbox" name="mustHaveIssue" value="true" #if ($mustHaveIssue) checked="checked" #end/>
-	</td>
-	<td>
-		The log message must contain a valid JIRA issue key(s).<br/>
-	</td>
-</tr>
-<tr bgcolor="#ffffff">
-	<td class="jiraformbody" width="1%" nowrap>
-	    <input type="checkbox" name="mustBeUnresolved" value="true" #if ($mustBeUnresolved) checked="checked" #end/>
-	</td>
-	<td>	    	
-	  All issues referenced in the log message must be <b>UNRESOLVED</b>.<br/>
-	</td>
-</tr>
-<tr bgcolor="#ffffff">
-	<td class="jiraformbody" width="1%" nowrap>            
-		<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if ($mustBeAssignedToCommiter) checked="checked" #end/>
-	</td>
-	<td>		
-		All issues referenced in the log message must be assigned to the committer.<br/>
-   <span class="small">NOTE: Your VCS usernames must match your JIRA usernames.</span>    	
-	</td>
-</tr>
-
-<tr bgcolor="#ffffff">
-	<td class="jiraformfooter fullyCentered" colspan="2">
-		<input type="submit" name="submitted" value="Update Rules"/>
-	</td>
-</tr>
-
+	<tr bgcolor="#ffffff">
+		<td class="jiraformfooter fullyCentered" colspan="2">
+			<input type="submit" name="submitted" value="Update Rules"/>
+		</td>
+	</tr>
 </table>
-
 </form>
-
 
 </body>
 </html>
