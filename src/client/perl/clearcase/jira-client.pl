@@ -65,6 +65,7 @@ use XMLRPC::Lite;
 my $jiraBaseURL = "http://localhost:8080";
 my $jiraLogin = "jirauser";
 my $jiraPassword = "password";
+my $projectKey = "TST"
 
 # If the script is not being called from within a ClearCase trigger environment
 # Then the setup / usage is not correct so print the documentation.
@@ -107,7 +108,7 @@ eval
 {
 	$jiraBaseURL =~ s/\/+$//; # remove trailing '/' if exists
 	my $s = XMLRPC::Lite->proxy($jiraBaseURL . "/rpc/xmlrpc");
-	my $result = $s->call("commitacc.acceptCommit", $jiraLogin, $jiraPassword, $committer, $commitMessage)->result();
+	my $result = $s->call("commitacc.acceptCommit", $jiraLogin, $jiraPassword, $committer, $projectKey, $commitMessage)->result();
 	($acceptance, $comment) = split('\|', $result);
 };
 

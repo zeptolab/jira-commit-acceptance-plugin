@@ -13,6 +13,7 @@ use XMLRPC::Lite;
 my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "root";
 my $jiraPassword = "root";
+my $projectKey = "TST"
 
 # get committer passed as arg[0]
 my $committer = $ARGV[0];
@@ -44,7 +45,7 @@ my $comment;
 eval {
 	$jiraBaseURL =~ s/\/+$//; # remove trailing '/' if exists
 	my $s = XMLRPC::Lite->proxy($jiraBaseURL . "/rpc/xmlrpc");
-	my $result = $s->call("commitacc.acceptCommit", $jiraLogin, $jiraPassword, $committer, $commitMessage)->result();
+	my $result = $s->call("commitacc.acceptCommit", $jiraLogin, $jiraPassword, $committer, $projectKey, $commitMessage)->result();
 	($acceptance, $comment) = split('\|', $result);
 };
 

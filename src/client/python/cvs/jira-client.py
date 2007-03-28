@@ -12,6 +12,7 @@ import xmlrpclib
 jiraBaseURL = 'http://127.0.0.1:8080'
 jiraLogin = 'root'
 jiraPassword = 'root'
+projectKey = 'TST'
 
 # get committer passed as arg[1]
 committer = sys.argv[1]
@@ -33,7 +34,7 @@ print 'Commit message: "' + commitMessage + '"'
 # invoke JIRA web service
 try:
 	s = xmlrpclib.ServerProxy(urlparse.urljoin(jiraBaseURL, '/rpc/xmlrpc'))
-	acceptance, comment = s.commitacc.acceptCommit(jiraLogin, jiraPassword, committer, commitMessage).split('|');
+	acceptance, comment = s.commitacc.acceptCommit(jiraLogin, jiraPassword, committer, projectKey, commitMessage).split('|');
 except:
 	acceptance, comment = ['false', 'Unable to connect to the JIRA server at "' + jiraBaseURL + '".']
 
