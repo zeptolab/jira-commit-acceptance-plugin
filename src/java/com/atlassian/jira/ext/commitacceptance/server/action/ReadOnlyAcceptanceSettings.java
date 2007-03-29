@@ -6,7 +6,7 @@ package com.atlassian.jira.ext.commitacceptance.server.action;
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
  */
-public interface ReadOnlyAcceptanceSettings {
+public interface ReadOnlyAcceptanceSettings {// TODO remove?
     boolean isMustHaveIssue();
     boolean isMustBeUnresolved();
     boolean isMustBeAssignedToCommiter();

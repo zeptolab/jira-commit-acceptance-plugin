@@ -17,21 +17,21 @@ public class ConfigureAction extends JiraWebActionSupport {
 	private AcceptanceSettingsManager settingsManager;
     private AcceptanceSettings settings = new AcceptanceSettings();
     private String submitted;
-    
+
 	public ConfigureAction(AcceptanceSettingsManager settingsManager) {
 		this.settingsManager = settingsManager;
 	}
-	
+
     public String execute() throws Exception {
         // apply new settings
         if (submitted != null) {
-            settingsManager.setSettings(settings);
+            settingsManager.setSettings(null, settings);// TODO pass project
         }
         return SUCCESS;
     }
 
 	public boolean isMustBeAssignedToCommiter() {
-		return settingsManager.getSettings().isMustBeAssignedToCommiter();
+		return settingsManager.getSettings(null).isMustBeAssignedToCommiter();// TODO pass project
 	}
 
 	public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
@@ -39,7 +39,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	}
 
 	public boolean isMustBeUnresolved() {
-		return settingsManager.getSettings().isMustBeUnresolved();
+		return settingsManager.getSettings(null).isMustBeUnresolved();// TODO pass project
 	}
 
 	public void setMustBeUnresolved(boolean mustBeUnresolved) {
@@ -47,7 +47,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	}
 
 	public boolean isMustHaveIssue() {
-		return settingsManager.getSettings().isMustHaveIssue();
+		return settingsManager.getSettings(null).isMustHaveIssue();// TODO pass project
 	}
 
 	public void setMustHaveIssue(boolean mustHaveIssue) {

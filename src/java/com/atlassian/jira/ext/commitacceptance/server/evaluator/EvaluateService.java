@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
@@ -18,6 +19,7 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPr
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.util.JiraKeyUtils;
 import com.opensymphony.user.EntityNotFoundException;
@@ -36,9 +38,9 @@ public class EvaluateService {
 	/*
 	 * JIRA services.
 	 */
+	private ProjectManager projectManager;// TODO inject it
 	private IssueManager issueManager;
 	// TODO remove? private PermissionManager permissionManager;
-
 	private AcceptanceSettingsManager settingsManager;
 
 	public EvaluateService(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
@@ -68,7 +70,10 @@ public class EvaluateService {
 			// TODO remove? User committer = getCommitter(committerName);
 
 			// get project
-			// TODO find by key
+			GenericValue project = projectManager.getProjectByKey(projectKey);// TODO check security?
+			if(project == null) {
+				// TODO log.warn("No project with key [" + projectKey + "] found, falling back to global rules...");
+			}
 
 			// get commit rules
 			// TODO load project-specific or global rules
@@ -77,7 +82,7 @@ public class EvaluateService {
 			Set issues = loadIssuesByMessage(commitMessage);
 
 			// check issues with acceptance settings.
-			checkIssuesAcceptance(issues, committerName);
+			checkIssuesAcceptance(committerName, project, issues);
 		} catch(AcceptanceException e) {
 			return acceptanceResultToString(false, e.getMessage());
 		}
@@ -183,12 +188,13 @@ public class EvaluateService {
      * Throws <code>AcceptanceException</code> if at least one issue doesn't
      * meet the acceptance settings.
      *
-     * @param issues, a set of issues to be checked.
-     * @param committerName, a committer name.
+     * @param project to check against.
+     * @param committerName a committer name.
+     * @param issues a set of issues to be checked.
 	 */
-	private void checkIssuesAcceptance(Set issues, String committerName) {
+	private void checkIssuesAcceptance(String committerName, GenericValue project, Set issues) {
 		List predicates = new ArrayList();
-        ReadOnlyAcceptanceSettings settings = settingsManager.getSettings();
+        ReadOnlyAcceptanceSettings settings = settingsManager.getSettings(project);// TODO pass project
 
 		// construct
 		if(settings.isMustHaveIssue()) {
