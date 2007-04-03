@@ -40,7 +40,6 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
     }
 
     public void setSettings(GenericValue project, AcceptanceSettings acceptanceSettings) {
-        // save settings
         applicationProperties.setOption(getOptionName(project, MUST_HAVE_ISSUE_KEY_PREFIX), acceptanceSettings.isMustHaveIssue());
         applicationProperties.setOption(getOptionName(project, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX), acceptanceSettings.isMustBeAssignedToCommiter());
         applicationProperties.setOption(getOptionName(project, MUST_BE_UNRESOLVED_KEY_PREFIX), acceptanceSettings.isMustBeUnresolved());

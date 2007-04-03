@@ -15,7 +15,18 @@ public class ConfigureAction extends JiraWebActionSupport {
 	private static final long serialVersionUID = 1L;
 
 	private AcceptanceSettingsManager settingsManager;
+
+	/**
+	 * TODO or <code>null</code>
+	 */
+	private String projectKey = null;
+	/**
+	 * Commit acceptance settings to persist.
+	 */
     private AcceptanceSettings settings = new AcceptanceSettings();
+    /**
+     * TODO
+     */
     private String submitted;
 
 	public ConfigureAction(AcceptanceSettingsManager settingsManager) {
@@ -29,6 +40,14 @@ public class ConfigureAction extends JiraWebActionSupport {
         }
         return SUCCESS;
     }
+
+	public String getProjectKey() {
+		return projectKey;
+	}
+
+	public void setProjectKey(String projectKey) {
+		this.projectKey = projectKey;
+	}
 
 	public boolean isMustBeAssignedToCommiter() {
 		return settingsManager.getSettings(null).isMustBeAssignedToCommiter();// TODO pass project

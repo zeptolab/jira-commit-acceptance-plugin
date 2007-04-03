@@ -10,8 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.core.user.UserUtils;
+import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
-import com.atlassian.jira.ext.commitacceptance.server.action.ReadOnlyAcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
@@ -194,7 +194,7 @@ public class EvaluateService {
 	 */
 	private void checkIssuesAcceptance(String committerName, GenericValue project, Set issues) {
 		List predicates = new ArrayList();
-        ReadOnlyAcceptanceSettings settings = settingsManager.getSettings(project);// TODO pass project
+        AcceptanceSettings settings = settingsManager.getSettings(project);// TODO pass project
 
 		// construct
 		if(settings.isMustHaveIssue()) {
