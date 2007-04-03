@@ -1,10 +1,17 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.ofbiz.core.entity.GenericValue;
+
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 
 /**
- * Loads and saves the site-wide acceptance settings and
- * handles the UI related.
+ * Loads and saves the commit acceptance settings and handles the UI related.
  *
  * @see AcceptanceSettings
  *
@@ -14,14 +21,18 @@ import com.atlassian.jira.web.action.JiraWebActionSupport;
 public class ConfigureAction extends JiraWebActionSupport {
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * Services.
+	 */
+	private ProjectManager projectManager;
 	private AcceptanceSettingsManager settingsManager;
 
 	/**
-	 * TODO or <code>null</code>
+	 * Key of the selected project or <code>null</code> for global settings.
 	 */
 	private String projectKey = null;
 	/**
-	 * Commit acceptance settings to persist.
+	 * Commit acceptance settings edited.
 	 */
     private AcceptanceSettings settings = new AcceptanceSettings();
     /**
@@ -29,14 +40,18 @@ public class ConfigureAction extends JiraWebActionSupport {
      */
     private String submitted;
 
-	public ConfigureAction(AcceptanceSettingsManager settingsManager) {
+	public ConfigureAction(ProjectManager projectManager, AcceptanceSettingsManager settingsManager) {
+		this.projectManager = projectManager;
 		this.settingsManager = settingsManager;
 	}
 
     public String execute() throws Exception {
-        // apply new settings
-        if (submitted != null) {
-            settingsManager.setSettings(null, settings);// TODO pass project
+        if (submitted == null) {
+            // load old settings
+    		settings = settingsManager.getSettings(projectKey);
+        } else {
+            // save new settings
+            settingsManager.setSettings(projectKey, settings);
         }
         return SUCCESS;
     }
@@ -50,7 +65,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	}
 
 	public boolean isMustBeAssignedToCommiter() {
-		return settingsManager.getSettings(null).isMustBeAssignedToCommiter();// TODO pass project
+		return settings.isMustBeAssignedToCommiter();
 	}
 
 	public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
@@ -58,7 +73,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	}
 
 	public boolean isMustBeUnresolved() {
-		return settingsManager.getSettings(null).isMustBeUnresolved();// TODO pass project
+		return settings.isMustBeUnresolved();
 	}
 
 	public void setMustBeUnresolved(boolean mustBeUnresolved) {
@@ -66,14 +81,30 @@ public class ConfigureAction extends JiraWebActionSupport {
 	}
 
 	public boolean isMustHaveIssue() {
-		return settingsManager.getSettings(null).isMustHaveIssue();// TODO pass project
+		return settings.isMustHaveIssue();
 	}
 
 	public void setMustHaveIssue(boolean mustHaveIssue) {
         settings.setMustHaveIssue(mustHaveIssue);
 	}
 
+	/**
+	 * TODO
+	 */
     public void setSubmitted(String submitted) {
         this.submitted = submitted;
+    }
+
+	/**
+	 * TODO
+	 */
+    public List getProjects() {
+    	List projects = new ArrayList(projectManager.getProjects());
+    	Collections.sort(projects, new Comparator() {
+			public int compare(Object obj1, Object obj2) {
+				return ((GenericValue)obj1).getString("key").compareTo(((GenericValue)obj2).getString("key"));
+			}
+    	});
+    	return projects;
     }
 }

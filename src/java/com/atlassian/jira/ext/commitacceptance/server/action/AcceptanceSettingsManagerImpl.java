@@ -29,26 +29,26 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
         this.applicationProperties = applicationProperties;
     }
 
-    public AcceptanceSettings getSettings(GenericValue project) {
+    public AcceptanceSettings getSettings(String projectKey) {
     	AcceptanceSettings acceptanceSettings = new AcceptanceSettings();
 
-        acceptanceSettings.setMustHaveIssue(applicationProperties.getOption(getOptionName(project, MUST_HAVE_ISSUE_KEY_PREFIX)));
-        acceptanceSettings.setMustBeAssignedToCommiter(applicationProperties.getOption(getOptionName(project, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX)));
-        acceptanceSettings.setMustBeUnresolved(applicationProperties.getOption(getOptionName(project, MUST_BE_UNRESOLVED_KEY_PREFIX)));
+        acceptanceSettings.setMustHaveIssue(applicationProperties.getOption(getOptionName(projectKey, MUST_HAVE_ISSUE_KEY_PREFIX)));
+        acceptanceSettings.setMustBeAssignedToCommiter(applicationProperties.getOption(getOptionName(projectKey, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX)));
+        acceptanceSettings.setMustBeUnresolved(applicationProperties.getOption(getOptionName(projectKey, MUST_BE_UNRESOLVED_KEY_PREFIX)));
 
         return acceptanceSettings;
     }
 
-    public void setSettings(GenericValue project, AcceptanceSettings acceptanceSettings) {
-        applicationProperties.setOption(getOptionName(project, MUST_HAVE_ISSUE_KEY_PREFIX), acceptanceSettings.isMustHaveIssue());
-        applicationProperties.setOption(getOptionName(project, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX), acceptanceSettings.isMustBeAssignedToCommiter());
-        applicationProperties.setOption(getOptionName(project, MUST_BE_UNRESOLVED_KEY_PREFIX), acceptanceSettings.isMustBeUnresolved());
+    public void setSettings(String projectKey, AcceptanceSettings acceptanceSettings) {
+        applicationProperties.setOption(getOptionName(projectKey, MUST_HAVE_ISSUE_KEY_PREFIX), acceptanceSettings.isMustHaveIssue());
+        applicationProperties.setOption(getOptionName(projectKey, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX), acceptanceSettings.isMustBeAssignedToCommiter());
+        applicationProperties.setOption(getOptionName(projectKey, MUST_BE_UNRESOLVED_KEY_PREFIX), acceptanceSettings.isMustBeUnresolved());
     }
 
     /**
      * Returns the global or project-dependent property name for the setting.
      */
-    public static String getOptionName(GenericValue project, String prefix) {
-    	return (project == null) ? prefix : prefix + "." + project.getString("key");
+    public static String getOptionName(String projectKey, String prefix) {
+    	return (projectKey == null) ? prefix : prefix + "." + projectKey;
     }
 }

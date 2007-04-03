@@ -36,11 +36,10 @@ import com.opensymphony.user.User;
  */
 public class EvaluateService {
 	/*
-	 * JIRA services.
+	 * Services.
 	 */
 	private ProjectManager projectManager;// TODO inject it
 	private IssueManager issueManager;
-	// TODO remove? private PermissionManager permissionManager;
 	private AcceptanceSettingsManager settingsManager;
 
 	public EvaluateService(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
@@ -194,7 +193,7 @@ public class EvaluateService {
 	 */
 	private void checkIssuesAcceptance(String committerName, GenericValue project, Set issues) {
 		List predicates = new ArrayList();
-        AcceptanceSettings settings = settingsManager.getSettings(project);// TODO pass project
+        AcceptanceSettings settings = settingsManager.getSettings(null);// TODO pass project key
 
 		// construct
 		if(settings.isMustHaveIssue()) {
