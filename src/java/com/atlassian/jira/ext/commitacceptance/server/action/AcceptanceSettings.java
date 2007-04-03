@@ -1,14 +1,16 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
 /**
- * Wraps the commit acceptance settings.
+ * Wraps the commit acceptance settings for one project
+ * or globally.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
 public class AcceptanceSettings {
 	/**
-	 * TODO
+	 * If <code>true</code> the global settings override
+	 * the project-specific settings.
 	 */
 	private boolean useGlobalRules;
     /**

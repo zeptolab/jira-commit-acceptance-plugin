@@ -5,7 +5,7 @@ import org.ofbiz.core.entity.GenericValue;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 
 /**
- * TODO Manages the site-wide acceptance settings.
+ * Manages the commit acceptance settings.
  *
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$

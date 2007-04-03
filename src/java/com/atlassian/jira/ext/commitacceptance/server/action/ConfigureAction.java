@@ -36,7 +36,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	 */
     private AcceptanceSettings settings = new AcceptanceSettings();
     /**
-     * TODO
+     * Submission identifier value.
      */
     private String submitted;
 
@@ -96,15 +96,12 @@ public class ConfigureAction extends JiraWebActionSupport {
         settings.setMustHaveIssue(mustHaveIssue);
 	}
 
-	/**
-	 * TODO
-	 */
     public void setSubmitted(String submitted) {
         this.submitted = submitted;
     }
 
 	/**
-	 * TODO
+	 * Returns the list of all available projects.
 	 */
     public List getProjects() {
     	List projects = new ArrayList(projectManager.getProjects());
