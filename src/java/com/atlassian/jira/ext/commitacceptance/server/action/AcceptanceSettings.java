@@ -7,6 +7,10 @@ package com.atlassian.jira.ext.commitacceptance.server.action;
  * @version $Id$
  */
 public class AcceptanceSettings {
+	/**
+	 * TODO
+	 */
+	private boolean useGlobalRules;
     /**
      * If <code>true</code> the commit message must contain
      * at least valid issue key.
@@ -24,7 +28,16 @@ public class AcceptanceSettings {
      */
     private boolean mustBeUnresolved;
 
-    public boolean isMustHaveIssue() {
+
+    public boolean getUseGlobalRules() {
+		return useGlobalRules;
+	}
+
+	public void setUseGlobalRules(boolean useGlobalRules) {
+		this.useGlobalRules = useGlobalRules;
+	}
+
+	public boolean isMustHaveIssue() {
         return mustHaveIssue;
     }
 

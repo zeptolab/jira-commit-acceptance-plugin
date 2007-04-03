@@ -51,7 +51,7 @@ public class ConfigureAction extends JiraWebActionSupport {
     		settings = settingsManager.getSettings(projectKey);
         } else {
             // save new settings
-            settingsManager.setSettings(projectKey, settings);
+           	settingsManager.setSettings(projectKey, settings);
         }
         return SUCCESS;
     }
@@ -64,7 +64,15 @@ public class ConfigureAction extends JiraWebActionSupport {
 		this.projectKey = projectKey;
 	}
 
-	public boolean isMustBeAssignedToCommiter() {
+    public boolean getUseGlobalRules() {
+    	return settings.getUseGlobalRules();
+    }
+
+    public void setUseGlobalRules(boolean useGlobalRules) {
+    	settings.setUseGlobalRules(useGlobalRules);
+    }
+
+    public boolean isMustBeAssignedToCommiter() {
 		return settings.isMustBeAssignedToCommiter();
 	}
 

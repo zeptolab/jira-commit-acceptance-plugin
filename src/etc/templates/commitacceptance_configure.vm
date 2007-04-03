@@ -7,6 +7,14 @@
 		function onCommitAcceptanceProjectSelectorChange() {
 			document.commitAcceptanceSettingsForm.submit();
 		}
+
+		function onUseGlobalRulesChange() {
+			useGlobalRules = document.commitAcceptanceSettingsForm.useGlobalRules.checked;
+
+			document.commitAcceptanceSettingsForm.mustHaveIssue.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.mustBeUnresolved.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.mustBeAssignedToCommiter.disabled = useGlobalRules;
+		}
 	</script>
 </head>
 
@@ -42,7 +50,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="instructions" width="1%" nowrap>
-	    	<input type="checkbox" name="useGlobalRules" checked="checked" #if($projectKey == "") disabled #end/>
+	    	<input type="checkbox" name="useGlobalRules" value="true" #if($useGlobalRules) checked="checked" #end #if($projectKey == "") disabled #end onChange="onUseGlobalRulesChange()" />
 		</td>
 		<td class="instructions">
 			Use the global rules for this project.<br/>
@@ -56,7 +64,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end/>
+	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end />
 		</td>
 		<td>
 			The log message must contain a valid JIRA issue key(s).
@@ -64,7 +72,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end/>
+		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end />
 		</td>
 		<td>
 		  All issues referenced in the log message must be <b>UNRESOLVED</b>.
@@ -72,7 +80,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end/>
+			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end/>
 		</td>
 		<td>
 			All issues referenced in the log message must be assigned to the committer.<br/>
