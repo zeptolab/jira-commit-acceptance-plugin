@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.project.ProjectManager;
@@ -20,6 +22,8 @@ import com.atlassian.jira.web.action.JiraWebActionSupport;
  */
 public class ConfigureAction extends JiraWebActionSupport {
 	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(ConfigureAction.class);
 
 	/*
 	 * Services.
@@ -48,10 +52,12 @@ public class ConfigureAction extends JiraWebActionSupport {
     public String execute() throws Exception {
         if (submitted == null) {
             // load old settings
-    		settings = settingsManager.getSettings(projectKey);
+        	logger.info("Loading commit acceptance settings for [" + projectKey + "]");
+    		settings = settingsManager.getSettings(StringUtils.trimToNull(projectKey));
         } else {
             // save new settings
-           	settingsManager.setSettings(projectKey, settings);
+        	logger.info("Saving commit acceptance settings for [" + projectKey + "]");
+           	settingsManager.setSettings(StringUtils.trimToNull(projectKey), settings);
         }
         return SUCCESS;
     }

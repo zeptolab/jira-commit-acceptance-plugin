@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.ofbiz.core.entity.GenericValue;
+import org.apache.log4j.Logger;
 
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
@@ -19,8 +19,8 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPr
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
+import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
-import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.util.JiraKeyUtils;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
@@ -35,16 +35,18 @@ import com.opensymphony.user.User;
  * @version $Id$
  */
 public class EvaluateService {
+	private static Logger logger = Logger.getLogger(EvaluateService.class);
+
 	/*
 	 * Services.
 	 */
-	private ProjectManager projectManager;// TODO inject it
+	private ProjectManager projectManager;
 	private IssueManager issueManager;
 	private AcceptanceSettingsManager settingsManager;
 
-	public EvaluateService(IssueManager issueManager, PermissionManager permissionManager, AcceptanceSettingsManager settingsManager) {
+	public EvaluateService(ProjectManager projectManager, IssueManager issueManager, AcceptanceSettingsManager settingsManager) {
+		this.projectManager = projectManager;
 		this.issueManager = issueManager;
-		// TODO remove? also the arg! this.permissionManager = permissionManager;
 		this.settingsManager = settingsManager;
 	}
 
@@ -60,22 +62,28 @@ public class EvaluateService {
      * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
 	 */
 	public String acceptCommit(String userName, String password, String committerName, String projectKey, String commitMessage) {
+		logger.info("Evaluating commit from '" + committerName + "' in [" + projectKey + "]");
+
 		try {
-			// Test SCM login and password.
+			// prepare arguments
+			userName = StringUtils.trim(userName);
+			password = StringUtils.trim(password);
+			committerName = StringUtils.trim(committerName);
+			projectKey = StringUtils.trim(projectKey);
+			commitMessage = StringUtils.trim(commitMessage);
+
+			// test SCM login and password
 			authenticateUser(userName, password);
 
 			// convert committer name to lowercase (JIRA user names are lowercase) and load committer
 			committerName = StringUtils.lowerCase(committerName);
-			// TODO remove? User committer = getCommitter(committerName);
+			User committer = getCommitter(committerName);
 
 			// get project
-			GenericValue project = projectManager.getProjectByKey(projectKey);// TODO check security?
+			Project project = projectManager.getProjectObjByKey(projectKey);// TODO check security?
 			if(project == null) {
-				// TODO log.warn("No project with key [" + projectKey + "] found, falling back to global rules...");
+				logger.warn("No project with key [" + projectKey + "] found, falling back to global rules");
 			}
-
-			// get commit rules
-			// TODO load project-specific or global rules
 
 			// parse the commit message and collect issues.
 			Set issues = loadIssuesByMessage(commitMessage);
@@ -191,9 +199,13 @@ public class EvaluateService {
      * @param committerName a committer name.
      * @param issues a set of issues to be checked.
 	 */
-	private void checkIssuesAcceptance(String committerName, GenericValue project, Set issues) {
+	private void checkIssuesAcceptance(String committerName, Project project, Set issues) {
 		List predicates = new ArrayList();
-        AcceptanceSettings settings = settingsManager.getSettings(null);// TODO pass project key
+        AcceptanceSettings settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
+        if(settings.getUseGlobalRules()) {// TODO move this to the manager?
+        	logger.debug("Using global rules");
+        	settings = settingsManager.getSettings(null);
+        }
 
 		// construct
 		if(settings.isMustHaveIssue()) {
