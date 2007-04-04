@@ -25,11 +25,9 @@ import com.atlassian.jira.util.JiraKeyUtils;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
 
-
 /**
  * Invoked when receiving a commit request.
- * Writes "true" (accepted) or "false" (rejected) to the Response
- * based on the log message and the settings.
+ * Evaluates whether the commit is accepted.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
@@ -105,10 +103,11 @@ public class EvaluateService {
 	 * @param comment, a comment to be passed to a commiter.
 	 */
 	private static String acceptanceResultToString(boolean acceptance, String comment) {
-		String result = Boolean.toString(acceptance);
-		result += '|';
-		result += comment;
-		return result;
+		StringBuffer result = new StringBuffer();
+		result.append(Boolean.toString(acceptance));
+		result.append('|');
+		result.append(comment);
+		return result.toString();
 	}
 
 	/**
@@ -202,7 +201,8 @@ public class EvaluateService {
 	private void checkIssuesAcceptance(String committerName, Project project, Set issues) {
 		List predicates = new ArrayList();
         AcceptanceSettings settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
-        if(settings.getUseGlobalRules()) {// TODO move this to the manager?
+        if(settings.getUseGlobalRules()) {
+        	// load global rules if those override the project specific ones
         	logger.debug("Using global rules");
         	settings = settingsManager.getSettings(null);
         }

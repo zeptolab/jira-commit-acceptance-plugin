@@ -32,7 +32,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	private AcceptanceSettingsManager settingsManager;
 
 	/**
-	 * Key of the selected project or <code>null</code> for global settings.
+	 * Key of the selected project or empty string for global settings.
 	 */
 	private String projectKey = null;
 	/**
