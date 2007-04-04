@@ -32,7 +32,9 @@
 		    The VCS Commit Acceptance plugin allows you to disallow commits to your version control repository
 		    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
 		    scripts (see <a href="http://confluence.atlassian.com/display/JIRAEXT/Commit+Acceptance+Plugin">docs</a>) will
-		    contact JIRA and process the commit info and log message based on the criteria below.
+		    contact JIRA and process the commit info and log message based on the criteria below.<br/>
+		    You can configure global (site-wide) rules and refer to those from the actual projects, or configure
+                    project specific rules separately for any of your JIRA projects.
 	    </td>
 	</tr>
 	<tr bgcolor="#ffffff">
