@@ -8,7 +8,7 @@ import com.atlassian.jira.project.Project;
 import com.opensymphony.user.User;
 
 /**
- * FIXME
+ * Mock implementation that does nothing in particular.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$

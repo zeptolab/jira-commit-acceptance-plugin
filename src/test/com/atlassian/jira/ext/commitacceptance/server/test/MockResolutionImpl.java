@@ -15,7 +15,7 @@ import com.opensymphony.module.propertyset.PropertySet;
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class MockResolutionImpl implements Resolution {
+public class MockResolutionImpl implements Resolution {// TODO reorder + arg names
 	private GenericValue genericValue = new GenericValue(new ModelEntity());
 
 	public GenericValue getGenericValue() {
@@ -23,74 +23,78 @@ public class MockResolutionImpl implements Resolution {
 	}
 
 	public String getId() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getName() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setName(String name) {
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDescription() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setDescription(String description) {
+		throw new UnsupportedOperationException();
 	}
 
 	public Long getSequence() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setSequence(Long sequence) {
+		throw new UnsupportedOperationException();
 	}
 
 	public String getIconUrl() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setIconUrl(String iconUrl) {
+		throw new UnsupportedOperationException();
 	}
 
 	public String getNameTranslation() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDescTranslation() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getNameTranslation(I18nHelper helper) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDescTranslation(I18nHelper helper) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getNameTranslation(String helper) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDescTranslation(String helper) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setTranslation(String arg0, String arg1, String arg2, Locale arg3) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	public void deleteTranslation(String arg0, Locale arg1) {
+		throw new UnsupportedOperationException();
 	}
 
 	public PropertySet getPropertySet() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException();
 	}
 }

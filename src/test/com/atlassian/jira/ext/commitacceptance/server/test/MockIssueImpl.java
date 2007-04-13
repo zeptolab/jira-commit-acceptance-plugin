@@ -92,7 +92,7 @@ public class MockIssueImpl implements MutableIssue {// TODO reorder + arg names
 		throw new UnsupportedOperationException();
 	}
 
-	public void setKey(String arg0) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 

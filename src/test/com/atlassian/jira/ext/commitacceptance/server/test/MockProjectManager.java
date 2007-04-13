@@ -16,144 +16,116 @@ import com.opensymphony.user.User;
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class MockProjectManager implements ProjectManager {
-
+public class MockProjectManager implements ProjectManager {// TODO reorder + arg names
 	public List convertToProjects(Collection arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getComponent(Long arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getComponent(GenericValue arg0, String arg1) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getComponents(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getComponents(List arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public User getDefaultAssignee(GenericValue arg0, GenericValue arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public long getNextId(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProject(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProject(Long arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProjectByKey(String arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProjectByName(String arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getProjectCategories() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProjectCategory(Long arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProjectCategoryByName(String arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public GenericValue getProjectCategoryFromProject(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Project getProjectObj(Long arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Project getProjectObjByKey(String arg0) {
-		return arg0.startsWith("EXIST") ? Mockery.createProject() : null;
+		return arg0.startsWith("EXIST") ? Mockery.createProject() : null;// TODO
 	}
 
 	public Collection getProjects() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getProjectsByLead(User arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getProjectsFromProjectCategory(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getProjectsWithNoCategory() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean isDefaultAssignee(GenericValue arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean isDefaultAssignee(GenericValue arg0, GenericValue arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	public void refresh() {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 	public void refreshProjectDependencies(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 	public void setProjectCategory(GenericValue arg0, GenericValue arg1) throws DataAccessException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 	public void updateProject(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 	public void updateProjectCategory(GenericValue arg0) throws DataAccessException {
-		// TODO Auto-generated method stub
-
-	}// TODO arg names
+		throw new UnsupportedOperationException();
+	}
 }
