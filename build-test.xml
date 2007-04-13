@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	SvnAnt must be installed to ANT_HOME/lib from http://subclipse.tigris.org/svnant.html
+	Ant-Contrib must be installed to ANT_HOME/lib from http://ant-contrib.sourceforge.ne
+-->
+<project basedir="." default="commit" >
+	<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<!-- configuration -->
+	<property name="svnrepo.url" value="file:///new/testrepos/jira-svn-repo" />
+	<property name="workingcopy.dir" location="/temp/workingcopy" />
+	<property name="testfle.path" location="${workingcopy.dir}/LICENSE.txt" />
+	<property name="commitMessage" value="John Doe!" />
+
+	<target name="init">
+		<if>
+			<available file="${testfle.path}" />
+			<then>
+				<echo>Working copy exists.</echo>
+			</then>
+			<else>
+				<mkdir dir="${workingcopy.dir}" />
+				<svn>
+					<checkout url="${svnrepo.url}" destPath="${workingcopy.dir}" />
+				</svn>
+			</else>
+		</if>
+	</target>
+
+	<target name="commit" depends="init">
+		<buildnumber file="${testfle.path}"/>
+		<svn>
+			<status path="${testfle.path}" revisionProperty="oldRevision" />
+			<commit dir="${workingcopy.dir}" message="${commitMessage}"/>
+			<status path="${testfle.path}" revisionProperty="newRevision" />
+		</svn>
+		<if>
+			<equals arg1="${newRevision}" arg2="${oldRevision}" />
+			<then>
+				<echo message="Commit rejected ${oldRevision} -> ${newRevision}: '${commitMessage}'" />
+			</then>
+			<else>
+				<echo message="Commit accepted ${oldRevision} -> ${newRevision}: '${commitMessage}'" />
+			</else>
+		</if>
+	</target>
+</project>
