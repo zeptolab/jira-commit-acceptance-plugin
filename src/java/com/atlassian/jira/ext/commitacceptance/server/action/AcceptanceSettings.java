@@ -1,5 +1,8 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Wraps the commit acceptance settings for one project
  * or globally.
@@ -62,4 +65,12 @@ public class AcceptanceSettings {
     public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
         this.mustBeAssignedToCommiter = mustBeAssignedToCommiter;
     }
+
+	public boolean equals(Object obj) {
+		return EqualsBuilder.reflectionEquals(this, obj);
+	}
+
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
 }
