@@ -26,7 +26,7 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 	}
 
 	public void evaluate(Set issues) {
-		for (Iterator it=issues.iterator(); it.hasNext();) {
+		for (Iterator it = issues.iterator(); it.hasNext();) {
 			Issue issue = (Issue)it.next();
 
 			// if at least one issue is not assigned to the correct person.

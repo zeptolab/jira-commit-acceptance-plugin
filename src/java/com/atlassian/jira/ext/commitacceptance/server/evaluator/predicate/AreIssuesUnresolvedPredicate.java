@@ -21,7 +21,7 @@ public class AreIssuesUnresolvedPredicate implements JiraPredicate {
 			Issue issue = (Issue)it.next();
 			Resolution resolution = issue.getResolutionObject();
 
-			// If at least one issue is resolved.
+			// reject if any issue is resolved
 			if (resolution != null)	{
 				throw new AcceptanceException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
 			}
