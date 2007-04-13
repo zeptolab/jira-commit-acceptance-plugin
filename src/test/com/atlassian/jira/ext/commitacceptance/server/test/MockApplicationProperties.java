@@ -8,47 +8,48 @@ import java.util.Map;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 
 /**
- * FIXME
+ * Mock implementation that stores the properties in memory.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class MockApplicationProperties implements ApplicationProperties {// TODO arg names
+public class MockApplicationProperties implements ApplicationProperties {// TODO reorder + arg names
 	private Map properties = new HashMap();
 
 	public void refresh() {
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDefaultBackedString(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDefaultBackedText(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Locale getDefaultLocale() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getDefaultString(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getContentType() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getEncoding() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getKeys() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean exists(String arg0) {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean getOption(String arg0) {
@@ -61,20 +62,22 @@ public class MockApplicationProperties implements ApplicationProperties {// TODO
 	}
 
 	public String getString(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setString(String arg0, String arg1) {
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection getStringsWithPrefix(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public String getText(String arg0) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public void setText(String arg0, String arg1) {
+		throw new UnsupportedOperationException();
 	}
 }

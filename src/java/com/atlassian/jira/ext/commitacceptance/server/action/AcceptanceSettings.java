@@ -1,6 +1,5 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
@@ -67,10 +66,18 @@ public class AcceptanceSettings {
     }
 
 	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj);
+		if (obj == this) {
+			return true;
+		}
+
+		AcceptanceSettings other = (AcceptanceSettings)obj;
+		return (useGlobalRules == other.getUseGlobalRules()) &&
+				(mustHaveIssue == other.isMustHaveIssue()) &&
+				(mustBeUnresolved == other.isMustBeUnresolved()) &&
+				(mustBeAssignedToCommiter == other.isMustBeAssignedToCommiter());
 	}
 
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
+		return new HashCodeBuilder(79, 11).append(useGlobalRules).append(mustHaveIssue).append(mustBeUnresolved).append(mustBeAssignedToCommiter).hashCode();
 	}
 }

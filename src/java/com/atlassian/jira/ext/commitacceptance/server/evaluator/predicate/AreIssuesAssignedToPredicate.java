@@ -35,8 +35,7 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 				try {
 					User assignee = UserUtils.getUser(assigneeName);
 					cause += "must be assigned to " + assigneeName + " (" + assignee.getFullName() + ").";
-				}
-				catch (EntityNotFoundException e) {
+				} catch (EntityNotFoundException e) {
 					cause += "is not assigned to the correct person.";
 				}
 

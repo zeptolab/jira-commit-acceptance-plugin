@@ -7,8 +7,6 @@ import com.atlassian.jira.ext.commitacceptance.server.test.Mockery;
 import junit.framework.TestCase;
 
 /**
- * FIXME
- *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
@@ -26,6 +24,7 @@ public class AcceptanceSettingsManagerTests extends TestCase {
 	 */
 	public void testGlobal() {
 		AcceptanceSettings acceptanceSettings = Mockery.createAcceptanceSettings();
+		acceptanceSettings.setUseGlobalRules(true);
 
 		acceptanceSettingsManager.setSettings(null, acceptanceSettings);
 		assertEquals(acceptanceSettings, acceptanceSettingsManager.getSettings(null));
@@ -43,11 +42,11 @@ public class AcceptanceSettingsManagerTests extends TestCase {
 	}
 
 	/**
-	 * TODO Tests whether
+	 * Tests whether the default settings are returned for unknown projects.
 	 */
-	public void testFallback() {// TODO no fall back at the moment!
-		String invalidProjectKey = "PR-" + RandomUtils.nextInt();
+	public void testFallback() {
+		String unknownProjectKey = "PR-" + RandomUtils.nextInt();
 
-		assertEquals(acceptanceSettingsManager.getSettings(null), acceptanceSettingsManager.getSettings(invalidProjectKey));
+		assertEquals(new AcceptanceSettings(), acceptanceSettingsManager.getSettings(unknownProjectKey));
 	}
 }

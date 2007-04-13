@@ -4,10 +4,12 @@ import org.apache.commons.lang.math.RandomUtils;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
-import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.resolution.Resolution;
+import com.atlassian.jira.project.Project;
 
 /**
- * FIXME
+ * Factory to instantiate test- or mock objects.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
@@ -24,11 +26,29 @@ public class Mockery {
 		return acceptanceSettings;
 	}
 
+	// - JIRA services --------------------------------------------------------
+
+	public static MockProjectManager createProjectManager() {
+		return new MockProjectManager();
+	}
+
 	public static ApplicationProperties createApplicationProperties() {
 		return new MockApplicationProperties();
 	}
 
-	public static Issue createIssue() {
-		return new MockIssueImpl();
+	// - JIRA entities --------------------------------------------------------
+
+	public static Project createProject() {
+		return new MockProjectImpl();
+	}
+
+	public static MutableIssue createIssue() {
+		MutableIssue issue = new MockIssueImpl();
+		issue.setKey("BUG-" + RandomUtils.nextInt());
+		return issue;
+	}
+
+	public static Resolution createResolution() {
+		return new MockResolutionImpl();
 	}
 }

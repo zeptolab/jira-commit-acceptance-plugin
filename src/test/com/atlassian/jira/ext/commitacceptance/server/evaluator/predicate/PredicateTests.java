@@ -7,15 +7,11 @@ import junit.framework.TestCase;
 
 import org.apache.commons.lang.math.RandomUtils;
 
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 import com.atlassian.jira.ext.commitacceptance.server.test.Mockery;
+import com.atlassian.jira.issue.MutableIssue;
 
 /**
- * FIXME
- *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
@@ -44,9 +40,25 @@ public class PredicateTests extends TestCase {
 		Set issues = new HashSet();
 		predicate.evaluate(issues);
 
-		// TODO
-//		Issue issue = Mockery.createIssue();
-//		issue.getGenericValue().set("status", );// TODO status mock?
+		// test with unresolved
+		for(int i = 0; i < 3; i++) {
+			MutableIssue issue = Mockery.createIssue();
+			issues.add(issue);
+		}
+		predicate.evaluate(issues);
+
+		// test with resolved
+		for(int i = 0; i < 2; i++) {
+			MutableIssue issue = Mockery.createIssue();
+			issue.setResolution(Mockery.createResolution().getGenericValue());
+			issues.add(issue);
+		}
+		try {
+			predicate.evaluate(issues);
+			fail("AcceptanceException is expected for issue set including resolved issues");
+		} catch(AcceptanceException ex) {
+			// do nothing
+		}
 	}
 
 	public void testAreIssuesAssignedToPredicate() {
@@ -57,6 +69,21 @@ public class PredicateTests extends TestCase {
 		Set issues = new HashSet();
 		predicate.evaluate(issues);
 
-		// TODO
+		// test with assigned
+		for(int i = 0; i < 3; i++) {
+			MutableIssue issue = Mockery.createIssue();
+			issue.setAssigneeId(assigneeName);
+			issues.add(issue);
+		}
+		predicate.evaluate(issues);
+
+		// test with unassigned
+// FIXME it depends on UserUtils that cannot be mocked
+//		for(int i = 0; i < 2; i++) {
+//			MutableIssue issue = Mockery.createIssue();
+//			issue.setAssigneeId("--");
+//			issues.add(issue);
+//		}
+//		predicate.evaluate(issues);
 	}
 }
