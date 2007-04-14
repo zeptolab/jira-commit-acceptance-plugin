@@ -15,23 +15,21 @@ public class AcceptanceSettings {
 	 * the project-specific settings.
 	 */
 	private boolean useGlobalRules;
-    /**
+
+	/**
      * If <code>true</code> the commit message must contain
      * at least valid issue key.
      */
     private boolean mustHaveIssue;
-
+    /**
+     * If <code>true</code>, all the issues must be unresolved.
+     */
+    private boolean mustBeUnresolved;
     /**
      * If <code>true</code>, all the issues must be assigned to
      * the commiter.
      */
     private boolean mustBeAssignedToCommiter;
-
-    /**
-     * If <code>true</code>, all the issues must be unresolved.
-     */
-    private boolean mustBeUnresolved;
-
 
     public boolean getUseGlobalRules() {
 		return useGlobalRules;
