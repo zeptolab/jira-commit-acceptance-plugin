@@ -1,7 +1,7 @@
 <atlassian-plugin key="com.atlassian.jira.ext.commitacceptance" name="JIRA Commit Acceptance Plugin">
 
     <plugin-info>
-        <description>JIRA Commit Acceptance plugin.</description>
+        <description>Commit Acceptance plugin.</description>
         <version>1.1</version>
         <application-version min="3.5" max="3.8"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
@@ -11,12 +11,12 @@
         <interface>com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager</interface>
     </component>
 
-    <rpc-xmlrpc key="xmlrpc" name="JIRA Commit Acceptance XML-RPC service" class="com.atlassian.jira.ext.commitacceptance.server.evaluator.EvaluateService">
-        <description>JIRA Commit Acceptance XML-RPC service.</description>
+    <rpc-xmlrpc key="xmlrpc" name="Commit Acceptance XML-RPC Service" class="com.atlassian.jira.ext.commitacceptance.server.evaluator.EvaluateService">
+        <description>Commit Acceptance XML-RPC service.</description>
         <service-path>commitacc</service-path>
     </rpc-xmlrpc>
 
-    <webwork1 key="ConfigureAction_key" name="Commit Acceptance Configuration action" class="java.lang.Object">
+    <webwork1 key="ConfigureAction_key" name="Commit Acceptance Configuration Action" class="java.lang.Object">
         <actions>
             <action name="com.atlassian.jira.ext.commitacceptance.server.action.ConfigureAction" alias="CommitAcceptanceConfigure">
                 <view name="success">/templates/commitacceptance_configure.vm</view>
