@@ -44,7 +44,7 @@
 	    		<option value="">Global</option>
 	    		<optgroup label="Projects">
 	    			#foreach($project in $projects)
-		    			<option value="${project.key}" #if($project.key == $projectKey) selected="true" #end >${project.name}</option>
+		    			<option value="${project.key}" #if($project.key == $projectKey) selected="true" #end >[$project.key] ${project.name}</option>
 		    		#end
 	    		</optgroup>
 	    	</select>
