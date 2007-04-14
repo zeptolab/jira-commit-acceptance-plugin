@@ -80,7 +80,7 @@ public class EvaluateService {
 			// get project
 			Project project = projectManager.getProjectObjByKey(projectKey);// TODO check security?
 			if(project == null) {
-				logger.warn("No project with key [" + projectKey + "] found, falling back to global rules");
+				throw new AcceptanceException("No project with key [" + projectKey + "] found, check the SCM hook script configuration");
 			}
 
 			// parse the commit message and collect issues.
@@ -162,7 +162,7 @@ public class EvaluateService {
 				throw new Exception();
 			}
 		} catch(Exception e) {
-			throw new AcceptanceException("Issue [" + issueKey + "] does not exist or you don't have permission.");
+			throw new AcceptanceException("Issue [" + issueKey + "] does not exist or you don't have permission to access it.");
 		}
 
 		return issue;
