@@ -281,7 +281,8 @@ public class MockIssueImpl implements MutableIssue {// TODO reorder + arg names
 	}
 
 	public Resolution getResolutionObject() {
-		return (resolution != null) ? new MockResolutionImpl() : null;// TODO pointless?
+		// return any instance
+		return (resolution != null) ? new MockResolutionImpl() : null;
 	}
 
 	public GenericValue getSecurityLevel() {

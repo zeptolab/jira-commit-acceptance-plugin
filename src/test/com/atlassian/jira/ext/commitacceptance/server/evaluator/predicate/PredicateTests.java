@@ -78,7 +78,7 @@ public class PredicateTests extends TestCase {
 		predicate.evaluate(issues);
 
 		// test with unassigned
-// FIXME it depends on UserUtils that cannot be mocked
+// FIXME it depends on UserUtils and IssueUtils and those cannot be mocked
 //		for(int i = 0; i < 2; i++) {
 //			MutableIssue issue = Mockery.createIssue();
 //			issue.setAssigneeId("--");

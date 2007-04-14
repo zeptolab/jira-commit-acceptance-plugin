@@ -8,7 +8,7 @@ import junit.framework.TestCase;
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class EvaluateServiceTests extends TestCase {
+public class EvaluateServiceTests extends TestCase {// TODO add more tests
 	private EvaluateService evaluateService;
 
 	protected void setUp() throws Exception {
@@ -17,8 +17,8 @@ public class EvaluateServiceTests extends TestCase {
 		evaluateService = new EvaluateService(Mockery.createProjectManager(), null, null);
 	}
 
-	public void testAccepted() {// TODO more tests
-// FIXME dependency
+	public void testAccepted() {
+// FIXME it depends on UserUtils that cannot be mocked
 //		String result = evaluateService.acceptCommit("userName", "password", "committerName", "projectKey", "commitMessage");
 //		assertTrue(isCommitAccepted(result));
 	}
