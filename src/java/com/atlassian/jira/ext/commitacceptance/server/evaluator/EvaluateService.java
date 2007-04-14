@@ -78,7 +78,7 @@ public class EvaluateService {
 			User committer = getCommitter(committerName);
 
 			// get project
-			Project project = projectManager.getProjectObjByKey(projectKey);// TODO check security?
+			Project project = projectManager.getProjectObjByKey(projectKey);
 			if(project == null) {
 				throw new AcceptanceException("No project with key [" + projectKey + "] found, check the SCM hook script configuration");
 			}
