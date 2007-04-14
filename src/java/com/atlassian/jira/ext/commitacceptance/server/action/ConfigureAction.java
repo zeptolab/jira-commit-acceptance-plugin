@@ -34,7 +34,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	/**
 	 * Key of the selected project or empty string for global settings.
 	 */
-	private String projectKey = null;
+	private String projectKey = "";
 	/**
 	 * Commit acceptance settings edited.
 	 */
