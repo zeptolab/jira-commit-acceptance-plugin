@@ -13,7 +13,7 @@ use XMLRPC::Lite;
 my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "root";
 my $jiraPassword = "root";
-my $projectKey = "TST"
+my $projectKey = "TST";
 
 # get committer passed as arg[0]
 my $committer = $ARGV[0];

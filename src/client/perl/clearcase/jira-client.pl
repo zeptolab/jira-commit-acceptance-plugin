@@ -15,16 +15,16 @@ on the ClearCase client machine.
 
 =head1 USAGE
 
-This script should be edited to have correct values set for $jiraBaseURL, 
+This script should be edited to have correct values set for $jiraBaseURL,
 $jiraLogin and $jiraPassword.
 
 The script should be copied so that it is accessible from all ClearCase clients.
-A central location is preferred but it is quite acceptable to copy this script 
-onto each machine that is setup as a ClearCase client. (This does however make 
+A central location is preferred but it is quite acceptable to copy this script
+onto each machine that is setup as a ClearCase client. (This does however make
 maintenance harder)
 
 Next the ClearCase administrator needs to create a ClearCase trigger for the
-pre checkin operation. The following command is an example of how this can be 
+pre checkin operation. The following command is an example of how this can be
 done with the file stored in a common location accessible from both Windows and
 UNIX clients and is in the path.
 
@@ -49,7 +49,7 @@ This error means that the server entered as the value of $jiraBaseURL is incorre
 
 =item C<Commit rejected: Invalid user namd or password.>
 
-This error means that one or both of the user name ($jiraLogin) or password 
+This error means that one or both of the user name ($jiraLogin) or password
 ($jiraPassword) are entered incorrect.
 
 =back
@@ -65,11 +65,11 @@ use XMLRPC::Lite;
 my $jiraBaseURL = "http://localhost:8080";
 my $jiraLogin = "jirauser";
 my $jiraPassword = "password";
-my $projectKey = "TST"
+my $projectKey = "TST";
 
 # If the script is not being called from within a ClearCase trigger environment
 # Then the setup / usage is not correct so print the documentation.
-# The environment variable CLEARCASE_OP_KIND is set for all trigger calls so 
+# The environment variable CLEARCASE_OP_KIND is set for all trigger calls so
 # checking if it exists should be a suitable test.
 unless (exists $ENV{'CLEARCASE_OP_KIND'})
 {

@@ -13,7 +13,7 @@ use XMLRPC::Lite;
 my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "root";
 my $jiraPassword = "root";
-my $projectKey = "TST"
+my $projectKey = "TST";
 
 # configure svnlook path
 my $svnlookPath = "C:\\Progra~1\\svn-win32-1.4.0\\bin\\svnlook.exe";
