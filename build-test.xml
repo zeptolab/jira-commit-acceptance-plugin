@@ -3,8 +3,11 @@
 <!--
 	1. SvnAnt must be installed to ANT_HOME/lib from http://subclipse.tigris.org/svnant.html
 	2. Ant-Contrib must be installed to ANT_HOME/lib from http://ant-contrib.sourceforge.ne
-	3. Configure hook scripts
-	4. Configure commit acceptance rules
+	3. "svn" must be in PATH
+	4. Configure hook scripts
+	5. Configure commit acceptance rules
+	6. Create the 4 preconfigured issues
+	7. Run "commitAll" and check the result log
 -->
 <project basedir="." default="commit" >
 	<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask"/>
@@ -17,11 +20,11 @@
 	<property name="logfile.path" location="${workingcopy.dir}/log.txt" />
 	<property name="commitMessage" value="John Doe!" />
 
-	<property name="issue.nonExisting" value="BUG-999999"></property>
-	<property name="issue.unresolvedUnassigned" value="BUG-1"></property>
-	<property name="issue.resolvedUnassigned" value="BUG-2"></property>
-	<property name="issue.unresolvedAssigned" value="BUG-3"></property>
-	<property name="issue.resolvedAssigned" value="BUG-4"></property>
+	<property name="issue.nonExisting" value="TST-0"></property>
+	<property name="issue.unresolvedUnassigned" value="TST-1"></property><!-- can be assigned to a different user -->
+	<property name="issue.unresolvedAssigned" value="TST-4"></property>
+	<property name="issue.resolvedUnassigned" value="TST-3"></property><!-- can be assigned to a different user -->
+	<property name="issue.resolvedAssigned" value="TST-5"></property>
 
 	<target name="init">
 		<if>
@@ -40,18 +43,19 @@
 
 	<target name="commit" depends="init" description="TODO">
 		<buildnumber file="${testfle.path}"/>
-		<!-- SvnAnt solution
 		<svn>
 			<status path="${testfle.path}" revisionProperty="oldRevision" />
-			<commit dir="${workingcopy.dir}" message="${commitMessage}"/>
-			<status path="${testfle.path}" revisionProperty="newRevision" />
 		</svn>
-		-->
+		<!-- commandline SVN executable is used to commit as SvnAnt can treat with commit hooks?! -->
 		<exec executable="svn">
 			<arg value="commit" />
 			<arg value="-m" />
 			<arg value="${commitMessage}" />
+			<arg value="${testfle.path}" />
 		</exec>
+		<svn>
+			<status path="${testfle.path}" revisionProperty="newRevision" />
+		</svn>
 		<if>
 			<equals arg1="${newRevision}" arg2="${oldRevision}" />
 			<then>
@@ -69,25 +73,25 @@
 		<delete file="${logfile.path}"></delete>
 
 		<antcall target="commit"><param name="commitMessage" value="No issues" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 nonexisting: [${issue.nonExisting}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 nonexisting + 1 existing: [${issue.nonExisting}] [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 existing: [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 existing: [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 nonExisting:                                 [${issue.nonExisting}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 nonExisting + 1 unresolvedUnassigned:        [${issue.nonExisting}] [${issue.unresolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 unassigned:                                  [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
 
-		<antcall target="commit"><param name="commitMessage" value="1 unresolved: [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unresolved + 1 resolved: [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 resolved: [${issue.resolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 resolved: [${issue.resolvedUnassigned}] [${issue.resolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 resolvedUnassigned: [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 resolvedUnassigned:                          [${issue.resolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 resolved:                                    [${issue.resolvedUnassigned}] [${issue.resolvedAssigned}]" /></antcall>
 
-		<antcall target="commit"><param name="commitMessage" value="1 unassigned: [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unassigned + 1 assigned: [${issue.unresolvedUnassigned}] [${issue.unresolvedAssigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 assigned: [${issue.unsresolvedAssigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 assigned: [${issue.unrsolvedAssigned}] [${issue.resolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 unresolvedAssigned: [${issue.unresolvedUnassigned}] [${issue.unresolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedAssigned:                          [${issue.unresolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 assigned:                                    [${issue.unresolvedAssigned}] [${issue.resolvedAssigned}]" /></antcall>
 
 		<loadfile property="log" srcfile="${logfile.path}" />
-		<echo>----------</echo>
+		<echo>--------------------------------------------------------------------------------</echo>
 		<echo>Result log</echo>
-		<echo>----------</echo>
+		<echo>--------------------------------------------------------------------------------</echo>
 		<echo>${log}</echo>
 	</target>
 </project>
