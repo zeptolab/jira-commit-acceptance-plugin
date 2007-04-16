@@ -15,17 +15,18 @@
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
 	<!-- configuration -->
+	<property name="tempDir.path" location="/temp/jira-commitacceptance-test" />
+	<property name="logfile.path" location="${tempDir.path}/log.txt" />
+	<property name="commitMessage" value="John Doe!" />
+
 	<property name="svn.repo.url" value="file:///new/testrepos/jira-svn-repo" />
-	<property name="svn.workingcopy.dir" location="/temp/svn-workingcopy" />
+	<property name="svn.workingcopy.dir" location="${tempDir.path}/svn-workingcopy" />
 	<property name="svn.testfile.path" location="${svn.workingcopy.dir}/LICENSE.txt" />
 
 	<property name="cvs.repo.cvsRoot" value="\new\testrepos\cvs-server-jira" />
 	<property name="cvs.repo.package" value="x" />
-	<property name="cvs.workingcopy.dir" location="/temp/cvs-workingcopy" />
+	<property name="cvs.workingcopy.dir" location="${tempDir.path}/cvs-workingcopy" />
 	<property name="cvs.testfile.path" location="${cvs.workingcopy.dir}/${cvs.repo.package}/file.txt" />
-
-	<property name="logfile.path" location="${svn.workingcopy.dir}/log.txt" />
-	<property name="commitMessage" value="John Doe!" />
 
 	<property name="issue.nonExisting" value="TST-0"></property>
 	<property name="issue.unresolvedUnassigned" value="TST-1"></property><!-- can be assigned to a different user -->
@@ -64,7 +65,7 @@
 		<!-- commit to SVN -->
 		<buildnumber file="${svn.testfile.path}"/>
 		<svn>
-			<status path="${svn.testfile.path}" revisionProperty="oldRevision" />
+			<status path="${svn.testfile.path}" revisionProperty="svn.oldRevision" />
 		</svn>
 		<exec executable="svn"><!-- commandline SVN executable is used to commit as SvnAnt can treat with commit hooks?! -->
 			<arg value="commit" />
@@ -73,19 +74,8 @@
 			<arg value="${svn.testfile.path}" />
 		</exec>
 		<svn>
-			<status path="${svn.testfile.path}" revisionProperty="newRevision" />
+			<status path="${svn.testfile.path}" revisionProperty="svn.newRevision" />
 		</svn>
-		<if>
-			<equals arg1="${newRevision}" arg2="${oldRevision}" />
-			<then>
-				<echo file="${logfile.path}" append="true">SVN > REJECTED: '${commitMessage}' ${oldRevision} -> ${newRevision}
-</echo>
-			</then>
-			<else>
-				<echo file="${logfile.path}" append="true">SVN > Accepted: '${commitMessage}' ${oldRevision} -> ${newRevision}
-</echo>
-			</else>
-		</if>
 		<!-- commit to CVS -->
 		<buildnumber file="${cvs.testfile.path}"/>
 		<exec dir="${cvs.workingcopy.dir}/${cvs.repo.package}" executable="cvs" resultproperty="cvsResultCode"><!-- commandline CVS executable is used to commit as the <cvs> task had problems with the current dir -->
@@ -95,19 +85,29 @@
 			<arg value="-m"/>
 			<arg value="${commitMessage}"/>
 		</exec>
+		<!-- log -->
+		<if>
+			<equals arg1="${svn.newRevision}" arg2="${svn.oldRevision}" />
+			<then>
+				<echo file="${logfile.path}" append="true">REJECTED  </echo>
+			</then>
+			<else>
+				<echo file="${logfile.path}" append="true">Accepted  </echo>
+			</else>
+		</if>
 		<if>
 			<not>
 				<equals arg1="${cvsResultCode}" arg2="0" />
 			</not>
 			<then>
-				<echo file="${logfile.path}" append="true">CVS > REJECTED: '${commitMessage}'
-</echo>
+				<echo file="${logfile.path}" append="true">REJECTED  </echo>
 			</then>
 			<else>
-				<echo file="${logfile.path}" append="true">CVS > Accepted: '${commitMessage}'
-</echo>
+				<echo file="${logfile.path}" append="true">Accepted  </echo>
 			</else>
 		</if>
+
+		<echo file="${logfile.path}" append="true">'${commitMessage}'  ${svn.oldRevision} -> ${svn.newRevision}${line.separator}</echo>
 	</target>
 
 	<target name="commitAll" depends="init" description="TODO">
@@ -131,7 +131,7 @@
 
 		<loadfile property="log" srcfile="${logfile.path}" />
 		<echo>--------------------------------------------------------------------------------</echo>
-		<echo>Result log</echo>
+		<echo>SVN       CVS       Message</echo>
 		<echo>--------------------------------------------------------------------------------</echo>
 		<echo>${log}</echo>
 	</target>
