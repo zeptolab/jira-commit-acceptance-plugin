@@ -5,7 +5,11 @@
 	<meta name="decorator" content="admin" />
 	<script language="JavaScript" type="text/javascript">
 		function onCommitAcceptanceProjectSelectorChange() {
-			document.commitAcceptanceSettingsForm.submit();
+			if(rulesFormChanged && !confirm("There are unsaved changes in the rule configuration.\nDo you really want to change to the other project?")) {
+				document.commitAcceptanceSettingsForm.reset();
+			} else {
+				document.commitAcceptanceSettingsForm.submit();
+			}
 		}
 
 		function onUseGlobalRulesChange() {
@@ -14,6 +18,13 @@
 			document.commitAcceptanceSettingsForm.mustHaveIssue.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeUnresolved.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeAssignedToCommiter.disabled = useGlobalRules;
+
+			onRulesFormChange();
+		}
+
+		var rulesFormChanged = false;
+		function onRulesFormChange() {
+			rulesFormChanged = true;
 		}
 	</script>
 </head>
@@ -40,7 +51,7 @@
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" colspan="2">
 			<b>Project:</b>
-	    	<select name="projectKey" onChange="onCommitAcceptanceProjectSelectorChange()">
+	    	<select name="projectKey" onChange="return onCommitAcceptanceProjectSelectorChange()">
 	    		<option value="">Global</option>
 	    		<optgroup label="Projects">
 	    			#foreach($project in $projects)
@@ -66,7 +77,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end />
+	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
 			The log message must contain a valid JIRA issue key(s).
@@ -74,7 +85,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end />
+		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
 		  All issues referenced in the log message must be <b>UNRESOLVED</b>.
@@ -82,7 +93,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end/>
+			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
 			All issues referenced in the log message must be assigned to the committer.<br/>
