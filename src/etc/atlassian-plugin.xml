@@ -24,4 +24,15 @@
         </actions>
     </webwork1>
 
+	<web-item key="commitAcceptancePlugin" name="Commit Acceptance Plugin Link" section="system.admin/project" weight="90">
+		<label key="commitAcceptance.menu.title" />
+		<tooltip key="commitAcceptance.menu.tooltip" />
+		<link linkId="commitAcceptance">/secure/CommitAcceptanceConfigure.jspa</link>
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+		    <param name="permission">admin</param>
+		</condition>
+	</web-item>
+
+	<resource type="i18n" name="i18n" location="templates/commitacceptance-plugin"/>
+
 </atlassian-plugin>
