@@ -10,7 +10,7 @@
 	7. Create the 4 preconfigured issues
 	8. Run "commitAll" and check the result log
 -->
-<project basedir="." default="commit" >
+<project basedir="." default="commitAll">
 	<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask"/>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
