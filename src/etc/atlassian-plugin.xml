@@ -20,6 +20,7 @@
         <actions>
             <action name="com.atlassian.jira.ext.commitacceptance.server.action.ConfigureAction" alias="CommitAcceptanceConfigure">
                 <view name="success">/templates/commitacceptance_configure.vm</view>
+                <view name="error">/secure/views/permissionviolation.jsp</view>
             </action>
         </actions>
     </webwork1>

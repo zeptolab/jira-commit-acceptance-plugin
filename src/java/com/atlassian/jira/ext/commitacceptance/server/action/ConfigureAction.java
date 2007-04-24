@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 
 /**
@@ -29,7 +30,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 	 * Services.
 	 */
 	private ProjectManager projectManager;
-	private AcceptanceSettingsManager settingsManager;
+	private AcceptanceSettingsManager acceptanceSettingsManager;
 
 	/**
 	 * Key of the selected project or empty string for global settings.
@@ -44,20 +45,25 @@ public class ConfigureAction extends JiraWebActionSupport {
      */
     private String submitted;
 
-	public ConfigureAction(ProjectManager projectManager, AcceptanceSettingsManager settingsManager) {
+	public ConfigureAction(ProjectManager projectManager, AcceptanceSettingsManager acceptanceSettingsManager) {
 		this.projectManager = projectManager;
-		this.settingsManager = settingsManager;
+		this.acceptanceSettingsManager = acceptanceSettingsManager;
 	}
 
     public String execute() throws Exception {
+    	// reject if user has no admin rights
+    	if(!isHasPermission(Permissions.ADMINISTER)) {
+    		return ERROR;
+    	}
+
         if (submitted == null) {
             // load old settings
         	logger.info("Loading commit acceptance settings for [" + projectKey + "]");
-    		settings = settingsManager.getSettings(StringUtils.trimToNull(projectKey));
+    		settings = acceptanceSettingsManager.getSettings(StringUtils.trimToNull(projectKey));
         } else {
             // save new settings
         	logger.info("Saving commit acceptance settings for [" + projectKey + "]");
-           	settingsManager.setSettings(StringUtils.trimToNull(projectKey), settings);
+           	acceptanceSettingsManager.setSettings(StringUtils.trimToNull(projectKey), settings);
         }
         return SUCCESS;
     }
