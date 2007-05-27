@@ -6,7 +6,7 @@ package com.atlassian.jira.ext.commitacceptance.server.exception;
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
  */
-public class AcceptanceException extends RuntimeException {
+public class AcceptanceException extends RuntimeException {// TODO should be CommitRejectedException
 	private static final long serialVersionUID = 1L;
 
 	public AcceptanceException() {
