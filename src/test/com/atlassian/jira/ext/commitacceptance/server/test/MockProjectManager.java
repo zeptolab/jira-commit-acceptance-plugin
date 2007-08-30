@@ -128,4 +128,9 @@ public class MockProjectManager implements ProjectManager {// TODO reorder + arg
 	public void updateProjectCategory(GenericValue arg0) throws DataAccessException {
 		throw new UnsupportedOperationException();
 	}
+
+	public Project getProjectObjByName(String arg0) {
+		throw new UnsupportedOperationException();
+	}
+
 }

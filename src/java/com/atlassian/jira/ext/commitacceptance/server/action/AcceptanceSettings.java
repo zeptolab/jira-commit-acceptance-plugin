@@ -18,13 +18,27 @@ public class AcceptanceSettings {
 
 	/**
      * If <code>true</code> the commit message must contain
-     * at least valid issue key.
+     * at least one valid issue key.
      */
     private boolean mustHaveIssue;
+
+	/**
+	 * If <code>true</code>, the commit message must contain
+	 * at least one issue key for the project.
+	 */
+	private boolean mustHaveIssueInProject;
+
+	/**
+	 * If <code>true</code>, all the issues referenced in
+	 * the commit message must be for this project.
+	 */
+	private boolean mustIssuesBeInProject;
+
     /**
      * If <code>true</code>, all the issues must be unresolved.
      */
     private boolean mustBeUnresolved;
+
     /**
      * If <code>true</code>, all the issues must be assigned to
      * the commiter.
@@ -46,6 +60,22 @@ public class AcceptanceSettings {
     public void setMustHaveIssue(boolean mustHaveIssue) {
         this.mustHaveIssue = mustHaveIssue;
     }
+
+	public boolean isMustHaveIssueInProject() {
+		return mustHaveIssueInProject;
+	}
+
+	public void setMustHaveIssueInProject(boolean mustHaveIssueInProject) {
+		this.mustHaveIssueInProject = mustHaveIssueInProject;
+	}
+
+	public boolean isMustIssuesBeInProject() {
+		return mustIssuesBeInProject;
+	}
+
+	public void setMustIssuesBeInProject(boolean mustIssuesBeInProject) {
+		this.mustIssuesBeInProject = mustIssuesBeInProject;
+	}
 
     public boolean isMustBeUnresolved() {
         return mustBeUnresolved;
@@ -71,11 +101,18 @@ public class AcceptanceSettings {
 		AcceptanceSettings other = (AcceptanceSettings)obj;
 		return (useGlobalRules == other.getUseGlobalRules()) &&
 				(mustHaveIssue == other.isMustHaveIssue()) &&
+				(mustHaveIssueInProject == other.isMustHaveIssueInProject()) &&
+				(mustIssuesBeInProject == other.isMustIssuesBeInProject()) &&
 				(mustBeUnresolved == other.isMustBeUnresolved()) &&
 				(mustBeAssignedToCommiter == other.isMustBeAssignedToCommiter());
 	}
 
 	public int hashCode() {
-		return new HashCodeBuilder(79, 11).append(useGlobalRules).append(mustHaveIssue).append(mustBeUnresolved).append(mustBeAssignedToCommiter).hashCode();
+		return new HashCodeBuilder(79, 11).append(useGlobalRules).
+					append(mustHaveIssue).
+					append(mustHaveIssueInProject).
+					append(mustIssuesBeInProject).
+					append(mustBeUnresolved).
+					append(mustBeAssignedToCommiter).hashCode();
 	}
 }

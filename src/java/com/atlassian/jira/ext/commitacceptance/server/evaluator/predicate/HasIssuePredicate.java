@@ -5,8 +5,7 @@ import java.util.Set;
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 
 /**
- * A set of issues passed to this predicate should contain at least one issue. If it's not true,
- * <code>AcceptanceException</code> will be thrown.
+ * A set of issues passed to this predicate should contain at least one issue.
  *
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$

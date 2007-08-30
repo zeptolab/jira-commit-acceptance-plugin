@@ -80,4 +80,8 @@ public class MockApplicationProperties implements ApplicationProperties {// TODO
 	public void setText(String arg0, String arg1) {
 		throw new UnsupportedOperationException();
 	}
+
+	public String getMailEncoding() {
+		throw new UnsupportedOperationException();
+	}
 }

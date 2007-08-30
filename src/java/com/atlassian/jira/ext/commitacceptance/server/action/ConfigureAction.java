@@ -108,6 +108,21 @@ public class ConfigureAction extends JiraWebActionSupport {
         settings.setMustHaveIssue(mustHaveIssue);
 	}
 
+	public boolean isMustHaveIssueInProject() {
+		return settings.isMustHaveIssueInProject();
+	}
+
+	public void setMustHaveIssueInProject(boolean mustHaveIssue) {
+		settings.setMustHaveIssueInProject(mustHaveIssue);
+	}
+
+	public boolean isRestrictIssuesToProject() {
+		return settings.isMustIssuesBeInProject();
+	}
+
+	public void setRestrictIssuesToProject(boolean restrictIssuesToProject) {
+		settings.setMustIssuesBeInProject(restrictIssuesToProject);
+	}
     public void setSubmitted(String submitted) {
         this.submitted = submitted;
     }

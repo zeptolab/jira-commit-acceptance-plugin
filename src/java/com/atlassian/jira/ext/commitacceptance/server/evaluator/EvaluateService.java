@@ -15,6 +15,8 @@ import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsM
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 import com.atlassian.jira.issue.Issue;
@@ -41,6 +43,7 @@ public class EvaluateService {
 	private ProjectManager projectManager;
 	private IssueManager issueManager;
 	private AcceptanceSettingsManager settingsManager;
+	private AcceptanceSettings settings;
 
 	public EvaluateService(ProjectManager projectManager, IssueManager issueManager, AcceptanceSettingsManager settingsManager) {
 		this.projectManager = projectManager;
@@ -60,8 +63,9 @@ public class EvaluateService {
      * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
 	 */
 	public String acceptCommit(String userName, String password, String committerName, String projectKey, String commitMessage) {
-		logger.info("Evaluating commit from '" + committerName + "' in [" + projectKey + "]");
+		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKey + "]");
 
+		String result = null;
 		try {
 			// prepare arguments
 			userName = StringUtils.trim(userName);
@@ -83,16 +87,24 @@ public class EvaluateService {
 				throw new AcceptanceException("No project with key [" + projectKey + "] found, check the SCM hook script configuration");
 			}
 
+			// Get the project settings
+        	        settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
+
 			// parse the commit message and collect issues.
 			Set issues = loadIssuesByMessage(commitMessage);
 
 			// check issues with acceptance settings.
 			checkIssuesAcceptance(committerName, project, issues);
-		} catch(AcceptanceException e) {
-			return acceptanceResultToString(false, e.getMessage());
+			result = acceptanceResultToString(true, "Commit accepted by JIRA.");
+		} catch(AcceptanceException ex) {
+			result = acceptanceResultToString(false, ex.getMessage());
+		} catch(Exception ex) {
+			logger.error("Unable to evaluate", ex);
+			result = acceptanceResultToString(false, "A fatal error occurred in JIRA and has been logged. Contact your system administrator.");
 		}
 
-		return acceptanceResultToString(true, "Commit accepted by JIRA.");
+		logger.info("Commit acceptance result: \"" + result + "\"");
+		return result;
 	}
 
 	/**
@@ -171,8 +183,8 @@ public class EvaluateService {
 	/**
 	 * Extracts issue keys from the commit message and collects issues.
 	 * @param commitMessage a commit message.
-     *
-     * @return a set of issues extracted from the commit message.
+	 *
+	 * @return a set of issues extracted from the commit message.
 	 */
 	private Set loadIssuesByMessage(String commitMessage) {
 		// Parse a commit message and get issue keys it contains.
@@ -191,25 +203,31 @@ public class EvaluateService {
 
 	/**
 	 * Checks issues with the given acceptance settings.
-     * Throws <code>AcceptanceException</code> if at least one issue doesn't
-     * meet the acceptance settings.
-     *
-     * @param project to check against.
-     * @param committerName a committer name.
-     * @param issues a set of issues to be checked.
+ 	 * Throws <code>AcceptanceException</code> if at least one issue doesn't
+ 	 * meet the acceptance settings.
+ 	 *
+ 	 * @param project to check against.
+ 	 * @param committerName a committer name.
+ 	 * @param issues a set of issues to be checked.
 	 */
 	private void checkIssuesAcceptance(String committerName, Project project, Set issues) {
-		List predicates = new ArrayList();
-        AcceptanceSettings settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
         if(settings.getUseGlobalRules()) {
-        	// load global rules if those override the project specific ones
-        	logger.debug("Using global rules");
+    		// load global rules if those override the project specific ones
+    		logger.debug("Using global rules");
         	settings = settingsManager.getSettings(null);
-        }
+    	}
 
 		// construct
+		List predicates = new ArrayList();
+
 		if(settings.isMustHaveIssue()) {
 			predicates.add(new HasIssuePredicate());
+		}
+		if (settings.isMustHaveIssueInProject()) {
+			predicates.add(new HasIssueInProjectPredicate(project));
+		}
+		if (settings.isMustIssuesBeInProject()) {
+			predicates.add(new AreIssuesInProjectPredicate(project));
 		}
 		if(settings.isMustBeAssignedToCommiter()) {
 			predicates.add(new AreIssuesAssignedToPredicate(committerName));

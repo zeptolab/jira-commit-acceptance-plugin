@@ -18,6 +18,8 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
 	 */
     private static final String USE_GLOBAL_RULES_KEY_PREFIX = "jira.plugins.commitacceptance.settings.useGlobalRules";
     private static final String MUST_HAVE_ISSUE_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustHaveIssue";
+    private static final String MUST_HAVE_ISSUE_IN_PROJECT_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustHaveIssueInProject";
+    private static final String MUST_ISSUES_BE_IN_PROJECT_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustIssuesBeInProject";
     private static final String MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeAssignedToCommiter";
     private static final String MUST_BE_UNRESOLVED_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeUnresolved";
 
@@ -35,6 +37,8 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
 
         acceptanceSettings.setUseGlobalRules((projectKey == null) ? true : applicationProperties.getOption(getRuleOptionName(projectKey, USE_GLOBAL_RULES_KEY_PREFIX)));
         acceptanceSettings.setMustHaveIssue(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_HAVE_ISSUE_KEY_PREFIX)));
+        acceptanceSettings.setMustHaveIssueInProject(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_HAVE_ISSUE_IN_PROJECT_KEY_PREFIX)));
+        acceptanceSettings.setMustIssuesBeInProject(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_ISSUES_BE_IN_PROJECT_KEY_PREFIX)));
         acceptanceSettings.setMustBeAssignedToCommiter(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX)));
         acceptanceSettings.setMustBeUnresolved(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_BE_UNRESOLVED_KEY_PREFIX)));
 
@@ -44,6 +48,8 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
     public void setSettings(String projectKey, AcceptanceSettings acceptanceSettings) {
         applicationProperties.setOption(getRuleOptionName(projectKey, USE_GLOBAL_RULES_KEY_PREFIX), (projectKey == null) ? true : acceptanceSettings.getUseGlobalRules());
         applicationProperties.setOption(getRuleOptionName(projectKey, MUST_HAVE_ISSUE_KEY_PREFIX), acceptanceSettings.isMustHaveIssue());
+        applicationProperties.setOption(getRuleOptionName(projectKey, MUST_HAVE_ISSUE_IN_PROJECT_KEY_PREFIX), acceptanceSettings.isMustHaveIssueInProject());
+        applicationProperties.setOption(getRuleOptionName(projectKey, MUST_ISSUES_BE_IN_PROJECT_KEY_PREFIX), acceptanceSettings.isMustIssuesBeInProject());
         applicationProperties.setOption(getRuleOptionName(projectKey, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX), acceptanceSettings.isMustBeAssignedToCommiter());
         applicationProperties.setOption(getRuleOptionName(projectKey, MUST_BE_UNRESOLVED_KEY_PREFIX), acceptanceSettings.isMustBeUnresolved());
     }

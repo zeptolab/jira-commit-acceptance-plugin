@@ -24,6 +24,7 @@ import com.opensymphony.user.User;
  * @version $Id$
  */
 public class MockIssueImpl implements MutableIssue {// TODO reorder + arg names
+	private Project project;
 	private String key;
 	private GenericValue resolution;
 	private String assigneeId;
@@ -114,6 +115,10 @@ public class MockIssueImpl implements MutableIssue {// TODO reorder + arg names
 
 	public void setProject(GenericValue arg0) {
 		throw new UnsupportedOperationException();
+	}
+
+	public void setProjectObject(Project project) {
+		this.project = project;
 	}
 
 	public void setReporter(User arg0) {
@@ -265,7 +270,7 @@ public class MockIssueImpl implements MutableIssue {// TODO reorder + arg names
 	}
 
 	public Project getProjectObject() {
-		throw new UnsupportedOperationException();
+		return project;
 	}
 
 	public User getReporter() {

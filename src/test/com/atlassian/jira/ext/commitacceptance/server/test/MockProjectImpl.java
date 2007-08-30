@@ -2,6 +2,8 @@ package com.atlassian.jira.ext.commitacceptance.server.test;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.project.Project;
@@ -14,6 +16,8 @@ import com.opensymphony.user.User;
  * @version $Id$
  */
 public class MockProjectImpl implements Project {// TODO reorder + arg names
+	private String key = StringUtils.upperCase(RandomStringUtils.random(3, true, false));
+
 	public Long getAssigneeType() {
 		throw new UnsupportedOperationException();
 	}
@@ -39,7 +43,7 @@ public class MockProjectImpl implements Project {// TODO reorder + arg names
 	}
 
 	public String getKey() {
-		throw new UnsupportedOperationException();
+		return key;
 	}
 
 	public User getLead() {

@@ -5,12 +5,12 @@ import java.util.Set;
 
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.resolution.Resolution;
+import com.atlassian.jira.project.Project;
 
 import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
 
 /**
- * All issues passed to this predicate should be in UNRESOLVED. If it's not true,
- * <code>AcceptanceException</code> will be thrown.
+ * All issues passed to this predicate should be in UNRESOLVED.
  *
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
@@ -26,5 +26,9 @@ public class AreIssuesUnresolvedPredicate implements JiraPredicate {
 				throw new AcceptanceException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
 			}
 		}
+	}
+
+	public void evaluate(Set issues, Project project) {
+		evaluate(issues);
 	}
 }

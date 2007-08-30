@@ -42,9 +42,10 @@ public class Mockery {
 		return new MockProjectImpl();
 	}
 
-	public static MutableIssue createIssue() {
-		MutableIssue issue = new MockIssueImpl();
-		issue.setKey("BUG-" + RandomUtils.nextInt());
+	public static MutableIssue createIssue(Project project) {
+		MockIssueImpl issue = new MockIssueImpl();
+		issue.setProjectObject(project);
+		issue.setKey(project.getKey() + "-" + RandomUtils.nextInt());
 		return issue;
 	}
 
