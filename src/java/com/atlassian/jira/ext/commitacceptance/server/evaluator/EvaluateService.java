@@ -88,7 +88,7 @@ public class EvaluateService {
 			}
 
 			// Get the project settings
-        	        settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
+			settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
 
 			// parse the commit message and collect issues.
 			Set issues = loadIssuesByMessage(commitMessage);

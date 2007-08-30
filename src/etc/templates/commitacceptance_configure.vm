@@ -90,8 +90,7 @@
 	    	<input type="checkbox" name="mustHaveIssueInProject" value="true" #if($mustHaveIssueInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
-			The log message must contain a valid JIRA issue key for this project.<br/>
-			<span class="small">NOTE: Otherwise issue key(s) can be for any project.</span>
+			The log message must contain at least one valid JIRA issue key for this project.<br/>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -99,7 +98,7 @@
 	    	<input type="checkbox" name="restrictIssuesToProject" value="true" #if($restrictIssuesToProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
-			The log message must <b>not</b> contain valid JIRA issue key(s) for other projects.
+			All issues referenced in the log message must be for this project.
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -107,7 +106,7 @@
 		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
-		  All issues referenced in the log message must be <b>UNRESOLVED</b>.
+			All issues referenced in the log message must be <b>UNRESOLVED</b>.
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
