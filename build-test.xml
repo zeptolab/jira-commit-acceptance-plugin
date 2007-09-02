@@ -30,9 +30,10 @@
 
 	<property name="issue.nonExisting" value="TST-0"></property>
 	<property name="issue.unresolvedUnassigned" value="TST-1"></property><!-- can be assigned to a different user -->
-	<property name="issue.unresolvedAssigned" value="TST-4"></property>
+	<property name="issue.unresolvedAssigned" value="TST-2"></property>
 	<property name="issue.resolvedUnassigned" value="TST-3"></property><!-- can be assigned to a different user -->
-	<property name="issue.resolvedAssigned" value="TST-5"></property>
+	<property name="issue.resolvedAssigned" value="TST-4"></property>
+	<property name="issue.anotherProject" value="ARP-1"></property><!-- can be anything, but must be valid -->
 
 	<target name="init">
 		<!-- checkout SVN working copy -->
@@ -107,27 +108,30 @@
 			</else>
 		</if>
 
-		<echo file="${logfile.path}" append="true">'${commitMessage}'  ${svn.oldRevision} -> ${svn.newRevision}${line.separator}</echo>
+		<echo file="${logfile.path}" append="true">'${commitMessage}'  (${svn.oldRevision} -> ${svn.newRevision})${line.separator}</echo>
 	</target>
 
 	<target name="commitAll" depends="init" description="TODO">
 		<delete file="${logfile.path}"></delete>
 
 		<antcall target="commit"><param name="commitMessage" value="No issues" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 nonExisting:                                 [${issue.nonExisting}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 nonExisting + 1 unresolvedUnassigned:        [${issue.nonExisting}] [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 unassigned:                                  [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 nonExisting:                                 ${issue.nonExisting}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 nonExisting + 1 unresolvedUnassigned:        ${issue.nonExisting} ${issue.unresolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        ${issue.unresolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 unassigned:                                  ${issue.unresolvedUnassigned} ${issue.resolvedUnassigned}" /></antcall>
 
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 resolvedUnassigned: [${issue.unresolvedUnassigned}] [${issue.resolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 resolvedUnassigned:                          [${issue.resolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 resolved:                                    [${issue.resolvedUnassigned}] [${issue.resolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        ${issue.unresolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 resolvedUnassigned: ${issue.unresolvedUnassigned} ${issue.resolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 resolvedUnassigned:                          ${issue.resolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 resolved:                                    ${issue.resolvedUnassigned} ${issue.resolvedAssigned}" /></antcall>
 
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        [${issue.unresolvedUnassigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 unresolvedAssigned: [${issue.unresolvedUnassigned}] [${issue.unresolvedAssigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="1 unresolvedAssigned:                          [${issue.unresolvedAssigned}]" /></antcall>
-		<antcall target="commit"><param name="commitMessage" value="2 assigned:                                    [${issue.unresolvedAssigned}] [${issue.resolvedAssigned}]" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned:                        ${issue.unresolvedUnassigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 unresolvedAssigned: ${issue.unresolvedUnassigned} ${issue.unresolvedAssigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedAssigned:                          ${issue.unresolvedAssigned}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="2 assigned:                                    ${issue.unresolvedAssigned} ${issue.resolvedAssigned}" /></antcall>
+
+		<antcall target="commit"><param name="commitMessage" value="1 anotherProject:                              ${issue.anotherProject}" /></antcall>
+		<antcall target="commit"><param name="commitMessage" value="1 unresolvedUnassigned + 1 anotherProject:     ${issue.unresolvedUnassigned} ${issue.anotherProject}" /></antcall>
 
 		<loadfile property="log" srcfile="${logfile.path}" />
 		<echo>--------------------------------------------------------------------------------</echo>
