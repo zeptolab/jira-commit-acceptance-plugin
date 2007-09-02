@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.atlassian.core.user.UserUtils;
-import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
 import com.atlassian.jira.issue.Issue;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
@@ -37,7 +37,7 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 					cause = "Issue [" + issue.getKey() + "] is not assigned to the correct person.";
 				}
 
-				throw new AcceptanceException(cause);
+				throw new PredicateVioldatedException(cause);
 			}
 		}
 	}

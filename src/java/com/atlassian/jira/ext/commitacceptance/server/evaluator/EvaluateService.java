@@ -13,12 +13,13 @@ import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInProjectPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.InvalidAcceptanceArgumentException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.project.Project;
@@ -58,12 +59,12 @@ public class EvaluateService {
      * @param userName, a login name of the SCM account.
      * @param password, a password of the SCM account.
      * @param committerName a name of the person that commiting a code.
-     * @param projectKey is the key of JIRA project where the commit belongs.
+     * @param projectKeys is the key(s) of JIRA project(s) where the commit belongs. This can be multiple keys separated by comma like "TST,ARP,PLG".
      * @param commitMessage a message that a committer entered before commiting.
      * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
 	 */
-	public String acceptCommit(String userName, String password, String committerName, String projectKey, String commitMessage) {
-		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKey + "]");
+	public String acceptCommit(String userName, String password, String committerName, String projectKeys, String commitMessage) {// FIXME change in scripts
+		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKeys + "]");
 
 		String result = null;
 		try {
@@ -71,7 +72,7 @@ public class EvaluateService {
 			userName = StringUtils.trim(userName);
 			password = StringUtils.trim(password);
 			committerName = StringUtils.trim(committerName);
-			projectKey = StringUtils.trim(projectKey);
+			projectKeys = StringUtils.trim(projectKeys);
 			commitMessage = StringUtils.trim(commitMessage);
 
 			// test SCM login and password
@@ -81,22 +82,42 @@ public class EvaluateService {
 			committerName = StringUtils.lowerCase(committerName);
 			User committer = getCommitter(committerName);
 
-			// get project
-			Project project = projectManager.getProjectObjByKey(projectKey);
-			if(project == null) {
-				throw new AcceptanceException("No project with key [" + projectKey + "] found, check the SCM hook script configuration");
+			// accept commit if at least one project accepts it
+			String projectKeyAcceptedBy = null;
+			String projectKeyArray[] = StringUtils.split(projectKeys, ',');
+			if(projectKeyArray.length == 0) {
+				throw new InvalidAcceptanceArgumentException("'projectKeys' value \"" + projectKeys + "\" must contain at least one valid project key, check the VCS hook script configuration.");
 			}
 
-			// Get the project settings
-			settings = settingsManager.getSettings((project != null) ? project.getKey() : null);
+			StringBuffer buffer = new StringBuffer();
+			for(int i = 0; i < projectKeyArray.length; i++) {
+				// get project
+				String projectKey = StringUtils.trimToEmpty(projectKeyArray[i]);
+				Project project = projectManager.getProjectObjByKey(projectKey);
+				if(project == null) {
+					throw new InvalidAcceptanceArgumentException("No project with key [" + projectKey + "] found, check the VCS hook script configuration.");
+				}
 
-			// parse the commit message and collect issues.
-			Set issues = loadIssuesByMessage(commitMessage);
+				// get project settings
+				settings = settingsManager.getSettings(project.getKey());
 
-			// check issues with acceptance settings.
-			checkIssuesAcceptance(committerName, project, issues);
-			result = acceptanceResultToString(true, "Commit accepted by JIRA.");
-		} catch(AcceptanceException ex) {
+				// parse the commit message and collect issues.
+				Set issues = loadIssuesByMessage(commitMessage);
+
+				// check issues with acceptance settings.
+				String projectResult = checkIssuesAcceptance(committerName, project, issues);
+				if(projectResult == null) {
+					projectKeyAcceptedBy = projectKey;
+					break;
+				} else {
+					// save result when rejected and move to the next project
+					buffer.append("Project [" + projectKey + "]: " + projectResult + " ");
+				}
+			}
+
+			// generate result string
+			result = (projectKeyAcceptedBy != null) ? acceptanceResultToString(true, "Commit accepted by JIRA in project [" + projectKeyAcceptedBy + "].") : acceptanceResultToString(false, "All projects reject this commit. " + StringUtils.trim(buffer.toString()));
+		} catch(InvalidAcceptanceArgumentException ex) {
 			result = acceptanceResultToString(false, ex.getMessage());
 		} catch(Exception ex) {
 			logger.error("Unable to evaluate", ex);
@@ -111,8 +132,8 @@ public class EvaluateService {
 	 * Joins parameters boolean and string into the string using '|' as delimiter.
 	 * It is used for passing boolean/string pair to XML-RPC client.
 	 *
-	 * @param acceptance, <code>true</code> if the commit should be accepted.
-	 * @param comment, a comment to be passed to a commiter.
+	 * @param acceptance <code>true</code> if the commit should be accepted.
+	 * @param comment a comment to be passed to a commiter.
 	 */
 	private static String acceptanceResultToString(boolean acceptance, String comment) {
 		StringBuffer result = new StringBuffer();
@@ -124,7 +145,7 @@ public class EvaluateService {
 
 	/**
 	 * Tries to login to JIRA with given account information and
-     * throws <code>AcceptanceException</code> if something goes wrong.
+     * throws {@link InvalidAcceptanceArgumentException} if something goes wrong.
      *
      * @param userName, a login name to be used.
      * @param password, a password to be used.
@@ -136,12 +157,12 @@ public class EvaluateService {
 				throw new EntityNotFoundException();
 			}
 		} catch (EntityNotFoundException e) {
-			throw new AcceptanceException("Invalid user name or password.");
+			throw new InvalidAcceptanceArgumentException("Invalid user name or password.");
 		}
 	}
 
 	/**
-	 * Tests a given committer name with JIRA. It throws <code>AcceptanceException</code>
+	 * Tests a given committer name with JIRA. It throws {@link InvalidAcceptanceArgumentException}
      * if the name is wrong and returns a corresponding <code>User</code> object otherwise.
      *
      * @param committerName a name of the committer to be tested.
@@ -152,7 +173,7 @@ public class EvaluateService {
 		try {
 			committer = UserUtils.getUser(committerName);
 		} catch (EntityNotFoundException e) {
-			//throw new AcceptanceException("Invalid committer name \"" + committerName + "\".");
+			//throw new XxxException("Invalid committer name \"" + committerName + "\".");
 		}
 
 		return committer;
@@ -174,7 +195,7 @@ public class EvaluateService {
 				throw new Exception();
 			}
 		} catch(Exception e) {
-			throw new AcceptanceException("Issue [" + issueKey + "] does not exist or you don't have permission to access it.");
+			throw new InvalidAcceptanceArgumentException("Issue [" + issueKey + "] does not exist or you don't have permission to access it.");
 		}
 
 		return issue;
@@ -192,7 +213,7 @@ public class EvaluateService {
 
 		// Collect issues.
 		Set issues = new HashSet();
-		for (Iterator it=issueKeys.iterator(); it.hasNext();) {
+		for (Iterator it = issueKeys.iterator(); it.hasNext();) {
 			Issue issue = loadIssue((String)it.next());
 			// Put it into the set of issues.
 			issues.add(issue);
@@ -202,15 +223,14 @@ public class EvaluateService {
 	}
 
 	/**
-	 * Checks issues with the given acceptance settings.
- 	 * Throws <code>AcceptanceException</code> if at least one issue doesn't
- 	 * meet the acceptance settings.
+ 	 * Returns <code>null</code> if the commit can be accepted in that project,
+ 	 * or the error message if not.
  	 *
  	 * @param project to check against.
  	 * @param committerName a committer name.
  	 * @param issues a set of issues to be checked.
 	 */
-	private void checkIssuesAcceptance(String committerName, Project project, Set issues) {
+	private String checkIssuesAcceptance(String committerName, Project project, Set issues) {
         if(settings.getUseGlobalRules()) {
     		// load global rules if those override the project specific ones
     		logger.debug("Using global rules");
@@ -229,16 +249,22 @@ public class EvaluateService {
 		if (settings.isMustIssuesBeInProject()) {
 			predicates.add(new AreIssuesInProjectPredicate(project));
 		}
-		if(settings.isMustBeAssignedToCommiter()) {
-			predicates.add(new AreIssuesAssignedToPredicate(committerName));
-		}
 		if(settings.isMustBeUnresolved()) {
 			predicates.add(new AreIssuesUnresolvedPredicate());
 		}
+		if(settings.isMustBeAssignedToCommiter()) {
+			predicates.add(new AreIssuesAssignedToPredicate(committerName));
+		}
 
 		// evaluate
-		for(Iterator it = predicates.iterator(); it.hasNext();) {
-			((JiraPredicate)it.next()).evaluate(issues);
+		try {
+			for(Iterator it = predicates.iterator(); it.hasNext();) {
+				((JiraPredicate)it.next()).evaluate(issues);
+			}
+		} catch(PredicateVioldatedException ex) {
+			return ex.getMessage();
 		}
+
+		return null;
 	}
 }

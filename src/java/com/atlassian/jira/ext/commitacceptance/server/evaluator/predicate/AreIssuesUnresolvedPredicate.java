@@ -7,7 +7,7 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.resolution.Resolution;
 import com.atlassian.jira.project.Project;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.AcceptanceException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
 
 /**
  * All issues passed to this predicate should be in UNRESOLVED.
@@ -23,7 +23,7 @@ public class AreIssuesUnresolvedPredicate implements JiraPredicate {
 
 			// reject if any issue is resolved
 			if (resolution != null)	{
-				throw new AcceptanceException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
+				throw new PredicateVioldatedException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
 			}
 		}
 	}

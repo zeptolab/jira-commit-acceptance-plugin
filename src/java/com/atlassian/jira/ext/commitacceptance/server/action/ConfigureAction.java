@@ -84,22 +84,6 @@ public class ConfigureAction extends JiraWebActionSupport {
     	settings.setUseGlobalRules(useGlobalRules);
     }
 
-    public boolean isMustBeAssignedToCommiter() {
-		return settings.isMustBeAssignedToCommiter();
-	}
-
-	public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
-        settings.setMustBeAssignedToCommiter(mustBeAssignedToCommiter);
-	}
-
-	public boolean isMustBeUnresolved() {
-		return settings.isMustBeUnresolved();
-	}
-
-	public void setMustBeUnresolved(boolean mustBeUnresolved) {
-        settings.setMustBeUnresolved(mustBeUnresolved);
-	}
-
 	public boolean isMustHaveIssue() {
 		return settings.isMustHaveIssue();
 	}
@@ -116,14 +100,31 @@ public class ConfigureAction extends JiraWebActionSupport {
 		settings.setMustHaveIssueInProject(mustHaveIssue);
 	}
 
-	public boolean isRestrictIssuesToProject() {
+	public boolean isMustIssuesBeInProject() {
 		return settings.isMustIssuesBeInProject();
 	}
 
-	public void setRestrictIssuesToProject(boolean restrictIssuesToProject) {
-		settings.setMustIssuesBeInProject(restrictIssuesToProject);
+	public void setMustIssuesBeInProject(boolean mustIssuesBeInProject) {
+		settings.setMustIssuesBeInProject(mustIssuesBeInProject);
 	}
-    public void setSubmitted(String submitted) {
+
+	public boolean isMustBeUnresolved() {
+		return settings.isMustBeUnresolved();
+	}
+
+	public void setMustBeUnresolved(boolean mustBeUnresolved) {
+        settings.setMustBeUnresolved(mustBeUnresolved);
+	}
+
+    public boolean isMustBeAssignedToCommiter() {
+		return settings.isMustBeAssignedToCommiter();
+	}
+
+	public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
+        settings.setMustBeAssignedToCommiter(mustBeAssignedToCommiter);
+	}
+
+	public void setSubmitted(String submitted) {
         this.submitted = submitted;
     }
 
