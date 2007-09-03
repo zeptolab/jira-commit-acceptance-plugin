@@ -86,7 +86,7 @@ public class EvaluateService {
 			String projectKeyAcceptedBy = null;
 			String projectKeyArray[] = StringUtils.split(projectKeys, ',');
 			if(projectKeyArray.length == 0) {
-				throw new InvalidAcceptanceArgumentException("'projectKeys' value \"" + projectKeys + "\" must contain at least one valid project key, check the VCS hook script configuration.");
+				throw new InvalidAcceptanceArgumentException("'projectKey' value \"" + projectKeys + "\" must contain at least one valid project key, check the VCS hook script configuration.");
 			}
 
 			StringBuffer buffer = new StringBuffer();
@@ -116,7 +116,7 @@ public class EvaluateService {
 			}
 
 			// generate result string
-			result = (projectKeyAcceptedBy != null) ? acceptanceResultToString(true, "Commit accepted by JIRA in project [" + projectKeyAcceptedBy + "].") : acceptanceResultToString(false, "All projects reject this commit. " + StringUtils.trim(buffer.toString()));
+			result = (projectKeyAcceptedBy != null) ? acceptanceResultToString(true, "Commit accepted by JIRA in project [" + projectKeyAcceptedBy + "].") : acceptanceResultToString(false, "No project accepts this commit. " + StringUtils.trim(buffer.toString()));
 		} catch(InvalidAcceptanceArgumentException ex) {
 			result = acceptanceResultToString(false, ex.getMessage());
 		} catch(Exception ex) {
