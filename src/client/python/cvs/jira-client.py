@@ -9,6 +9,8 @@ import urlparse
 import xmlrpclib
 
 # configure JIRA access
+# ("projectKey" can contain multiple comma-separated JIRA project keys like "projectKey = 'TST,ARP'".
+# If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.)
 jiraBaseURL = 'http://127.0.0.1:8080'
 jiraLogin = 'root'
 jiraPassword = 'root'
