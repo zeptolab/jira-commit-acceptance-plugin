@@ -6,21 +6,21 @@ package com.atlassian.jira.ext.commitacceptance.server.exception;
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
  */
-public class PredicateVioldatedException extends RuntimeException {
+public class PredicateViolatedException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public PredicateVioldatedException() {
+	public PredicateViolatedException() {
 	}
 
-	public PredicateVioldatedException(String message) {
+	public PredicateViolatedException(String message) {
 		super(message);
 	}
 
-	public PredicateVioldatedException(String message, Throwable cause) {
+	public PredicateViolatedException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public PredicateVioldatedException(Throwable cause) {
+	public PredicateViolatedException(Throwable cause) {
 		super(cause);
 	}
 }

@@ -3,7 +3,7 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.project.Project;
 
@@ -31,6 +31,6 @@ public class HasIssueInProjectPredicate implements JiraPredicate {
 		}
 
 		// none matched, so reject
-		throw new PredicateVioldatedException("Commit message must include at least one issue from project [" + project.getKey() + "].");
+		throw new PredicateViolatedException("Commit message must include at least one issue from project [" + project.getKey() + "].");
 	}
 }

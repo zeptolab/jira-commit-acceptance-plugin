@@ -3,7 +3,7 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.project.Project;
 
@@ -26,7 +26,7 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 
 			// If it's not equal, reject
 			if (!project.equals(issue.getProjectObject())) {
-				throw new PredicateVioldatedException("Commit message must only reference issues from project [" + project.getKey() + "], but issue [" + issue.getKey() +"] is in another project.");
+				throw new PredicateViolatedException("Commit message must only reference issues from project [" + project.getKey() + "], but issue [" + issue.getKey() +"] is in another project.");
 			}
 		}
 	}

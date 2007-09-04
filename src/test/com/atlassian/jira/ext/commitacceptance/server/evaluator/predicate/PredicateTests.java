@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.lang.math.RandomUtils;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.ext.commitacceptance.server.test.Mockery;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.project.Project;
@@ -27,7 +27,7 @@ public class PredicateTests extends TestCase {
 		try {
 			predicate.evaluate(issues);
 			fail("CommitRejectedException is expected for empty issue set");
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			// do nothing
 		}
 
@@ -49,7 +49,7 @@ public class PredicateTests extends TestCase {
 		try {
 			predicate.evaluate(issues);
 			fail("CommitRejectedException is expected for empty issue set");
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			// do nothing
 		}
 
@@ -60,7 +60,7 @@ public class PredicateTests extends TestCase {
 		try {
 			predicate.evaluate(issues);
 			fail("CommitRejectedException is expected for external issues only");
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			// do nothing
 		}
 
@@ -94,7 +94,7 @@ public class PredicateTests extends TestCase {
 		try {
 			predicate.evaluate(issues);
 			fail("CommitRejectedException is expected for external issues");
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			// do nothing
 		}
 	}
@@ -124,7 +124,7 @@ public class PredicateTests extends TestCase {
 		try {
 			predicate.evaluate(issues);
 			fail("CommitRejectedException is expected for issue set including resolved issues");
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			// do nothing
 		}
 	}

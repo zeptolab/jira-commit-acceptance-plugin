@@ -2,7 +2,7 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
 import java.util.Set;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 
 /**
  * Predicate interface to implement by concrete predicates.
@@ -13,7 +13,7 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldat
 public interface JiraPredicate {
 	/**
 	 * It should simply return if the predicate evaluates to "true"
-	 * or throw {@link PredicateVioldatedException} otherwise.
+	 * or throw {@link PredicateViolatedException} otherwise.
 	 */
 	void evaluate(Set issues);
 }

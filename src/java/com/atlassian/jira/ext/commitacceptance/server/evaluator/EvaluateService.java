@@ -18,7 +18,7 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIss
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.ext.commitacceptance.server.exception.InvalidAcceptanceArgumentException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
@@ -261,7 +261,7 @@ public class EvaluateService {
 			for(Iterator it = predicates.iterator(); it.hasNext();) {
 				((JiraPredicate)it.next()).evaluate(issues);
 			}
-		} catch(PredicateVioldatedException ex) {
+		} catch(PredicateViolatedException ex) {
 			return ex.getMessage();
 		}
 

@@ -2,7 +2,7 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
 import java.util.Set;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldatedException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 
 /**
  * A set of issues passed to this predicate should contain at least one issue.
@@ -13,7 +13,7 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateVioldat
 public class HasIssuePredicate implements JiraPredicate {
 	public void evaluate(Set issues) {
 		if (issues.isEmpty()) {
-			throw new PredicateVioldatedException("Commit message must contain at least one valid issue key.");
+			throw new PredicateViolatedException("Commit message must contain at least one valid issue key.");
 		}
 	}
 }
