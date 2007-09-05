@@ -17,13 +17,14 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 	private Project project;
 
 	public AreIssuesInProjectPredicate(Project project) {
-		if (project == null) {
-			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used with the global settings.");
-		}
 		this.project = project;
 	}
 
 	public void evaluate(Set issues) {
+		if (project == null) {
+			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used in the global settings. Contact your administrator.");
+		}
+
 		for (Iterator it = issues.iterator(); it.hasNext();) {
 			Issue issue = (Issue)it.next();
 
