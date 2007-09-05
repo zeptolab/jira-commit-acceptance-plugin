@@ -17,6 +17,9 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 	private Project project;
 
 	public AreIssuesInProjectPredicate(Project project) {
+		if (project == null) {
+			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used with the global settings.");
+		}
 		this.project = project;
 	}
 
