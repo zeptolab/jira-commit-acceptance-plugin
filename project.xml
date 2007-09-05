@@ -35,16 +35,25 @@
         <role>Developer</role>
       </roles>
     </developer>
+    <developer>
+      <name>Peter Kolbus</name>
+      <id>prkolbus</id>
+      <email>prkolbus@unusualcode.com</email>
+      <organization>UnusualCode</organization>
+      <roles>
+        <role>Contributor</role>
+      </roles>
+    </developer>
   </developers>
-
-
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <resources>
       <resource>
         <directory>src/etc/</directory>
-        <includes>**/*.*</includes>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
       </resource>
     </resources>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
