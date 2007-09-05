@@ -69,7 +69,7 @@
 		</td>
 		<td class="instructions">
 			Use the global rules for this project.<br/>
-	   		<span class="small">NOTE: uncheck it to configure specific rules for this project.</span>
+	   		<span class="small">NOTE: Uncheck it to configure specific rules for this project.</span>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
