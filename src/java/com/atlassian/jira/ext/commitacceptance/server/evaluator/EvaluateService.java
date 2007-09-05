@@ -85,9 +85,8 @@ public class EvaluateService {
 			// test SCM login and password
 			authenticateUser(userName, password);
 
-			// convert committer name to lowercase (JIRA user names are lowercase) and load committer
+			// convert committer name to lowercase (JIRA user names are lowercase)
 			committerName = StringUtils.lowerCase(committerName);
-			User committer = getCommitter(committerName);
 
 			// accept commit if at least one project accepts it
 			String projectKeyAcceptedBy = null;
@@ -103,9 +102,7 @@ public class EvaluateService {
 
 				if (projectKey.equals(GLOBAL_PROJECT_KEY)) {
 					project = null;
-				}
-				else {
-					// get project
+				} else {
 					project = projectManager.getProjectObjByKey(projectKey);
 					if(project == null) {
 						throw new InvalidAcceptanceArgumentException("No project with key [" + projectKey + "] found, check the VCS hook script configuration.");
@@ -173,24 +170,6 @@ public class EvaluateService {
 		} catch (EntityNotFoundException e) {
 			throw new InvalidAcceptanceArgumentException("Invalid user name or password.");
 		}
-	}
-
-	/**
-	 * Tests a given committer name with JIRA. It throws {@link InvalidAcceptanceArgumentException}
-     * if the name is wrong and returns a corresponding <code>User</code> object otherwise.
-     *
-     * @param committerName a name of the committer to be tested.
-     * @return a <code>User</code> object for the given committer name.
-	 */
-	private User getCommitter(String committerName) {
-		User committer = null;
-		try {
-			committer = UserUtils.getUser(committerName);
-		} catch (EntityNotFoundException e) {
-			//throw new XxxException("Invalid committer name \"" + committerName + "\".");
-		}
-
-		return committer;
 	}
 
 	/**
