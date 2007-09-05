@@ -10,7 +10,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @version $Id$
  */
 public class AcceptanceSettings {
-	/**
+    /* TODO */
+    public static int ONLY_FOR_THIS = 0;
+    public static int ONE_FOR_THIS = 1;
+    public static int FOR_ANY = 2;
+
+    /**
 	 * If <code>true</code> the global settings override
 	 * the project-specific settings.
 	 */
@@ -22,18 +27,6 @@ public class AcceptanceSettings {
      */
     private boolean mustHaveIssue;
 
-	/**
-	 * If <code>true</code>, the commit message must contain
-	 * at least one issue key for the project.
-	 */
-	private boolean mustHaveIssueInProject;
-
-	/**
-	 * If <code>true</code>, all the issues referenced in
-	 * the commit message must be for this project.
-	 */
-	private boolean mustHaveAllIssuesInProject;
-
     /**
      * If <code>true</code>, all the issues must be unresolved.
      */
@@ -44,6 +37,11 @@ public class AcceptanceSettings {
      * the commiter.
      */
     private boolean mustBeAssignedToCommiter;
+
+    /**
+     * TODO
+     */
+    private int acceptIssuesFor;
 
     public boolean getUseGlobalRules() {
 		return useGlobalRules;
@@ -61,22 +59,6 @@ public class AcceptanceSettings {
         this.mustHaveIssue = mustHaveIssue;
     }
 
-	public boolean isMustHaveIssueInProject() {
-		return mustHaveIssueInProject;
-	}
-
-	public void setMustHaveIssueInProject(boolean mustHaveIssueInProject) {
-		this.mustHaveIssueInProject = mustHaveIssueInProject;
-	}
-
-	public boolean isMustHaveAllIssuesInProject() {
-		return mustHaveAllIssuesInProject;
-	}
-
-	public void setMustHaveAllIssuesInProject(boolean mustHaveAllIssuesInProject) {
-		this.mustHaveAllIssuesInProject = mustHaveAllIssuesInProject;
-	}
-
     public boolean isMustBeUnresolved() {
         return mustBeUnresolved;
     }
@@ -93,6 +75,14 @@ public class AcceptanceSettings {
         this.mustBeAssignedToCommiter = mustBeAssignedToCommiter;
     }
 
+	public int getAcceptIssuesFor() {
+		return acceptIssuesFor;
+	}
+
+	public void setAcceptIssuesFor(int acceptIssuesFor) {
+		this.acceptIssuesFor = acceptIssuesFor;
+	}
+
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -101,18 +91,16 @@ public class AcceptanceSettings {
 		AcceptanceSettings other = (AcceptanceSettings)obj;
 		return (useGlobalRules == other.getUseGlobalRules()) &&
 				(mustHaveIssue == other.isMustHaveIssue()) &&
-				(mustHaveIssueInProject == other.isMustHaveIssueInProject()) &&
-				(mustHaveAllIssuesInProject == other.isMustHaveAllIssuesInProject()) &&
 				(mustBeUnresolved == other.isMustBeUnresolved()) &&
-				(mustBeAssignedToCommiter == other.isMustBeAssignedToCommiter());
+				(mustBeAssignedToCommiter == other.isMustBeAssignedToCommiter() &&
+				(acceptIssuesFor == other.getAcceptIssuesFor()));
 	}
 
 	public int hashCode() {
 		return new HashCodeBuilder(79, 11).append(useGlobalRules).
 					append(mustHaveIssue).
-					append(mustHaveIssueInProject).
-					append(mustHaveAllIssuesInProject).
 					append(mustBeUnresolved).
-					append(mustBeAssignedToCommiter).hashCode();
+					append(mustBeAssignedToCommiter).
+					append(acceptIssuesFor).hashCode();
 	}
 }

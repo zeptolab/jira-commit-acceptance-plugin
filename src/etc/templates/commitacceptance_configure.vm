@@ -16,10 +16,11 @@
 			useGlobalRules = document.commitAcceptanceSettingsForm.useGlobalRules.checked;
 
 			document.commitAcceptanceSettingsForm.mustHaveIssue.disabled = useGlobalRules;
-			document.commitAcceptanceSettingsForm.mustHaveIssueInProject.disabled = useGlobalRules;
-			document.commitAcceptanceSettingsForm.mustHaveAllIssuesInProject.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeUnresolved.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeAssignedToCommiter.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.acceptIssuesFor_onlyForThis.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.acceptIssuesFor_oneForThis.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.acceptIssuesFor_any.disabled = useGlobalRules;
 
 			onRulesFormChange();
 		}
@@ -46,6 +47,7 @@
 		    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
 		    scripts (see <a href="http://confluence.atlassian.com/display/JIRAEXT/Commit+Acceptance+Plugin">docs</a>) will
 		    contact JIRA and process the commit info and log message based on the criteria below.<br/>
+		    <br/>
 		    You can configure global (site-wide) rules and refer to those from the actual projects, or configure
 			project specific rules separately for any of your JIRA projects.
 	    </td>
@@ -64,10 +66,10 @@
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
-		<td class="instructions" width="1%" nowrap>
+		<td class="instructions fieldLabelArea" width="1%" nowrap>
 	    	<input type="checkbox" name="useGlobalRules" value="true" #if($useGlobalRules) checked="checked" #end #if($projectKey == "") disabled #end onChange="onUseGlobalRulesChange()" />
 		</td>
-		<td class="instructions">
+		<td class="instructions fieldValueArea">
 			Use the global rules for this project.<br/>
 	   		<span class="small">NOTE: Uncheck it to configure specific rules for this project.</span>
 		</td>
@@ -78,48 +80,47 @@
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
-		<td class="jiraformbody" width="1%" nowrap>
+		<td class="fieldLabelArea" width="1%" nowrap>
 	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
-		<td>
+		<td class="fieldValueArea">
 			The log message must contain a valid JIRA issue key(s).
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
-		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustHaveIssueInProject" value="true" #if($mustHaveIssueInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end #if ($projectKey == "") disabled #end onChange="onRulesFormChange()" />
-		</td>
-		<td>
-			The log message must contain at least one valid JIRA issue key for this project.<br/>
-		</td>
-	</tr>
-	<tr bgcolor="#ffffff">
-		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustHaveAllIssuesInProject" value="true" #if($mustHaveAllIssuesInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end #if ($projectKey == "") disabled #end onChange="onRulesFormChange()" />		</td>
-		<td>
-			All issues referenced in the log message must be for this project.
-		</td>
-	</tr>
-	<tr bgcolor="#ffffff">
-		<td class="jiraformbody" width="1%" nowrap>
+		<td class="fieldLabelArea" width="1%" nowrap>
 		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
-		<td>
+		<td class="fieldValueArea">
 			All issues referenced in the log message must be <b>UNRESOLVED</b>.
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
-		<td class="jiraformbody" width="1%" nowrap>
+		<td class="fieldLabelArea" width="1%" nowrap>
 			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
-		<td>
+		<td class="fieldValueArea">
 			All issues referenced in the log message must be assigned to the committer.<br/>
 	   		<span class="small">NOTE: Your VCS usernames must match your JIRA usernames.</span>
 		</td>
 	</tr>
+	<tr>
+		<td class="fieldLabelArea" width="1%" nowrap>
+			Issues:
+		</td>
+		<td class="fieldValueArea">
+			<input type="radio" name="acceptIssuesFor" value="onlyForThis" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">Accept only for this project</label>
+			&nbsp;
+			<input type="radio" name="acceptIssuesFor" value="oneForThis" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">At least one must be for this project</label>
+			&nbsp;
+			<input type="radio" name="acceptIssuesFor" value="any" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">Accept for any project</label>
+			<br/>
+			<span class="small">NOTE: This setting is ignored when client is checking directly against the global settings.</span>
+		</td>
+	</tr>
 
 	<tr bgcolor="#ffffff">
-		<td class="jiraformfooter fullyCentered" colspan="2">
+		<td class="jiraformfooter fullyCentered" style="padding-top: 10px;" colspan="2">
 			<input type="submit" name="submitted" value="Update Rules"/>
 		</td>
 	</tr>

@@ -92,22 +92,6 @@ public class ConfigureAction extends JiraWebActionSupport {
         settings.setMustHaveIssue(mustHaveIssue);
 	}
 
-	public boolean isMustHaveIssueInProject() {
-		return settings.isMustHaveIssueInProject();
-	}
-
-	public void setMustHaveIssueInProject(boolean mustHaveIssue) {
-		settings.setMustHaveIssueInProject(mustHaveIssue);
-	}
-
-	public boolean isMustHaveAllIssuesInProject() {
-		return settings.isMustHaveAllIssuesInProject();
-	}
-
-	public void setMustHaveAllIssuesInProject(boolean mustHaveAllIssuesInProject) {
-		settings.setMustHaveAllIssuesInProject(mustHaveAllIssuesInProject);
-	}
-
 	public boolean isMustBeUnresolved() {
 		return settings.isMustBeUnresolved();
 	}
@@ -122,6 +106,22 @@ public class ConfigureAction extends JiraWebActionSupport {
 
 	public void setMustBeAssignedToCommiter(boolean mustBeAssignedToCommiter) {
         settings.setMustBeAssignedToCommiter(mustBeAssignedToCommiter);
+	}
+
+	public int getAcceptIssuesFor() {// TODO convert back to str? or leave everything as string?
+logger.info(" bbbbbbbb " + settings.getAcceptIssuesFor());
+		return settings.getAcceptIssuesFor();
+	}
+
+	public void setAcceptIssuesFor(String xxx) {// FIXME this is NEVER called?!!!
+logger.info(" aaaaaaaaaaaaaaaaaaaa " + xxx);
+//		if(xxx.equals("onlyForThis")) {
+//			settings.setAcceptIssuesFor(AcceptanceSettings.ONLY_FOR_THIS);
+//		} else if(xxx.equals("oneForThis")) {
+//			settings.setAcceptIssuesFor(AcceptanceSettings.ONE_FOR_THIS);
+//		} else {
+//			settings.setAcceptIssuesFor(AcceptanceSettings.FOR_ANY);
+//		}
 	}
 
 	public void setSubmitted(String submitted) {

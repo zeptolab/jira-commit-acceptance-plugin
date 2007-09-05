@@ -13,9 +13,7 @@ import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.exception.InvalidAcceptanceArgumentException;
@@ -236,12 +234,6 @@ public class EvaluateService {
 		try {
 			if(settings.isMustHaveIssue()) {
 				predicates.add(new HasIssuePredicate());
-			}
-			if (settings.isMustHaveIssueInProject()) {
-				predicates.add(new HasIssueInProjectPredicate(project));
-			}
-			if (settings.isMustHaveAllIssuesInProject()) {
-				predicates.add(new AreIssuesInProjectPredicate(project));
 			}
 			if(settings.isMustBeUnresolved()) {
 				predicates.add(new AreIssuesUnresolvedPredicate());
