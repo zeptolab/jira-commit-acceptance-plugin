@@ -1,0 +1,167 @@
+Test Plan for commitacceptance SVN client
+
+Author: Peter Kolbus, prkolbus@unusualcode.com
+
+Setup:
+
+1. Include the following rules in commitacceptance.conf:
+
+^testone/.*$ TST
+^sandbox/.*$ SANDBOX
+^multi/.*$   TST,SANDBOX
+^oneof/.*$ OneOf TST,SANDBOX
+^allof/.*$ AllOf TST,SANDBOX
+^global/.*   *,TST
+^sandbox/all/.*$ TST
+
+2. Set up the commitacceptance settings as follows:
+
+[Global Settings] Issue must be unresolved
+[TST]             Message must contain key from this project
+[SANDBOX]         Message must contain key from this project
+                  Message must contain only keys from this project
+[TSTB]            Message must contain key from this project
+                  
+3. Create two issues in the TST project, one resolved, one open.
+
+Execute Tests:
+
+General Procedure:
+ 1. Create/modify the specified files in a working copy of the test repository.
+ 2. Commit the files with the specified message.
+ 3. Verify the commit is correctly accepted or denied.  If the commit is denied, make sure the reason is correct.
+
+
+Files:
+  testone/test01.txt
+Message
+  SANDBOX-1 Test a file
+  
+Result: Denied [TST]
+
+Files:
+  testone/test02.txt
+Message
+  TST-1 Test a file
+  
+Result: Accepted
+
+Files:
+  sandbox/test03.txt
+  testone/test03.txt
+Message
+  SANDBOX-1 Test a file
+  
+Result: Denied [TST]
+
+Files:
+  sandbox/test04.txt
+  testone/test04.txt
+Message:
+  SANDBOX-1 TST-1 Test a commit
+
+Result: Denied [SANDBOX]
+
+
+Change the rules for SANDBOX, remove the 'require all' restriction
+
+Files:
+  sandbox/test05.txt
+  testone/test05.txt
+Message:
+  SANDBOX-1 TST-1 Test a commit
+
+Result: Accepted
+
+Files: 
+  multi/test06.txt
+Message:
+  SANDBOX-1 Test a commit  
+Result: Denied [TST]
+
+Files: 
+  multi/test07.txt
+Message:
+  TST-1 Test a commit  
+Result: Denied [SANDBOX]
+
+Files: 
+  multi/test08.txt
+Message:
+  TST-1 SANDBOX-1 Test a commit  
+Result: Accepted
+
+
+Files: 
+  allof/test09.txt
+Message:
+  SANDBOX-1 Test a commit  
+Result: Denied [TST]
+
+Files: 
+  allof/test10.txt
+Message:
+  TST-1 Test a commit  
+Result: Denied [SANDBOX]
+
+Files: 
+  allof/test11.txt
+Message:
+  TST-1 SANDBOX-1 Test a commit  
+Result: Accepted
+
+
+Files: 
+  oneof/test12.txt
+Message:
+  SANDBOX-1 Test a commit  
+Result: Accepted
+
+Files: 
+  oneof/test13.txt
+Message:
+  OTHER-1 Test a commit  
+Result: Denied.  Errors for both [SANDBOX] and [TST] rejects are shown.
+
+Files: 
+  global/test14.txt
+Message:
+  TST-X Test a commit (tst-x is the closed issue)
+Result: Rejected
+
+Files: 
+  global/test15.txt
+Message:
+  TST-X Test a commit (tst-x is the open issue)
+Result: Accepted
+
+Files:
+  sandbox/all/test16.txt
+Message:
+  SANDBOX-1 Test a commit
+Result: Rejected (sandbox/all, TST project)
+
+Files:
+  sandbox/all/test17.txt
+Message:
+  SANDBOX-1 TST-1 Test a commit
+Result: Accepted
+
+Add the following line to commitacceptance.conf
+  Default TSTB  (or another, existing project)
+
+Files:
+  testone/test18.txt
+  zztest/test18.txt
+Message:
+  TST-1 This will fail
+Result: Rejected (zztest/test18.txt rejected by TSTB)
+
+Files:
+  testone/test19.txt
+  zztest/test19.txt
+Message:
+  TSTB-1, TST-1 This will pass
+Result: Accepted
+
+

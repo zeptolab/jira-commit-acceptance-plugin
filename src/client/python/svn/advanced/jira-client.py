@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-# JIRA commit acceptance python client for SVN.
+# JIRA commit acceptance python client for SVN
+# Author: peter.kolbus@unusalcode.com
+# $Id$
 #
 # Usage:
 #    jira-client.py {repository} {transaction} [-r|-t]
@@ -15,9 +17,6 @@
 # separate configuration file, commitacceptance.conf.  A sample is provided
 # with this script, it should be edited and moved to
 # {repository path}/conf/commitacceptance.conf.
-
-# Author: peter.kolbus@unusalcode.com
-# $Id$
 
 import os
 import sys
