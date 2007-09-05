@@ -32,7 +32,7 @@ public class AcceptanceSettings {
 	 * If <code>true</code>, all the issues referenced in
 	 * the commit message must be for this project.
 	 */
-	private boolean mustIssuesBeInProject;
+	private boolean mustHaveAllIssuesInProject;
 
     /**
      * If <code>true</code>, all the issues must be unresolved.
@@ -69,12 +69,12 @@ public class AcceptanceSettings {
 		this.mustHaveIssueInProject = mustHaveIssueInProject;
 	}
 
-	public boolean isMustIssuesBeInProject() {
-		return mustIssuesBeInProject;
+	public boolean isMustHaveAllIssuesInProject() {
+		return mustHaveAllIssuesInProject;
 	}
 
-	public void setMustIssuesBeInProject(boolean mustIssuesBeInProject) {
-		this.mustIssuesBeInProject = mustIssuesBeInProject;
+	public void setMustHaveAllIssuesInProject(boolean mustHaveAllIssuesInProject) {
+		this.mustHaveAllIssuesInProject = mustHaveAllIssuesInProject;
 	}
 
     public boolean isMustBeUnresolved() {
@@ -102,7 +102,7 @@ public class AcceptanceSettings {
 		return (useGlobalRules == other.getUseGlobalRules()) &&
 				(mustHaveIssue == other.isMustHaveIssue()) &&
 				(mustHaveIssueInProject == other.isMustHaveIssueInProject()) &&
-				(mustIssuesBeInProject == other.isMustIssuesBeInProject()) &&
+				(mustHaveAllIssuesInProject == other.isMustHaveAllIssuesInProject()) &&
 				(mustBeUnresolved == other.isMustBeUnresolved()) &&
 				(mustBeAssignedToCommiter == other.isMustBeAssignedToCommiter());
 	}
@@ -111,7 +111,7 @@ public class AcceptanceSettings {
 		return new HashCodeBuilder(79, 11).append(useGlobalRules).
 					append(mustHaveIssue).
 					append(mustHaveIssueInProject).
-					append(mustIssuesBeInProject).
+					append(mustHaveAllIssuesInProject).
 					append(mustBeUnresolved).
 					append(mustBeAssignedToCommiter).hashCode();
 	}

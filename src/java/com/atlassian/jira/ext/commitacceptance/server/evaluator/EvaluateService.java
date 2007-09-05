@@ -18,8 +18,8 @@ import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIss
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.ext.commitacceptance.server.exception.InvalidAcceptanceArgumentException;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.project.Project;
@@ -46,6 +46,11 @@ public class EvaluateService {
 	private AcceptanceSettingsManager settingsManager;
 	private AcceptanceSettings settings;
 
+	/**
+	 * Project key that represents the global settings.
+	 */
+	private final String GLOBAL_PROJECT_KEY = "*";
+
 	public EvaluateService(ProjectManager projectManager, IssueManager issueManager, AcceptanceSettingsManager settingsManager) {
 		this.projectManager = projectManager;
 		this.issueManager = issueManager;
@@ -55,19 +60,21 @@ public class EvaluateService {
 	/**
 	 * Evaluates acceptance rules for the given commit information and accepts or rejects the commit.
 	 * This is only method that exposed and can be executed by a user through XML-RPC.
-     *
-     * @param userName, a login name of the SCM account.
-     * @param password, a password of the SCM account.
-     * @param committerName a name of the person that commiting a code.
-     * @param projectKeys is the key(s) of JIRA project(s) where the commit belongs. This can be multiple keys separated by comma like "TST,ARP,PLG".
-     * @param commitMessage a message that a committer entered before commiting.
-     * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
+	 *
+	 * @param userName, a login name of the SCM account.
+	 * @param password, a password of the SCM account.
+	 * @param committerName a name of the person that commiting a code.
+	 * @param projectKeys is the key(s) of JIRA project(s) where the commit belongs. This can be multiple keys separated by comma like "TST,ARP,PLG".  If a key is '*', the global settings are used.
+	 * @param commitMessage a message that a committer entered before commiting.
+	 * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
 	 */
 	public String acceptCommit(String userName, String password, String committerName, String projectKeys, String commitMessage) {// FIXME change in scripts
 		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKeys + "]");
 
 		String result = null;
 		try {
+			Project project;
+
 			// prepare arguments
 			userName = StringUtils.trim(userName);
 			password = StringUtils.trim(password);
@@ -93,13 +100,20 @@ public class EvaluateService {
 			for(int i = 0; i < projectKeyArray.length; i++) {
 				// get project
 				String projectKey = StringUtils.trimToEmpty(projectKeyArray[i]);
-				Project project = projectManager.getProjectObjByKey(projectKey);
-				if(project == null) {
-					throw new InvalidAcceptanceArgumentException("No project with key [" + projectKey + "] found, check the VCS hook script configuration.");
+
+				if (projectKey.equals(GLOBAL_PROJECT_KEY)) {
+					project = null;
+				}
+				else {
+					// get project
+					project = projectManager.getProjectObjByKey(projectKey);
+					if(project == null) {
+						throw new InvalidAcceptanceArgumentException("No project with key [" + projectKey + "] found, check the VCS hook script configuration.");
+					}
 				}
 
 				// get project settings
-				settings = settingsManager.getSettings(project.getKey());
+				settings = settingsManager.getSettings(project == null ? null : project.getKey());
 
 				// parse the commit message and collect issues.
 				Set issues = loadIssuesByMessage(commitMessage);
@@ -240,24 +254,24 @@ public class EvaluateService {
 		// construct
 		List predicates = new ArrayList();
 
-		if(settings.isMustHaveIssue()) {
-			predicates.add(new HasIssuePredicate());
-		}
-		if (settings.isMustHaveIssueInProject()) {
-			predicates.add(new HasIssueInProjectPredicate(project));
-		}
-		if (settings.isMustIssuesBeInProject()) {
-			predicates.add(new AreIssuesInProjectPredicate(project));
-		}
-		if(settings.isMustBeUnresolved()) {
-			predicates.add(new AreIssuesUnresolvedPredicate());
-		}
-		if(settings.isMustBeAssignedToCommiter()) {
-			predicates.add(new AreIssuesAssignedToPredicate(committerName));
-		}
-
-		// evaluate
 		try {
+			if(settings.isMustHaveIssue()) {
+				predicates.add(new HasIssuePredicate());
+			}
+			if (settings.isMustHaveIssueInProject()) {
+				predicates.add(new HasIssueInProjectPredicate(project));
+			}
+			if (settings.isMustHaveAllIssuesInProject()) {
+				predicates.add(new AreIssuesInProjectPredicate(project));
+			}
+			if(settings.isMustBeUnresolved()) {
+				predicates.add(new AreIssuesUnresolvedPredicate());
+			}
+			if(settings.isMustBeAssignedToCommiter()) {
+				predicates.add(new AreIssuesAssignedToPredicate(committerName));
+			}
+
+			// evaluate
 			for(Iterator it = predicates.iterator(); it.hasNext();) {
 				((JiraPredicate)it.next()).evaluate(issues);
 			}

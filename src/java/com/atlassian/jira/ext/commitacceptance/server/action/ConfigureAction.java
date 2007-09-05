@@ -100,12 +100,12 @@ public class ConfigureAction extends JiraWebActionSupport {
 		settings.setMustHaveIssueInProject(mustHaveIssue);
 	}
 
-	public boolean isMustIssuesBeInProject() {
-		return settings.isMustIssuesBeInProject();
+	public boolean isMustHaveAllIssuesInProject() {
+		return settings.isMustHaveAllIssuesInProject();
 	}
 
-	public void setMustIssuesBeInProject(boolean mustIssuesBeInProject) {
-		settings.setMustIssuesBeInProject(mustIssuesBeInProject);
+	public void setMustHaveAllIssuesInProject(boolean mustHaveAllIssuesInProject) {
+		settings.setMustHaveAllIssuesInProject(mustHaveAllIssuesInProject);
 	}
 
 	public boolean isMustBeUnresolved() {

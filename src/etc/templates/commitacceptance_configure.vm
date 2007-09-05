@@ -17,7 +17,7 @@
 
 			document.commitAcceptanceSettingsForm.mustHaveIssue.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustHaveIssueInProject.disabled = useGlobalRules;
-			document.commitAcceptanceSettingsForm.mustIssuesBeInProject.disabled = useGlobalRules;
+			document.commitAcceptanceSettingsForm.mustHaveAllIssuesInProject.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeUnresolved.disabled = useGlobalRules;
 			document.commitAcceptanceSettingsForm.mustBeAssignedToCommiter.disabled = useGlobalRules;
 
@@ -87,7 +87,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustHaveIssueInProject" value="true" #if($mustHaveIssueInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
+	    	<input type="checkbox" name="mustHaveIssueInProject" value="true" #if($mustHaveIssueInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end #if ($projectKey == "") disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td>
 			The log message must contain at least one valid JIRA issue key for this project.<br/>
@@ -95,8 +95,7 @@
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" width="1%" nowrap>
-	    	<input type="checkbox" name="mustIssuesBeInProject" value="true" #if($mustIssuesBeInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
-		</td>
+	    	<input type="checkbox" name="mustHaveAllIssuesInProject" value="true" #if($mustHaveAllIssuesInProject) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end #if ($projectKey == "") disabled #end onChange="onRulesFormChange()" />		</td>
 		<td>
 			All issues referenced in the log message must be for this project.
 		</td>
