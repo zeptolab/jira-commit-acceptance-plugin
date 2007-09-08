@@ -13,7 +13,9 @@ import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesUnresolvedPredicate;
+import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssueInProjectPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.HasIssuePredicate;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.JiraPredicate;
 import com.atlassian.jira.ext.commitacceptance.server.exception.InvalidAcceptanceArgumentException;
@@ -108,7 +110,7 @@ public class EvaluateService {
 				}
 
 				// get project settings
-				settings = settingsManager.getSettings(project == null ? null : project.getKey());
+				settings = settingsManager.getSettings((project == null) ? null : project.getKey());
 
 				// parse the commit message and collect issues.
 				Set issues = loadIssuesByMessage(commitMessage);
@@ -217,7 +219,7 @@ public class EvaluateService {
  	 * Returns <code>null</code> if the commit can be accepted in that project,
  	 * or the error message if not.
  	 *
- 	 * @param project to check against.
+ 	 * @param project to check against or <code>null</code> if checking against global settings.
  	 * @param committerName a committer name.
  	 * @param issues a set of issues to be checked.
 	 */
@@ -240,6 +242,13 @@ public class EvaluateService {
 			}
 			if(settings.isMustBeAssignedToCommiter()) {
 				predicates.add(new AreIssuesAssignedToPredicate(committerName));
+			}
+			if(project != null) {
+				if(settings.getAcceptIssuesFor() == AcceptanceSettings.ONE_FOR_THIS) {
+					predicates.add(new HasIssueInProjectPredicate(project));
+				} else if(settings.getAcceptIssuesFor() == AcceptanceSettings.ONLY_FOR_THIS) {
+					predicates.add(new AreIssuesInProjectPredicate(project));
+				}
 			}
 
 			// evaluate
