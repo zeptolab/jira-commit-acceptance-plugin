@@ -22,7 +22,7 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 
 	public void evaluate(Set issues) {
 		if (project == null) {
-			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used in the global settings. Contact your administrator.");
+			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used in the global settings. Contact your JIRA administrator.");
 		}
 
 		for (Iterator it = issues.iterator(); it.hasNext();) {

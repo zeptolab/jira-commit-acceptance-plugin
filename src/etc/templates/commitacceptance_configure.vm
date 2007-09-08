@@ -109,13 +109,15 @@
 			Issues:
 		</td>
 		<td class="fieldValueArea">
-			<input type="radio" name="acceptIssuesFor" value="onlyForThis" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">Accept only for this project</label>
+			<input type="radio" name="acceptIssuesFor" value="0" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">Accept only for this project</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="oneForThis" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">At least one must be for this project</label>
+			<input type="radio" name="acceptIssuesFor" value="1" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">At least one must be for this project</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="any" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">Accept for any project</label>
-			<br/>
-			<span class="small">NOTE: This setting is ignored when client is checking directly against the global settings.</span>
+			<input type="radio" name="acceptIssuesFor" value="2" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">Accept for any project</label>
+			#if($projectKey == "")
+				<br/>
+				<span class="small">NOTE: This setting is ignored when the client script is checking directly against the global settings using the <b>*</b> wildcard (i.e. when no concrete project is specified). This is however in use for concrete projects inheriting the global settings.</span>
+			#end
 		</td>
 	</tr>
 
