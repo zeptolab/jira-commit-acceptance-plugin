@@ -38,9 +38,8 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
         acceptanceSettings.setMustHaveIssue(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_HAVE_ISSUE_KEY_PREFIX)));
         acceptanceSettings.setMustBeAssignedToCommiter(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX)));
         acceptanceSettings.setMustBeUnresolved(applicationProperties.getOption(getRuleOptionName(projectKey, MUST_BE_UNRESOLVED_KEY_PREFIX)));
-
-        String aaa = applicationProperties.getString(getRuleOptionName(projectKey, ACCEPT_ISSUES_FOR));// TODO util?
-       	acceptanceSettings.setAcceptIssuesFor((aaa != null) ? Integer.parseInt(aaa) : 0);
+        String acceptIssuesFor = applicationProperties.getString(getRuleOptionName(projectKey, ACCEPT_ISSUES_FOR));
+       	acceptanceSettings.setAcceptIssuesFor((acceptIssuesFor != null) ? Integer.parseInt(acceptIssuesFor) : 0);
 
         return acceptanceSettings;
     }

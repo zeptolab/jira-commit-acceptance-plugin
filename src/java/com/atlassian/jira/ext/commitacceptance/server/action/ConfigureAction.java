@@ -108,20 +108,12 @@ public class ConfigureAction extends JiraWebActionSupport {
         settings.setMustBeAssignedToCommiter(mustBeAssignedToCommiter);
 	}
 
-	public int getAcceptIssuesFor() {// TODO convert back to str? or leave everything as string?
-logger.info(" bbbbbbbb " + settings.getAcceptIssuesFor());
+	public int getAcceptIssuesFor() {
 		return settings.getAcceptIssuesFor();
 	}
 
-	public void setAcceptIssuesFor(String xxx) {// FIXME this is NEVER called?!!!
-logger.info(" aaaaaaaaaaaaaaaaaaaa " + xxx);
-//		if(xxx.equals("onlyForThis")) {
-//			settings.setAcceptIssuesFor(AcceptanceSettings.ONLY_FOR_THIS);
-//		} else if(xxx.equals("oneForThis")) {
-//			settings.setAcceptIssuesFor(AcceptanceSettings.ONE_FOR_THIS);
-//		} else {
-//			settings.setAcceptIssuesFor(AcceptanceSettings.FOR_ANY);
-//		}
+	public void setAcceptIssuesFor(int acceptIssuesFor) {
+		settings.setAcceptIssuesFor(acceptIssuesFor);
 	}
 
 	public void setSubmitted(String submitted) {
