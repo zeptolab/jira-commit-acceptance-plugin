@@ -11,7 +11,9 @@ use XMLRPC::Lite;
 
 # configure JIRA access
 # ($projectKey can contain multiple comma-separated JIRA project keys like 'my $projectKey = "TST,ARP";'.
-# If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.)
+# If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
+# Or you can specify 'my $projectKey = "*";' to force using the global commit acceptance settings if you don't
+# want to specify any exact project key.)
 my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "root";
 my $jiraPassword = "root";
