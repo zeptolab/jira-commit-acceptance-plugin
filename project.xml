@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 <project>
 
-  <extend>../../project-files/jira-3.7.xml</extend>
+  <extend>../../../project-files/jira-3.7.xml</extend>
   <pomVersion>3</pomVersion>
   <id>jira-commitacceptance-plugin</id>
   <name>${project.name}</name>
