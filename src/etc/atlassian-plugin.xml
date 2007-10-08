@@ -5,6 +5,7 @@
         <version>1.2</version>
         <application-version min="3.5" max="3.10"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
+	    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
     </plugin-info>
 
     <component key="commitAcceptanceSettingsManager" name="Commit Acceptance Settings Manager" class="com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManagerImpl">
