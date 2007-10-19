@@ -3,12 +3,15 @@
 <!--
 	1. SvnAnt must be installed to ANT_HOME/lib from http://subclipse.tigris.org/svnant.html
 	2. Ant-Contrib must be installed to ANT_HOME/lib from http://ant-contrib.sourceforge.ne
-	3. "svn" must be in PATH
-	4. "cvs" must be in PATH
-	5. Configure hook scripts for both SVN and CVS
-	6. Configure commit acceptance rules
-	7. Create the 4 preconfigured issues
-	8. Run "commitAll" and check the result log
+	3, ORO must be installed to ANT_HOME/lib
+	4. "svn" must be in PATH
+	5. "cvs" must be in PATH
+	6. "p4" must be in PATH
+	7. Make sure that the repo exist in SVN, CVS and P4
+	7. Configure hook scripts for SVN, CVS and P4
+	8. Configure commit acceptance rules
+	9. Create the 4 preconfigured issues
+	10. Run "commitAll" and check the result log
 -->
 <project basedir="." default="commitAll">
 	<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask"/>
@@ -20,13 +23,18 @@
 	<property name="commitMessage" value="John Doe!" />
 
 	<property name="svn.repo.url" value="file:///new/testrepos/jira-svn-repo" />
-	<property name="svn.workingcopy.dir" location="${tempDir.path}/svn-workingcopy" />
-	<property name="svn.testfile.path" location="${svn.workingcopy.dir}/LICENSE.txt" />
+	<property name="svn.workingCopy.dir" location="${tempDir.path}/svn-workingcopy" />
+	<property name="svn.testFile.path" location="${svn.workingCopy.dir}/LICENSE.txt" />
 
 	<property name="cvs.repo.cvsRoot" value="\new\testrepos\cvs-server-jira" />
 	<property name="cvs.repo.package" value="x" />
-	<property name="cvs.workingcopy.dir" location="${tempDir.path}/cvs-workingcopy" />
-	<property name="cvs.testfile.path" location="${cvs.workingcopy.dir}/${cvs.repo.package}/file.txt" />
+	<property name="cvs.workingCopy.dir" location="${tempDir.path}/cvs-workingcopy" />
+	<property name="cvs.testFile.path" location="${cvs.workingCopy.dir}/${cvs.repo.package}/file.txt" />
+	
+	<property name="p4.client" value="commitacceptance" />
+	<property name="p4.testFile.depotPath" value="LICENSE.txt" />
+	<property name="p4.workingCopy.dir" location="${tempDir.path}/p4-workingcopy" />
+	<property name="p4.testFile.path" location="${p4.workingCopy.dir}\${p4.testFile.depotPath}" />
 
 	<property name="issue.nonExisting" value="TST-0"></property>
 	<property name="issue.unresolvedUnassigned" value="TST-1"></property><!-- can be assigned to a different user -->
@@ -38,53 +46,75 @@
 	<target name="init">
 		<!-- checkout SVN working copy -->
 		<if>
-			<available file="${svn.testfile.path}" />
+			<available file="${svn.testFile.path}" />
 			<then>
 				<echo>SVN working copy exists.</echo>
 			</then>
 			<else>
-				<mkdir dir="${svn.workingcopy.dir}" />
+				<mkdir dir="${svn.workingCopy.dir}" />
 				<svn>
-					<checkout url="${svn.repo.url}" destPath="${svn.workingcopy.dir}" />
+					<checkout url="${svn.repo.url}" destPath="${svn.workingCopy.dir}" />
 				</svn>
 			</else>
 		</if>
 		<!-- checkout CVS working copy -->
 		<if>
-			<available file="${cvs.testfile.path}" />
+			<available file="${cvs.testFile.path}" />
 			<then>
 				<echo>CVS working copy exists.</echo>
 			</then>
 			<else>
-				<mkdir dir="${cvs.workingcopy.dir}" />
-				<cvs command="checkout" cvsroot="${cvs.repo.cvsRoot}" package="${cvs.repo.package}" dest="${cvs.workingcopy.dir}" />
+				<mkdir dir="${cvs.workingCopy.dir}" />
+				<cvs command="checkout" cvsroot="${cvs.repo.cvsRoot}" package="${cvs.repo.package}" dest="${cvs.workingCopy.dir}" />
+			</else>
+		</if>
+		<!-- checkout P4 working copy -->
+		<if>
+			<available file="${p4.testFile.path}" />
+			<then>
+				<echo>P4 working copy exists.</echo>
+			</then>
+			<else>
+				<mkdir dir="${p4.workingCopy.dir}" />
+				<p4sync />
 			</else>
 		</if>
 	</target>
 
 	<target name="commit" depends="init" description="TODO">
 		<!-- commit to SVN -->
-		<buildnumber file="${svn.testfile.path}"/>
+		<buildnumber file="${svn.testFile.path}"/>
 		<svn>
-			<status path="${svn.testfile.path}" revisionProperty="svn.oldRevision" />
+			<status path="${svn.testFile.path}" revisionProperty="svn.oldRevision" />
 		</svn>
 		<exec executable="svn"><!-- commandline SVN executable is used to commit as SvnAnt can treat with commit hooks?! -->
 			<arg value="commit" />
 			<arg value="-m" />
 			<arg value="${commitMessage}" />
-			<arg value="${svn.testfile.path}" />
+			<arg value="${svn.testFile.path}" />
 		</exec>
 		<svn>
-			<status path="${svn.testfile.path}" revisionProperty="svn.newRevision" />
+			<status path="${svn.testFile.path}" revisionProperty="svn.newRevision" />
 		</svn>
 		<!-- commit to CVS -->
-		<buildnumber file="${cvs.testfile.path}"/>
-		<exec dir="${cvs.workingcopy.dir}/${cvs.repo.package}" executable="cvs" resultproperty="cvsResultCode"><!-- commandline CVS executable is used to commit as the <cvs> task had problems with the current dir -->
+		<buildnumber file="${cvs.testFile.path}"/>
+		<exec dir="${cvs.workingCopy.dir}/${cvs.repo.package}" executable="cvs" resultproperty="cvsResultCode"><!-- commandline CVS executable is used to commit as the <cvs> task had problems with the current dir -->
 			<arg value="-d"/>
 			<arg value="${cvs.repo.cvsRoot}"/>
 			<arg value="commit"/>
 			<arg value="-m"/>
 			<arg value="${commitMessage}"/>
+		</exec>
+		<!-- commit to P4 -->
+		<p4change description="${commitMessage}" />
+		<p4edit change="${p4.change}" view="${p4.testFile.path}" />
+		<buildnumber file="${p4.testFile.path}" />
+		<exec executable="p4" resultproperty="p4ResultCode"><!-- TODO commandline P4 executable is used to commit as p4submit task does not return any result code -->
+			<arg value="-c" />
+			<arg value="${p4.client}" />
+			<arg value="submit" />
+			<arg value="-c" />
+			<arg value="${p4.change}" />
 		</exec>
 		<!-- log -->
 		<if>
@@ -107,8 +137,19 @@
 				<echo file="${logfile.path}" append="true">Accepted  </echo>
 			</else>
 		</if>
+		<if>
+			<not>
+				<equals arg1="${p4ResultCode}" arg2="0" />
+			</not>
+			<then>
+				<echo file="${logfile.path}" append="true">REJECTED  </echo>
+			</then>
+			<else>
+				<echo file="${logfile.path}" append="true">Accepted  </echo>
+			</else>
+		</if>
 
-		<echo file="${logfile.path}" append="true">'${commitMessage}'  (${svn.oldRevision} -> ${svn.newRevision})${line.separator}</echo>
+		<echo file="${logfile.path}" append="true">'${commitMessage}'${line.separator}</echo>
 	</target>
 
 	<target name="commitAll" depends="init" description="TODO">
@@ -135,7 +176,7 @@
 
 		<loadfile property="log" srcfile="${logfile.path}" />
 		<echo>--------------------------------------------------------------------------------</echo>
-		<echo>SVN       CVS       Message</echo>
+		<echo>SVN       CVS       P4        Message</echo>
 		<echo>--------------------------------------------------------------------------------</echo>
 		<echo>${log}</echo>
 	</target>
