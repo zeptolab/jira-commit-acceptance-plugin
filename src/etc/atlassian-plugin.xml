@@ -3,7 +3,7 @@
     <plugin-info>
         <description>Commit Acceptance plugin.</description>
         <version>1.2</version>
-        <application-version min="3.5" max="3.10"/>
+        <application-version min="3.5" max="3.11"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
 	    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
     </plugin-info>
