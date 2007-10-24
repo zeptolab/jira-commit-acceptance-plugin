@@ -4,6 +4,7 @@
 # Author: ferenc.kiss@midori.hu
 # $Id: jira-client.py 10144 2007-09-12 10:13:37Z ferenc.kiss $
 
+import os
 import sys
 import urlparse
 import xmlrpclib
@@ -14,23 +15,28 @@ import xmlrpclib
 # Or you can specify "projectKey = '*'" to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
 jiraBaseURL = 'http://127.0.0.1:8080'
-jiraLogin = 'root'
-jiraPassword = 'root'
+jiraLogin = 'admin'
+jiraPassword = 'admin'
 projectKey = 'TST'
+
+# configure svnlook path
+p4Path = 'p4'
 
 # get committer passed as arg[1]
 committer = sys.argv[1]
 
-# slurp log message from log message file passed as arg[2]
+# get change description with change passed as arg[2]
 try:
-	f = open(sys.argv[2])
+	f = os.popen(p4Path + ' -s describe ' + sys.argv[2])
 	commitMessage = f.read()
-	f.close()
-	commitMessage = commitMessage.rstrip('\n\r')
+	if f.close():
+		raise 1
 except:
-	print 'Unable to open ' + sys.argv[2] + '.'
+	print >> sys.stderr, 'Unable to get change <' + sys.argv[2] + '> description with p4.'
 	sys.exit(1)
 
+# TODO trim leading whitespace
+	
 # print arguments
 print 'Committer: ' + committer
 print 'Commit message: "' + commitMessage + '"'
