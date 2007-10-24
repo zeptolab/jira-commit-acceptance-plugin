@@ -29,7 +29,7 @@ my $committer = $ARGV[0];
 my $holdTerminator = $/;
 undef $/;
 
-open IN, '-|', "$p4Path -s describe $ARGV[1]" or die "Unable to get change description with p4.\n";
+open IN, '-|', "$p4Path -s describe $ARGV[1]" or die "Unable to get change $ARGV[1] description with p4.\n";
 my $buffer = <IN>;
 close IN;
 
@@ -47,7 +47,6 @@ print "Committer: " . $committer . "\n";
 print "Commit message: \"" . $commitMessage . "\"\n";
 
 # invoke JIRA web service
-# TODO move this common  part to a separate.pl and use it also from the SVN client,
 my $acceptance;
 my $comment;
 

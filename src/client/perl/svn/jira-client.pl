@@ -50,7 +50,6 @@ print "Committer: " . $committer . "\n";
 print "Commit message: \"" . $commitMessage . "\"\n";
 
 # invoke JIRA web service
-# TODO move this common  part to a separate.pl and use it also from the SVN client,
 my $acceptance;
 my $comment;
 
