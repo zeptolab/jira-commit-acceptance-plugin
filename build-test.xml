@@ -109,7 +109,7 @@
 		<p4change description="${commitMessage}" />
 		<p4edit change="${p4.change}" view="${p4.testFile.path}" />
 		<buildnumber file="${p4.testFile.path}" />
-		<exec executable="p4" resultproperty="p4ResultCode"><!-- TODO commandline P4 executable is used to commit as p4submit task does not return any result code -->
+		<exec executable="p4" resultproperty="p4ResultCode"><!-- commandline P4 executable is used to commit as p4submit task does not return any result code -->
 			<arg value="-c" />
 			<arg value="${p4.client}" />
 			<arg value="submit" />
