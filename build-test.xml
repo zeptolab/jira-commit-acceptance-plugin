@@ -10,7 +10,7 @@
 	7. Make sure that the repo exist in SVN, CVS and P4
 	7. Configure hook scripts for SVN, CVS and P4
 	8. Configure commit acceptance rules
-	9. Create the 4 preconfigured issues
+	9. Create the 4 preconfigured issues (see the issue.* properties below)
 	10. Run "commitAll" and check the result log
 -->
 <project basedir="." default="commitAll">
@@ -30,7 +30,7 @@
 	<property name="cvs.repo.package" value="x" />
 	<property name="cvs.workingCopy.dir" location="${tempDir.path}/cvs-workingcopy" />
 	<property name="cvs.testFile.path" location="${cvs.workingCopy.dir}/${cvs.repo.package}/file.txt" />
-	
+
 	<property name="p4.client" value="commitacceptance" />
 	<property name="p4.testFile.depotPath" value="LICENSE.txt" />
 	<property name="p4.workingCopy.dir" location="${tempDir.path}/p4-workingcopy" />
@@ -108,6 +108,7 @@
 		<!-- commit to P4 -->
 		<p4change description="${commitMessage}" />
 		<p4edit change="${p4.change}" view="${p4.testFile.path}" />
+		<p4reopen tochange="${p4.change}" view="${p4.testFile.path}" />
 		<buildnumber file="${p4.testFile.path}" />
 		<exec executable="p4" resultproperty="p4ResultCode"><!-- commandline P4 executable is used to commit as p4submit task does not return any result code -->
 			<arg value="-c" />
