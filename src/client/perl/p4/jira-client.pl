@@ -33,9 +33,10 @@ open IN, '-|', "$p4Path -s describe $ARGV[1]" or die "Unable to get change $ARGV
 my $p4DescribeOutput = <IN>;
 close IN;
 
+#  trim leading whitespace
 $/ = $holdTerminator;
 my @lines = split /$holdTerminator/, $p4DescribeOutput;
-@lines = map(substr($_, 1), grep(/^\t/, map(substr($_, 6) , grep(/^text:/, @lines)))); #  trim leading whitespace
+@lines = map(substr($_, 1), grep(/^\t/, map(substr($_, 6) , grep(/^text:/, @lines))));
 $p4DescribeOutput = "init";
 $p4DescribeOutput = join $holdTerminator, @lines;
 chomp($p4DescribeOutput);

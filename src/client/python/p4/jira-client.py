@@ -35,7 +35,7 @@ except:
 	print >> sys.stderr, 'Unable to get change <' + sys.argv[2] + '> description with p4.'
 	sys.exit(1)
 
-# TODO trim leading whitespace
+# trim leading whitespace
 lines = p4DescribeOutput.splitlines()
 commitMessage = ""
 for line in lines:
