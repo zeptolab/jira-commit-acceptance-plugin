@@ -28,7 +28,7 @@ committer = sys.argv[1]
 # get change description with change passed as arg[2]
 try:
 	f = os.popen(p4Path + ' -s describe ' + sys.argv[2])
-	commitMessage = f.read()
+	p4DescribeOutput = f.read()
 	if f.close():
 		raise 1
 except:
@@ -36,6 +36,15 @@ except:
 	sys.exit(1)
 
 # TODO trim leading whitespace
+lines = p4DescribeOutput.splitlines()
+commitMessage = ""
+for line in lines:
+	if(line.startswith('text: ')):
+		line = line[6:]
+		if(line.startswith('\t')):
+			commitMessage = commitMessage + line.lstrip('\t') + '\n\r'
+
+commitMessage = commitMessage.rstrip()
 	
 # print arguments
 print 'Committer: ' + committer

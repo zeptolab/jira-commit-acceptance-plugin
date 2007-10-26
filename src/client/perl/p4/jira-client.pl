@@ -14,7 +14,7 @@ use XMLRPC::Lite;
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify 'my $projectKey = "*";' to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-my $jiraBaseURL = "http://127.0.0.1:8083";
+my $jiraBaseURL = "http://127.0.0.1:8080";
 my $jiraLogin = "admin";
 my $jiraPassword = "admin";
 my $projectKey = "TST";
@@ -30,17 +30,17 @@ my $holdTerminator = $/;
 undef $/;
 
 open IN, '-|', "$p4Path -s describe $ARGV[1]" or die "Unable to get change $ARGV[1] description with p4.\n";
-my $buffer = <IN>;
+my $p4DescribeOutput = <IN>;
 close IN;
 
 $/ = $holdTerminator;
-my @lines = split /$holdTerminator/, $buffer;
-@lines = map(substr($_, 1), grep(/^\t/, map(substr($_, 6) , grep(/^text:/, @lines)))); # TODO review and comment
-$buffer = "init";
-$buffer = join $holdTerminator, @lines;
-chomp($buffer);
+my @lines = split /$holdTerminator/, $p4DescribeOutput;
+@lines = map(substr($_, 1), grep(/^\t/, map(substr($_, 6) , grep(/^text:/, @lines)))); #  trim leading whitespace
+$p4DescribeOutput = "init";
+$p4DescribeOutput = join $holdTerminator, @lines;
+chomp($p4DescribeOutput);
 
-my $commitMessage = $buffer;
+my $commitMessage = $p4DescribeOutput;
 
 # print arguments
 print "Committer: " . $committer . "\n";
