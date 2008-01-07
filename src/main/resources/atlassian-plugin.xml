@@ -1,9 +1,10 @@
-<atlassian-plugin key="com.atlassian.jira.ext.commitacceptance" name="JIRA Commit Acceptance Plugin">
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}">
 
-    <plugin-info>
-        <description>Commit Acceptance plugin.</description>
-        <version>1.2</version>
-        <application-version min="3.7" max="3.11"/>
+	<plugin-info>
+        <description>${project.description}</description>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <version>${project.version}</version>
+        <application-version min="${atlassian.plugin.application.version.min}" max="${atlassian.plugin.application.version.max}"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
 	    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
     </plugin-info>
