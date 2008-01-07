@@ -112,7 +112,7 @@ Or you can set a rule that no commit would be accepted if the issue was not in a
         </plugins>
     </build>
 
-    <!--profiles>
+    <profiles>
         <profile>
             <id>plugin-debug</id>
             <build>
@@ -133,7 +133,7 @@ Or you can set a rule that no commit would be accepted if the issue was not in a
                 <unpack.jira.config.overwrite>false</unpack.jira.config.overwrite>
             </properties>
         </profile>
-    </profiles-->
+    </profiles>
 
 
     <dependencies>
