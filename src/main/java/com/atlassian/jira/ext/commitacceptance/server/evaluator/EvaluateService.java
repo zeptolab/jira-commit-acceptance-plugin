@@ -163,7 +163,7 @@ public class EvaluateService {
 	 */
 	private void authenticateUser(String userName, String password) {
 		try {
-			User user = UserUtils.getUser(userName);
+			User user = getUser(userName);
 			if ((user == null) || (!user.authenticate(password))) {
 				throw new EntityNotFoundException();
 			}
@@ -172,7 +172,11 @@ public class EvaluateService {
 		}
 	}
 
-	/**
+    protected User getUser(String userName) throws EntityNotFoundException {
+        return UserUtils.getUser(userName);
+    }
+
+    /**
 	 * Returns an issue for the given issue key only if it exists in JIRA and a committer
      * has permission to browse it. Throws <code>AcceptanceException</code> otherwise.
 	 * @param issueKey an issue key.
@@ -202,7 +206,7 @@ public class EvaluateService {
 	 */
 	private Set loadIssuesByMessage(String commitMessage) {
 		// Parse a commit message and get issue keys it contains.
-		List issueKeys = JiraKeyUtils.getIssueKeysFromString(commitMessage);
+		List issueKeys = getIssueKeysFromString(commitMessage);
 
 		// Collect issues.
 		Set issues = new HashSet();
@@ -215,7 +219,11 @@ public class EvaluateService {
 		return issues;
 	}
 
-	/**
+    protected List getIssueKeysFromString(String commitMessage) {
+        return JiraKeyUtils.getIssueKeysFromString(commitMessage);
+    }
+
+    /**
  	 * Returns <code>null</code> if the commit can be accepted in that project,
  	 * or the error message if not.
  	 *
@@ -223,7 +231,7 @@ public class EvaluateService {
  	 * @param committerName a committer name.
  	 * @param issues a set of issues to be checked.
 	 */
-	private String checkIssuesAcceptance(String committerName, Project project, Set issues) {
+	protected String checkIssuesAcceptance(String committerName, Project project, Set issues) {
         if(settings.getUseGlobalRules()) {
     		// load global rules if those override the project specific ones
     		logger.debug("Using global rules");

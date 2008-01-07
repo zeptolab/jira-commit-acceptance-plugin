@@ -14,7 +14,8 @@ import com.atlassian.jira.project.Project;
  * @version $Id$
  */
 public class HasIssueInProjectPredicate implements JiraPredicate {
-	private Project project;
+    
+    private Project project;
 
 	public HasIssueInProjectPredicate(Project project) {
 		this.project = project;

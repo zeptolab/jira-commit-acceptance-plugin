@@ -31,7 +31,7 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 			if ((issue.getAssigneeId() == null) || (!issue.getAssigneeId().equals(assigneeName))) {
 				String cause = null;
 				try {
-					User assignee = UserUtils.getUser(assigneeName);
+					User assignee = getUser();
 					cause = "Issue [" + issue.getKey() + "] must be assigned to " + assigneeName + " (" + assignee.getFullName() + ").";
 				} catch (EntityNotFoundException e) {
 					cause = "Issue [" + issue.getKey() + "] is not assigned to the correct person.";
@@ -41,4 +41,8 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 			}
 		}
 	}
+
+    protected User getUser() throws EntityNotFoundException {
+        return UserUtils.getUser(assigneeName);
+    }
 }

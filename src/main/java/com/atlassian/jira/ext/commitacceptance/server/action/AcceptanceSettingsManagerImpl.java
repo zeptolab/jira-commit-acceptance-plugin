@@ -16,11 +16,11 @@ public class AcceptanceSettingsManagerImpl implements AcceptanceSettingsManager 
 	 * for project-dependent rules the key of the project will be appended.
 	 * @see #getRuleOptionName(GenericValue, String)
 	 */
-    private static final String USE_GLOBAL_RULES_KEY_PREFIX = "jira.plugins.commitacceptance.settings.useGlobalRules";
-    private static final String MUST_HAVE_ISSUE_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustHaveIssue";
-    private static final String MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeAssignedToCommiter";
-    private static final String MUST_BE_UNRESOLVED_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeUnresolved";
-    private static final String ACCEPT_ISSUES_FOR = "jira.plugins.commitacceptance.settings.acceptIssuesFor";
+    public static final String USE_GLOBAL_RULES_KEY_PREFIX = "jira.plugins.commitacceptance.settings.useGlobalRules";
+    public static final String MUST_HAVE_ISSUE_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustHaveIssue";
+    public static final String MUST_BE_ASSIGNED_TO_COMMITER_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeAssignedToCommiter";
+    public static final String MUST_BE_UNRESOLVED_KEY_PREFIX = "jira.plugins.commitacceptance.settings.mustBeUnresolved";
+    public static final String ACCEPT_ISSUES_FOR = "jira.plugins.commitacceptance.settings.acceptIssuesFor";
 
     /*
      * Services.
