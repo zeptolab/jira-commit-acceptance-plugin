@@ -13,4 +13,24 @@ public class TestCvsCommitAcceptanceWithPythonClient extends AbstractCvsCommitAc
     protected String getCommitHookBaseName() {
         return "jira-client.py";
     }
+
+    public void testCommitIssueWithDifferentAssignee() {
+
+    }
+
+    public void testCommit() {
+
+    }
+
+    public void testCommmitWithNoIssueKey() {
+
+    }
+
+    public void testCommmitWithInvalidIssueKey() {
+
+    }
+
+    public void testCommitToResolvedIssue() {
+        
+    }
 }
