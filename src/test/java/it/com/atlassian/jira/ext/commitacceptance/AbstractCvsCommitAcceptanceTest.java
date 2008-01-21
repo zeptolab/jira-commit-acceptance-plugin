@@ -183,7 +183,7 @@ public abstract class AbstractCvsCommitAcceptanceTest extends AbstractRepository
     }
 
     protected void setupCvsRoot() {
-        cvsRoot = new StringBuffer(":pserver:" + ADMIN_USERNAME + "@10.60.1.127:").append(repository.getAbsolutePath()).toString();
+        cvsRoot = new StringBuffer(":pserver:" + ADMIN_USERNAME + "@127.0.0.1:").append(repository.getAbsolutePath()).toString();
         if (logger.isDebugEnabled())
             logger.debug("CVS Root string: " + cvsRoot);
     }
