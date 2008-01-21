@@ -346,6 +346,8 @@ public abstract class AbstractCvsCommitAcceptanceTest extends AbstractRepository
             client.getEventManager().addCVSListener(new BasicListener());
 
         } catch (final AuthenticationException ae) {
+            if (logger.isEnabledFor(Level.ERROR))
+                logger.error("Unable to authenticate with CVS repository at : " + repository, ae);
             fail("Unable to authenticate with repository at: " + repository + ". Please check the --allow-root option set for cvs.");
         } catch (final CommandException ce) {
             fail("General foobar while opening connection to repository at: " + repository);
