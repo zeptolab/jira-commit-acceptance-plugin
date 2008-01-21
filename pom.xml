@@ -80,6 +80,10 @@
                 </excludes>
             </resource>
         </resources>
+
+        <filters>
+            <filter>src/main/filters/${filter.name}</filter>
+        </filters>
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
@@ -170,6 +174,18 @@
                 <unpack.jira.config.overwrite>false</unpack.jira.config.overwrite>
             </properties>
         </profile>
+
+        <profile>
+            <id>ci-bdac</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <jira.version>3.12</jira.version>
+                <filter.name>bdac.properties</filter.name>
+                <http.port>1990</http.port>
+            </properties>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -221,7 +237,6 @@
     </dependencies>
 
     <repositories>
-
         <repository>
             <id>custom</id>
             <name>custom-m1-repository</name>
@@ -250,20 +265,7 @@
 
     <properties>
         <jira.version>3.12</jira.version>
-        <atlassian.plugin.application.version.min>3.7</atlassian.plugin.application.version.min>
-        <atlassian.plugin.application.version.max>3.12</atlassian.plugin.application.version.max>
-
-        <client.scm.username>admin</client.scm.username>
-        <client.scm.password>admin</client.scm.password>
-        <client.scm.projectkey>*</client.scm.projectkey>
-
-        <client.scm.perl.path>/usr/bin/perl</client.scm.perl.path>
-        <client.scm.python.path>/usr/bin/python</client.scm.python.path>
-        <client.scm.svn.svnlook.path>/usr/bin/svnlook</client.scm.svn.svnlook.path>
-
-
-        <client.scm.cvs.repository.path>/home/bamboo-dev-atl/cvsroots/stable</client.scm.cvs.repository.path>
-
+        <filter.name>default.properties</filter.name>
     </properties>
 
 </project>

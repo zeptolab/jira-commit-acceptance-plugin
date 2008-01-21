@@ -14,7 +14,7 @@ use XMLRPC::Lite;
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify 'my $projectKey = "*";' to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-my $jiraBaseURL = "http://localhost:${http.port}/jira";
+my $jiraBaseURL = "http://localhost:${jira.http.port}/jira";
 my $jiraLogin = "${client.scm.username}";
 my $jiraPassword = "${client.scm.password}";
 my $projectKey = "${client.scm.projectkey}";
