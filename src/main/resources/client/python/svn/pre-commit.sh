@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/bin/python /Users/nolen/svnrepo/hooks/jira-client.py $1 $2
+${client.scm.python.path} ${user.dir}/svn-repository/hooks/jira-client.py $1 $2

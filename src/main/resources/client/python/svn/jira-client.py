@@ -14,13 +14,13 @@ import xmlrpclib
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify "projectKey = '*'" to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-jiraBaseURL = 'http://127.0.0.1:8080'
-jiraLogin = 'root'
-jiraPassword = 'root'
-projectKey = 'TST'
+jiraBaseURL = 'http://127.0.0.1:${http.port}/jira'
+jiraLogin = '${client.scm.username}'
+jiraPassword = '${client.scm.password}'
+projectKey = '${client.scm.projectkey}'
 
 # configure svnlook path
-svnlookPath = 'C:\\Progra~1\\svn-win32-1.4.0\\bin\\svnlook.exe'
+svnlookPath = '${client.scm.svn.svnlook.path}'
 
 # get committer
 try:
@@ -49,8 +49,9 @@ print >> sys.stderr, 'Committer: ' + committer
 print >> sys.stderr, 'Commit message: "' + commitMessage + '"'
 
 # invoke JIRA web service
+xmlrpcUrl = jiraBaseURL + '/rpc/xmlrpc'
 try:
-	s = xmlrpclib.ServerProxy(urlparse.urljoin(jiraBaseURL, '/rpc/xmlrpc'))
+	s = xmlrpclib.ServerProxy(xmlrpcUrl)
 	acceptance, comment = s.commitacc.acceptCommit(jiraLogin, jiraPassword, committer, projectKey, commitMessage).split('|');
 except:
 	acceptance, comment = ['false', 'Unable to connect to the JIRA server at "' + jiraBaseURL + '".']

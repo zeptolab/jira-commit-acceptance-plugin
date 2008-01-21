@@ -1,1 +1,1 @@
-@perl.exe jira-client.pl %1 %2
+${client.scm.perl.path} jira-client.pl %1 %2
