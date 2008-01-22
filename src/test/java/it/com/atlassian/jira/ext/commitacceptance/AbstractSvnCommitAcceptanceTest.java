@@ -26,6 +26,10 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
 
     protected SVNRepository svnRepository;
 
+    public AbstractSvnCommitAcceptanceTest(final String name) {
+        super(name);
+    }
+
     protected void setUpRepository() {
         try {
             svnRepositoryDirectory = new File(SystemUtils.getUserDir(), "svn-repository");
@@ -167,10 +171,10 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
 
     public void testCommmitWithInvalidIssueKey() {
         try {
-            doCommit("test", "test/test.txt", "Test".getBytes(), "Commit without any isue keys using global rules.");
+            doCommit("test", "test/test.txt", "Test".getBytes(), "[XXX-1] Commit without any isue keys using global rules.");
             fail("Commit should fail because the commit message does not contain any valid JIRA issue key.");
         } catch (final SVNException svne) {
-            assertTrue(0 < svne.getMessage().indexOf("Commit message must contain at least one valid issue key"));
+            assertTrue(0 < svne.getMessage().indexOf("Issue [XXX-1] does not exist or you don't have permission to access it"));
         }
     }
 

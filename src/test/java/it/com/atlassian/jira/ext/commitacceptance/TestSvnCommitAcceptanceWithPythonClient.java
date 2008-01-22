@@ -4,6 +4,10 @@ import org.apache.commons.lang.SystemUtils;
 
 public class TestSvnCommitAcceptanceWithPythonClient extends AbstractSvnCommitAcceptanceTest {
 
+    public TestSvnCommitAcceptanceWithPythonClient() {
+        super(TestSvnCommitAcceptanceWithPythonClient.class.getName());
+    }
+
     protected String getPathToCommitHookImpl() {
         return "client/python/svn/" + getCommitHookBaseName();
     }

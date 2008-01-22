@@ -1,36 +1,18 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
+import java.io.InputStream;
+
 public class TestCvsCommitAcceptanceWithPythonClient extends AbstractCvsCommitAcceptanceTest {
 
-    protected String getCommitHookScriptPath() {
-        return "client/python/cvs/verifymsg";
+    public TestCvsCommitAcceptanceWithPythonClient() {
+        super(TestCvsCommitAcceptanceWithPythonClient.class.getName());
     }
 
-    protected String getPathToCommitHookImpl() {
-        return "client/python/cvs/" + getCommitHookBaseName();
+    protected String getScriptExecutor() {
+        return testConfiguration.getProperty("client.scm.python.path");
     }
 
-    protected String getCommitHookBaseName() {
-        return "jira-client.py";
-    }
-
-    public void testCommitIssueWithDifferentAssignee() {
-
-    }
-
-    public void testCommit() {
-
-    }
-
-    public void testCommmitWithNoIssueKey() {
-
-    }
-
-    public void testCommmitWithInvalidIssueKey() {
-
-    }
-
-    public void testCommitToResolvedIssue() {
-        
+    protected InputStream getScriptContent() {
+        return getClass().getClassLoader().getResourceAsStream("client/python/cvs/jira-client.py");
     }
 }
