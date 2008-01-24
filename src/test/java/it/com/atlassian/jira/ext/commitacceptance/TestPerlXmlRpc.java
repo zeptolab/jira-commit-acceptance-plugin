@@ -127,5 +127,8 @@ public class TestPerlXmlRpc extends JIRAWebTest {
 		System.out.println(getStandardOutputText());
 		System.out.println("Standard error dump:");
 		System.out.println(getStandardErrorText());
+		
+		if (scriptExecutionExitValue != 0)
+			fail("Perl script exited with: " + scriptExecutionExitValue);
 	}
 }
