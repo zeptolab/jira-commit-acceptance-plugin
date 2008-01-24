@@ -89,6 +89,7 @@
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
                 <includes>
+                    <include>perl-xmlrpc-test.pl</include>
                     <include>test-configuration.properties</include>
                 </includes>
             </testResource>
@@ -99,6 +100,7 @@
                     <include>**/*</include>
                 </includes>
                 <excludes>
+                    <exclude>perl-xmlrpc-test.pl</exclude>
                     <exclude>test-configuration.properties</exclude>
                 </excludes>
             </testResource>
