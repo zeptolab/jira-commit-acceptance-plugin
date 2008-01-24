@@ -122,13 +122,18 @@ public class TestPerlXmlRpc extends JIRAWebTest {
 		);
 		
 		scriptExecutionExitValue = perlProcess.waitFor();
-		System.out.println("Process exited with value: " + scriptExecutionExitValue);
-		System.out.println("Standard output dump:");
-		System.out.println(getStandardOutputText());
-		System.out.println("Standard error dump:");
-		System.out.println(getStandardErrorText());
+//		System.out.println("Process exited with value: " + scriptExecutionExitValue);
+//		System.out.println("Standard output dump:");
+//		System.out.println(getStandardOutputText());
+//		System.out.println("Standard error dump:");
+//		System.out.println(getStandardErrorText());
 		
 		if (scriptExecutionExitValue != 0)
-			fail("Perl script exited with: " + scriptExecutionExitValue);
+			fail(new StringBuffer("Perl script exited with: ").append(scriptExecutionExitValue).append(SystemUtils.LINE_SEPARATOR)
+					.append("Script standard output:").append(SystemUtils.LINE_SEPARATOR)
+					.append(getStandardOutputText())
+					.append("Script error output:").append(SystemUtils.LINE_SEPARATOR)
+					.append(getStandardErrorText())
+					.toString());
 	}
 }
