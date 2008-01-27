@@ -30,7 +30,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepositoryCommitAcceptanceTest {
 	
-	private static final String LOCK_FILE_NAME = ".lock";
+	private static final String LOCK_FILE_NAME = ".jira-commitacceptance-test.lock";
 
     private static final Logger logger = Logger.getLogger(AbstractSvnCommitAcceptanceTest.class);
     
@@ -54,7 +54,7 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
     	boolean success = false;
     	
     	try {
-			lockFile = new RandomAccessFile(new File(SystemUtils.USER_DIR, LOCK_FILE_NAME), "rw");
+			lockFile = new RandomAccessFile(new File(SystemUtils.JAVA_IO_TMPDIR, LOCK_FILE_NAME), "rw");
 			svnCommitAcceptanceTestMutexFileChannel = lockFile.getChannel();
 			svnCommitAcceptanceTestFileLock = svnCommitAcceptanceTestMutexFileChannel.lock();
 			
