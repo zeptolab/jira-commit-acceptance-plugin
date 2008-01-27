@@ -34,6 +34,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
 
     private static final Logger logger = Logger.getLogger(AbstractSvnCommitAcceptanceTest.class);
     
+    private static boolean svnToolsSetup;
+    
     protected RandomAccessFile lockFile;
     
     protected FileChannel svnCommitAcceptanceTestMutexFileChannel;
@@ -110,9 +112,13 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
                 FileUtils.deleteDirectory(svnRepositoryDirectory);
 
             /* Setup SVN tools */
-            DAVRepositoryFactory.setup();
-            SVNRepositoryFactoryImpl.setup();
-            FSRepositoryFactory.setup();
+            if (!svnToolsSetup) {
+	            DAVRepositoryFactory.setup();
+	            SVNRepositoryFactoryImpl.setup();
+	            FSRepositoryFactory.setup();
+	            
+	            svnToolsSetup = true;
+            }
 
             svnRepository = SVNRepositoryFactory.create(SVNRepositoryFactory.createLocalRepository(svnRepositoryDirectory, true, false));
 
