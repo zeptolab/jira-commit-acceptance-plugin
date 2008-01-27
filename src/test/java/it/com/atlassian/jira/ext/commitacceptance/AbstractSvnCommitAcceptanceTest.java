@@ -156,6 +156,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
         try {
             doCommit("test", "test/test.txt", "Test".getBytes(), "[TST-4] Successful commit.");
         } catch (final SVNException svne) {
+        	if (logger.isEnabledFor(Level.INFO))
+    			logger.info("SVNException: ", svne);
             fail(svne.getMessage());
         }
     }
@@ -165,6 +167,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             doCommit("test", "test/test.txt", "Test".getBytes(), "Commit without any isue keys using global rules.");
             fail("Commit should fail because the commit message does not contain any valid JIRA issue key.");
         } catch (final SVNException svne) {
+        	if (logger.isEnabledFor(Level.INFO))
+    			logger.info("SVNException: ", svne);
             assertTrue(0 < svne.getMessage().indexOf("Commit message must contain at least one valid issue key"));
         }
     }
@@ -174,6 +178,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             doCommit("test", "test/test.txt", "Test".getBytes(), "[XXX-1] Commit without any isue keys using global rules.");
             fail("Commit should fail because the commit message does not contain any valid JIRA issue key.");
         } catch (final SVNException svne) {
+        	if (logger.isEnabledFor(Level.INFO))
+    			logger.info("SVNException: ", svne);
             assertTrue(0 < svne.getMessage().indexOf("Issue [XXX-1] does not exist or you don't have permission to access it"));
         }
     }
@@ -183,6 +189,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             doCommit("test", "test/test.txt", "Test".getBytes(), "[TST-2] Test Commit To Resolved Issue.");
             fail("Commit should fail because the commit issue is resolved.");
         } catch (final SVNException svne) {
+        	if (logger.isEnabledFor(Level.INFO))
+    			logger.info("SVNException: ", svne);
             assertTrue(0 < svne.getMessage().indexOf("Issue [TST-2] must be in UNRESOLVED"));
         }
     }
@@ -194,6 +202,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             doCommit("test", "test/test.txt", "Test".getBytes(), "[TST-3] Test Commit To Issue Not Assigned To Commiter.");
             fail("Commit should fail because the commit issue is resolved.");
         } catch (final SVNException svne) {
+        	if (logger.isEnabledFor(Level.INFO))
+    			logger.info("SVNException: ", svne);
             assertTrue(0 < svne.getMessage().indexOf("Issue [TST-3] is not assigned to the correct person."));
         }
     }
