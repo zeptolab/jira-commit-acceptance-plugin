@@ -1,8 +1,17 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNCommitInfo;
@@ -15,8 +24,6 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
-
-import java.io.*;
 
 public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepositoryCommitAcceptanceTest {
 
@@ -149,7 +156,7 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
         return isvnEditor.closeEdit();
     }
 
-    public void testCommmit() {
+    public void testCommit() {
         /* Commits to an existing unresolved issue which its assignee is equal to the commiter name */
         svnRepository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager(ADMIN_USERNAME, ADMIN_PASSWORD));
 
@@ -158,29 +165,29 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
         } catch (final SVNException svne) {
         	if (logger.isEnabledFor(Level.INFO))
     			logger.info("SVNException: ", svne);
-            fail(svne.getMessage());
+            fail(ExceptionUtils.getFullStackTrace(svne));
         }
     }
 
-    public void testCommmitWithNoIssueKey() {
+    public void testCommitWithNoIssueKey() {
         try {
             doCommit("test", "test/test.txt", "Test".getBytes(), "Commit without any isue keys using global rules.");
             fail("Commit should fail because the commit message does not contain any valid JIRA issue key.");
         } catch (final SVNException svne) {
         	if (logger.isEnabledFor(Level.INFO))
     			logger.info("SVNException: ", svne);
-            assertTrue(0 < svne.getMessage().indexOf("Commit message must contain at least one valid issue key"));
+            assertTrue(0 < ExceptionUtils.getFullStackTrace(svne).indexOf("Commit message must contain at least one valid issue key"));
         }
     }
 
-    public void testCommmitWithInvalidIssueKey() {
+    public void testCommitWithInvalidIssueKey() {
         try {
             doCommit("test", "test/test.txt", "Test".getBytes(), "[XXX-1] Commit without any isue keys using global rules.");
             fail("Commit should fail because the commit message does not contain any valid JIRA issue key.");
         } catch (final SVNException svne) {
         	if (logger.isEnabledFor(Level.INFO))
     			logger.info("SVNException: ", svne);
-            assertTrue(0 < svne.getMessage().indexOf("Issue [XXX-1] does not exist or you don't have permission to access it"));
+            assertTrue(0 < ExceptionUtils.getFullStackTrace(svne).indexOf("Issue [XXX-1] does not exist or you don't have permission to access it"));
         }
     }
 
@@ -191,7 +198,7 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
         } catch (final SVNException svne) {
         	if (logger.isEnabledFor(Level.INFO))
     			logger.info("SVNException: ", svne);
-            assertTrue(0 < svne.getMessage().indexOf("Issue [TST-2] must be in UNRESOLVED"));
+            assertTrue(0 < ExceptionUtils.getFullStackTrace(svne).indexOf("Issue [TST-2] must be in UNRESOLVED"));
         }
     }
 
@@ -204,7 +211,7 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
         } catch (final SVNException svne) {
         	if (logger.isEnabledFor(Level.INFO))
     			logger.info("SVNException: ", svne);
-            assertTrue(0 < svne.getMessage().indexOf("Issue [TST-3] is not assigned to the correct person."));
+            assertTrue(0 < ExceptionUtils.getFullStackTrace(svne).indexOf("Issue [TST-3] is not assigned to the correct person."));
         }
     }
 }

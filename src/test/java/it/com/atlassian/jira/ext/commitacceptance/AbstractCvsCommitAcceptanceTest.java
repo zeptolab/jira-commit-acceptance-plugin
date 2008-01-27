@@ -131,13 +131,13 @@ public abstract class AbstractCvsCommitAcceptanceTest extends AbstractCommitAcce
         assertTrue(output, output.indexOf("Commit accepted") >= 0);
     }
 
-    public void testCommmitWithNoIssueKey() throws IOException {
+    public void testCommitWithNoIssueKey() throws IOException {
         final String output = doCommit(ADMIN_USERNAME, "Commit without any isue keys using global rules.");
         assertTrue(output, output.indexOf("Commit rejected") >= 0);
         assertTrue(output, output.indexOf("Commit message must contain at least one valid issue key") >= 0);
     }
 
-    public void testCommmitWithInvalidIssueKey() throws IOException {
+    public void testCommitWithInvalidIssueKey() throws IOException {
         final String output = doCommit(ADMIN_USERNAME, "[XXX-1] Commit without any isue keys using global rules.");
         assertTrue(output, output.indexOf("Commit rejected") >= 0);
         assertTrue(output, output.indexOf("Issue [XXX-1] does not exist or you don't have permission to access it") >= 0);
