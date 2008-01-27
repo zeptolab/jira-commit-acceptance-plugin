@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -26,8 +29,16 @@ import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepositoryCommitAcceptanceTest {
+	
+	private static final String LOCK_FILE_NAME = ".lock";
 
     private static final Logger logger = Logger.getLogger(AbstractSvnCommitAcceptanceTest.class);
+    
+    protected RandomAccessFile lockFile;
+    
+    protected FileChannel svnCommitAcceptanceTestMutexFileChannel;
+    
+    protected FileLock svnCommitAcceptanceTestFileLock;
 
     protected File svnRepositoryDirectory;
 
@@ -36,8 +47,63 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
     public AbstractSvnCommitAcceptanceTest(final String name) {
         super(name);
     }
+    
+    protected boolean obtainLock() {
+    	boolean success = false;
+    	
+    	try {
+			lockFile = new RandomAccessFile(new File(SystemUtils.USER_DIR, LOCK_FILE_NAME), "rw");
+			svnCommitAcceptanceTestMutexFileChannel = lockFile.getChannel();
+			svnCommitAcceptanceTestFileLock = svnCommitAcceptanceTestMutexFileChannel.lock();
+			
+			success = true;
+			
+    	} catch (final IOException ioe) {
+    		if (logger.isEnabledFor(Level.ERROR))
+    			logger.error("Error obtaining lock file", ioe);
+    	}
+    	
+    	return success;
+    }
+    
+    protected void releaseLock() {
+    	if (null != svnCommitAcceptanceTestFileLock) {
+	    	try {
+	    		svnCommitAcceptanceTestFileLock.release();
+	    	} catch (final IOException ioe) {
+	    		if (logger.isEnabledFor(Level.ERROR))
+	    			logger.error("Error releasing lock", ioe);
+	    	} finally {
+	    		svnCommitAcceptanceTestFileLock = null;
+	    	}
+    	}
+    	
+    	if (null != svnCommitAcceptanceTestMutexFileChannel) {
+	    	try {
+	    		svnCommitAcceptanceTestMutexFileChannel.close();
+	    	} catch (final IOException ioe) {
+	    		if (logger.isEnabledFor(Level.ERROR))
+	    			logger.error("Error closing lock file channel", ioe);
+	    	} finally {
+	    		svnCommitAcceptanceTestMutexFileChannel = null;
+	    	}
+    	}
+    	
+    	if (null != lockFile) {
+	    	try {
+	    		lockFile.close();
+	    	} catch (final IOException ioe) {
+	    		if (logger.isEnabledFor(Level.ERROR))
+	    			logger.error("Error closing lock file", ioe);
+	    	} finally {
+	    		lockFile = null;
+	    	}
+    	}
+    }
 
     protected void setUpRepository() {
+        assertTrue(obtainLock());
+    	
         try {
             svnRepositoryDirectory = new File(SystemUtils.getUserDir(), "svn-repository");
             if (svnRepositoryDirectory.exists())
@@ -49,7 +115,6 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             FSRepositoryFactory.setup();
 
             svnRepository = SVNRepositoryFactory.create(SVNRepositoryFactory.createLocalRepository(svnRepositoryDirectory, true, false));
-            
 
         } catch (final IOException ioe) {
             fail("Unable to remove previously created SVN repository: " + svnRepositoryDirectory);
@@ -66,7 +131,6 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
                 logger.error("Unable to close current SVN session.", svne);
             
         } finally {
-            
             try {
                 if (svnRepositoryDirectory.isDirectory()) {
                     FileUtils.deleteDirectory(svnRepositoryDirectory);
@@ -74,6 +138,8 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractRepository
             } catch (final IOException ioe) {
                 fail("Unable to delete SVN repository at: " + svnRepositoryDirectory);
             }
+            
+            releaseLock();
         }
     }
 
