@@ -1,6 +1,6 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
-import org.apache.commons.lang.SystemUtils;
+import java.io.InputStream;
 
 public class TestSvnCommitAcceptanceWithPythonClient extends AbstractSvnCommitAcceptanceTest {
 
@@ -8,15 +8,11 @@ public class TestSvnCommitAcceptanceWithPythonClient extends AbstractSvnCommitAc
         super(TestSvnCommitAcceptanceWithPythonClient.class.getName());
     }
 
-    protected String getPathToCommitHookImpl() {
-        return "client/python/svn/" + getCommitHookBaseName();
+    protected String getScriptExecutor() {
+        return testConfiguration.getProperty("client.scm.python.path");
     }
 
-    protected String getCommitHookBaseName() {
-        return "jira-client.py";
-    }
-
-    protected String getCommitHookScriptPath() {
-        return "client/python/svn/pre-commit." + ( !SystemUtils.IS_OS_WINDOWS ? "sh" : "bat");
+    protected InputStream getScriptContent() {
+        return getClass().getClassLoader().getResourceAsStream("client/python/svn/jira-client.py");
     }
 }

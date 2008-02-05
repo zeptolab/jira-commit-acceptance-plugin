@@ -1,22 +1,22 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
-import com.opensymphony.user.User;
-import com.opensymphony.user.EntityNotFoundException;
-import com.opensymphony.user.ProviderAccessor;
-import com.opensymphony.user.UserManager;
-import com.opensymphony.user.provider.CredentialsProvider;
-import com.opensymphony.user.provider.ProfileProvider;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
+import com.atlassian.jira.issue.Issue;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.HashMap;
+import com.opensymphony.user.EntityNotFoundException;
+import com.opensymphony.user.ProviderAccessor;
+import com.opensymphony.user.User;
+import com.opensymphony.user.provider.CredentialsProvider;
+import com.opensymphony.user.provider.ProfileProvider;
 
 public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 

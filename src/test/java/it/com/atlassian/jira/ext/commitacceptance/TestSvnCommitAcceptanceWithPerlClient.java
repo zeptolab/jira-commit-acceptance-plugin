@@ -1,6 +1,6 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
-import org.apache.commons.lang.SystemUtils;
+import java.io.InputStream;
 
 public class TestSvnCommitAcceptanceWithPerlClient extends AbstractSvnCommitAcceptanceTest {
 
@@ -8,17 +8,12 @@ public class TestSvnCommitAcceptanceWithPerlClient extends AbstractSvnCommitAcce
         super(TestSvnCommitAcceptanceWithPerlClient.class.getName());
     }
 
-    protected String getPathToCommitHookImpl() {
-        return "client/perl/svn/" + getCommitHookBaseName();
+    protected String getScriptExecutor() {
+        return testConfiguration.getProperty("client.scm.perl.path");
     }
 
-    protected String getCommitHookBaseName() {
-        return "jira-client.pl";
+    protected InputStream getScriptContent() {
+        return getClass().getClassLoader().getResourceAsStream("client/perl/svn/jira-client.pl");
     }
-
-    protected String getCommitHookScriptPath() {
-        return "client/perl/svn/pre-commit." + ( !SystemUtils.IS_OS_WINDOWS ? "sh" : "bat");
-    }
-
 
 }

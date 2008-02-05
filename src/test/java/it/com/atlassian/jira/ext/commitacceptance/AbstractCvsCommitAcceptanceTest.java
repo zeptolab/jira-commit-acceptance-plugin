@@ -13,47 +13,8 @@ public abstract class AbstractCvsCommitAcceptanceTest extends AbstractCommitAcce
 
     private static final Logger logger = Logger.getLogger(AbstractCvsCommitAcceptanceTest.class);
 
-    protected File scriptFile;
-
     public AbstractCvsCommitAcceptanceTest(final String name) {
         super(name);
-    }
-
-    public void setUp() {
-        super.setUp();
-        copyScriptFile();
-    }
-
-    public void tearDown() {
-        if (scriptFile.exists())
-            scriptFile.delete();
-        super.tearDown();
-    }
-
-    protected abstract String getScriptExecutor();
-
-    protected abstract InputStream getScriptContent();
-
-    protected void copyScriptFile() {
-        InputStream in = null;
-        OutputStream out = null;
-
-        do {
-            scriptFile = new File(SystemUtils.JAVA_IO_TMPDIR, RandomStringUtils.randomAlphabetic(16));
-        } while (scriptFile.exists());
-
-        try {
-            in = getScriptContent();
-            out = new BufferedOutputStream(new FileOutputStream(scriptFile));
-
-            IOUtils.copy(in, out);
-
-        } catch (final IOException ioe) {
-            fail("Unable to copy script file: " + ioe);
-        } finally {
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(in);
-        }
     }
 
     protected File createCommitMessageFile(final String commitMessage) throws IOException {

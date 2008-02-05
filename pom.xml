@@ -216,28 +216,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.tmatesoft</groupId>
-            <artifactId>svnkit</artifactId>
-            <version>1.1.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- 
-        <dependency>
-            <groupId>ch.ethz.ganymed</groupId>
-            <artifactId>ganymed-ssh2</artifactId>
-            <version>build209</version>
-            <scope>test</scope>
-        </dependency>
-        -->
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.2</version>
             <scope>test</scope>
         </dependency>
-        
-        
-        
     </dependencies>
 
     <repositories>

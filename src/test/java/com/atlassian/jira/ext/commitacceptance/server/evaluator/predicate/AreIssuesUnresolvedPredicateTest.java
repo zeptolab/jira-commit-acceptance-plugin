@@ -1,15 +1,15 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
-import org.jmock.MockObjectTestCase;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jmock.Mock;
-import com.atlassian.jira.project.Project;
+import org.jmock.MockObjectTestCase;
+
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.resolution.Resolution;
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.HashSet;
 
 public class AreIssuesUnresolvedPredicateTest extends MockObjectTestCase {
 
