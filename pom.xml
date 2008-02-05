@@ -177,6 +177,10 @@
             </properties>
         </profile>
 
+        <!--
+        	Use this profile for integeration tests, and despite the http.port property defined here, you still need 
+        	to specify it using the -D option. This is another Maven weirdness (maybe not) which I am trying to figure out. 
+        -->
         <profile>
             <id>ci-bdac</id>
             <activation>
@@ -222,19 +226,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>custom</id>
-            <name>custom-m1-repository</name>
-            <url>file://${basedir}/lib/</url>
-            <layout>legacy</layout>
-
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <distributionManagement>
         <repository>
