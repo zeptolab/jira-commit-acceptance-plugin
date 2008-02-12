@@ -89,7 +89,13 @@ public abstract class AbstractCommitAcceptanceTest extends JIRAWebTest {
     protected void setUnixFilePermissionOnResource(final String permission, final File resource) {
         if (SystemUtils.IS_OS_UNIX && null != resource && resource.exists()) {
             try {
-                Runtime.getRuntime().exec(new StringBuffer("chmod ").append(permission).append(' ').append(resource.getAbsolutePath()).toString());
+                final Process p = Runtime.getRuntime().exec(new StringBuffer("chmod ").append(permission).append(' ').append(resource.getAbsolutePath()).toString());
+                
+                p.waitFor();
+                
+            } catch (final InterruptedException ie) {
+                if (logger.isEnabledFor(Level.ERROR))
+            		logger.error("Error waiting for chmod to return.", ie);
             } catch (final IOException ioe) {
                 if (logger.isEnabledFor(Level.ERROR))
                     logger.error("Unable to set execute permission on " + resource, ioe);

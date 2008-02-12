@@ -1,15 +1,17 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 
@@ -120,31 +122,48 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
     	}
     }
     
-    protected void writeSvnLookAsScript() {
-    	Writer out = null;
-    	
+    protected void writeSvnLook() {
     	try {
-    		out = new BufferedWriter(new FileWriter(svnLookPathFile = new File(testConfiguration.getProperty("client.scm.svn.svnlook.path"))));
+    		svnLookPathFile = new File(testConfiguration.getProperty("client.scm.svn.svnlook.path"));
     		
-    		if (!SystemUtils.IS_OS_WINDOWS) {
-	    		out.write(
-	    				new StringBuffer()
-	    						.append("#!/bin/bash\n")
-	    						.append("if [ \"$1\" = \"author\" ]; then echo \"").append(commiterNameToReturnInSvnLook).append("\"; elif [ \"$1\" = \"log\" ]; then echo \"").append(commitMessageToReturnInSvnLook).append("\"; fi;")
-	    						.toString());
+    		if (SystemUtils.IS_OS_WINDOWS) {
+	    		writeSvnLookWindows();
     		} else {
-	    		out.write(
-	    				new StringBuffer()
-	    						.append("@ECHO OFF\r\n")
-	    						.append("if \"%1\" == \"author\" echo ").append(commiterNameToReturnInSvnLook).append("\r\n")
-	    						.append("if \"%1\" == \"log\" echo ").append(commitMessageToReturnInSvnLook).append("\r\n")
-	    						.toString());
+    			writeSvnLookUnix();
     		}
     		
     	} catch (final IOException ioe) {
     		if (logger.isEnabledFor(Level.ERROR))
     			logger.error("Unable to create a mock svnlookpath: " + svnLookPathFile, ioe);
     		fail("Unable to create a mock svnlookpath: " + svnLookPathFile);
+    	}
+    }
+    
+    protected void writeSvnLookUnix() throws IOException {
+    	OutputStream out = null;
+    	InputStream in = null;
+    	
+    	try {
+    		in = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("native/unix/svnlook"));
+    		out = new BufferedOutputStream(new FileOutputStream(svnLookPathFile));
+    		
+    		IOUtils.copy(in, out);
+    		
+    	} finally {
+    		IOUtils.closeQuietly(out);
+    	}
+    }
+    
+    protected void writeSvnLookWindows() throws IOException {
+    	OutputStream out = null;
+    	InputStream in = null;
+    	
+    	try {
+    		in = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("native/windows/svnlook.exe"));
+    		out = new BufferedOutputStream(new FileOutputStream(svnLookPathFile));
+    		
+    		IOUtils.copy(in, out);
+    		
     	} finally {
     		IOUtils.closeQuietly(out);
     	}
@@ -157,7 +176,7 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
 
 
     	commitMessageToReturnInSvnLook = commitMessage; 
-		writeSvnLookAsScript();
+		writeSvnLook();
 		setUnixFilePermissionOnResource("a+x", svnLookPathFile);
     	
     	process = runtime.exec(
@@ -166,12 +185,21 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
 		    			scriptFile.getAbsolutePath(),
 		    			filePath,
 		    			RandomStringUtils.randomAlphanumeric(8)
+    			},
+    			new String[] {
+    					new StringBuffer("COMMITER=").append(commiterNameToReturnInSvnLook).toString(),
+    					new StringBuffer("COMMITMESSAGE=").append(commitMessageToReturnInSvnLook).toString()
     			}
 		);
     	processExitValue = process.waitFor();
     	
     	commitStandardOutputBuffer.append(readStandardOutput(process));
     	commitStandardErrorBuffer.append(readStandardError(process));
+    	
+    	if (logger.isDebugEnabled())
+    		logger.debug("STDOUT: " + commitStandardOutputBuffer);
+    	if (logger.isDebugEnabled())
+    		logger.debug("STDERR: " + commitStandardErrorBuffer);
     	
     	return processExitValue;
     }
