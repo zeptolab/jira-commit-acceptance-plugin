@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -17,7 +18,13 @@ public class AreIssuesUnresolvedPredicateTest extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        areIssuesUnresolvedPredicate = new AreIssuesUnresolvedPredicate();
+        areIssuesUnresolvedPredicate = new AreIssuesUnresolvedPredicate() {
+
+			public String getErrorMessageWhenIssueIsResolved(Issue issue) {
+				return StringUtils.EMPTY;
+			}
+        	
+        };
     }
 
     public void testEvaluateWithEmptyIssues() {

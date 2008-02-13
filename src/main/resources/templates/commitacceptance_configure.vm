@@ -5,7 +5,7 @@
 	<meta name="decorator" content="admin" />
 	<script language="JavaScript" type="text/javascript">
 		function onCommitAcceptanceProjectSelectorChange() {
-			if(rulesFormChanged && !confirm("There are unsaved changes in the rule configuration.\nDo you really want to change to the other project?")) {
+			if(rulesFormChanged && !confirm("$action.getText('commitacceptance.prompt.unsavedConfig')\n$action.getText('commitacceptance.prompt.changeProject')")) {
 				document.commitAcceptanceSettingsForm.reset();
 			} else {
 				document.commitAcceptanceSettingsForm.submit();
@@ -38,26 +38,21 @@
 <table class="jiraform maxWidth">
 	<tr>
 	    <td class="jiraformheader" colspan="2">
-	        <h3 class="formtitle">Version Control Commit Rules</h3>
+	        <h3 class="formtitle">$action.getText("commitacceptance.title.versionCommitRules")</h3>
 	    </td>
 	</tr>
 	<tr>
 	    <td class="jiraformheader" colspan="2">
-		    The VCS Commit Acceptance plugin allows you to disallow commits to your version control repository
-		    based on certain rules defined here. When you attempt a new commit to your repository, pre-commit
-		    scripts (see <a href="http://confluence.atlassian.com/display/JIRAEXT/Commit+Acceptance+Plugin">docs</a>) will
-		    contact JIRA and process the commit info and log message based on the criteria below.<br/>
-		    <br/>
-		    You can configure global (site-wide) rules and refer to those from the actual projects, or configure
-			project specific rules separately for any of your JIRA projects.
+		    <p>$action.getText("commitacceptance.description.0")</p>
+		    <p>$action.getText("commitacceptance.description.1")</p>
 	    </td>
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" colspan="2">
-			<b>Project:</b>
+			<strong>$action.getText("commitacceptance.field.projectKey.label")</strong>
 	    	<select name="projectKey" onChange="return onCommitAcceptanceProjectSelectorChange()">
-	    		<option value="">Global</option>
-	    		<optgroup label="Projects">
+	    		<option value="">$action.getText("commitacceptance.field.projectKey.values.global")</option>
+	    		<optgroup label="$action.getText('commitacceptance.field.projectKey.values.group.project')">
 	    			#foreach($project in $projects)
 		    			<option value="${project.key}" #if($project.key == $projectKey) selected="true" #end >[$project.key] ${project.name}</option>
 		    		#end
@@ -70,13 +65,13 @@
 	    	<input type="checkbox" name="useGlobalRules" value="true" #if($useGlobalRules) checked="checked" #end #if($projectKey == "") disabled #end onChange="onUseGlobalRulesChange()" />
 		</td>
 		<td class="instructions fieldValueArea">
-			Use the global rules for this project.<br/>
-	   		<span class="small">NOTE: Uncheck it to configure specific rules for this project.</span>
+			$action.getText("commitacceptance.field.useGlobalRules.label")<br/>
+	   		<span class="small">$action.getText("commitacceptance.field.useGlobalRules.description")</span>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" colspan="2">
-			<b>Rules:</b>
+			<strong>$action.getText("commitacceptance.rules")</strong>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -84,7 +79,7 @@
 	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			The log message must contain a valid JIRA issue key(s).
+			$action.getText("commitacceptance.field.mustHaveIssue.label")
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -92,7 +87,7 @@
 		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			All issues referenced in the log message must be <b>UNRESOLVED</b>.
+			$action.getText("commitacceptance.field.mustBeUnresolved.label")
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -100,30 +95,30 @@
 			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			All issues referenced in the log message must be assigned to the committer.<br/>
-	   		<span class="small">NOTE: Your VCS usernames must match your JIRA usernames.</span>
+			$action.getText("commitacceptance.field.mustBeAssignedToCommiter.label")<br/>
+	   		<span class="small">$action.getText("commitacceptance.field.mustBeAssignedToCommiter.description")</span>
 		</td>
 	</tr>
 	<tr>
 		<td class="fieldLabelArea" width="1%" nowrap>
-			Issues:
+			$action.getText("commitacceptance.issues")
 		</td>
 		<td class="fieldValueArea">
-			<input type="radio" name="acceptIssuesFor" value="0" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">Accept only for this project</label>
+			<input type="radio" name="acceptIssuesFor" value="0" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">$action.getText("commitacceptance.field.acceptIssuesFor.values.onlyForThisProject")</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="1" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">At least one must be for this project</label>
+			<input type="radio" name="acceptIssuesFor" value="1" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">$action.getText("commitacceptance.field.acceptIssuesFor.values.atLeastOneMustBeForThisProject")</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="2" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">Accept for any project</label>
+			<input type="radio" name="acceptIssuesFor" value="2" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">$action.getText("commitacceptance.field.acceptIssuesFor.values.acceptForAnyProject")</label>
 			#if($projectKey == "")
 				<br/>
-				<span class="small">NOTE: This setting is ignored when the client script is checking directly against the global settings using the <b>*</b> wildcard (i.e. when no concrete project is specified). This is however in use for concrete projects inheriting the global settings.</span>
+				<span class="small">$action.getText("commitacceptance.field.acceptIssuesFor.description")</span>
 			#end
 		</td>
 	</tr>
 
 	<tr bgcolor="#ffffff">
 		<td class="jiraformfooter fullyCentered" style="padding-top: 10px;" colspan="2">
-			<input type="submit" name="submitted" value="Update Rules"/>
+			<input type="submit" name="submitted" value="$action.getText('commitacceptance.button.updateRules')"/>
 		</td>
 	</tr>
 </table>

@@ -13,7 +13,7 @@ import com.atlassian.jira.project.Project;
  * @author <a href="mailto:prkolbus@unusualcode.com">Peter Kolbus</a>
  * @version $Id$
  */
-public class HasIssueInProjectPredicate implements JiraPredicate {
+public class HasIssueInProjectPredicate extends AbstractPredicate {
     
     private Project project;
 
@@ -23,7 +23,7 @@ public class HasIssueInProjectPredicate implements JiraPredicate {
 
 	public void evaluate(Set issues) {
 		if (project == null) {
-			throw new PredicateViolatedException("HasIssueInProjectPredicate cannot be used in the global settings. Contact your JIRA administrator.");
+			throw new PredicateViolatedException(getErrorMessageWhenUsedInGlobalContext());
 		}
 
 		for (Iterator it = issues.iterator(); it.hasNext();) {
@@ -36,6 +36,14 @@ public class HasIssueInProjectPredicate implements JiraPredicate {
 		}
 
 		// none matched, so reject
-		throw new PredicateViolatedException("Commit message must include at least one issue from project [" + project.getKey() + "].");
+		throw new PredicateViolatedException(getErrorMessageWhenThereIsNoIssueInProject());
+	}
+	
+	protected String getErrorMessageWhenUsedInGlobalContext() {
+		return getI18nBean().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenUsedInGlobalContext");
+	}
+	
+	protected String getErrorMessageWhenThereIsNoIssueInProject() {
+		return getI18nBean().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenIssueIsNotInProject", project.getKey());
 	}
 }

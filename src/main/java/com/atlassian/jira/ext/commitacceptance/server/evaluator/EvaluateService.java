@@ -51,7 +51,10 @@ public class EvaluateService {
 	 */
 	private final String GLOBAL_PROJECT_KEY = "*";
 
-	public EvaluateService(ProjectManager projectManager, IssueManager issueManager, AcceptanceSettingsManager settingsManager) {
+	public EvaluateService(
+			final ProjectManager projectManager, 
+			final IssueManager issueManager, 
+			final AcceptanceSettingsManager settingsManager) {
 		this.projectManager = projectManager;
 		this.issueManager = issueManager;
 		this.settingsManager = settingsManager;

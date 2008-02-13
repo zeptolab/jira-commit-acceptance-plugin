@@ -13,7 +13,7 @@ import com.atlassian.jira.project.Project;
  * @author <a href="mailto:prkolbus@unusualcode.com">Peter Kolbus</a>
  * @version $Id$
  */
-public class AreIssuesInProjectPredicate implements JiraPredicate {
+public class AreIssuesInProjectPredicate extends AbstractPredicate {
 	private Project project;
 
 	public AreIssuesInProjectPredicate(Project project) {
@@ -22,7 +22,7 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 
 	public void evaluate(Set issues) {
 		if (project == null) {
-			throw new PredicateViolatedException("AreIssuesInProjectPredicate cannot be used in the global settings. Contact your JIRA administrator.");
+			throw new PredicateViolatedException(getErrorMessageWhenUsedInGlobalContext());
 		}
 
 		for (Iterator it = issues.iterator(); it.hasNext();) {
@@ -30,8 +30,18 @@ public class AreIssuesInProjectPredicate implements JiraPredicate {
 
 			// If it's not equal, reject
 			if (!project.equals(issue.getProjectObject())) {
-				throw new PredicateViolatedException("Commit message must only reference issues from project [" + project.getKey() + "], but issue [" + issue.getKey() +"] is in another project.");
+				throw new PredicateViolatedException(getErrorMessageWhenIssueIsNotInProject(issue));
 			}
 		}
+	}
+	
+	protected String getErrorMessageWhenUsedInGlobalContext() {
+		return getI18nBean().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenUsedInGlobalContext");
+	}
+	
+	protected String getErrorMessageWhenIssueIsNotInProject(final Issue issue) {
+		return getI18nBean().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenIssueIsNotInProject",
+				project.getKey(),
+				issue.getKey());
 	}
 }

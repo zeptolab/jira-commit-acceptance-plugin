@@ -15,7 +15,7 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolate
  * @author <a href="mailto:istvan.vamosi@midori.hu">Istvan Vamosi</a>
  * @version $Id$
  */
-public class AreIssuesUnresolvedPredicate implements JiraPredicate {
+public class AreIssuesUnresolvedPredicate extends AbstractPredicate {
 	public void evaluate(Set issues) {
 		for (Iterator it = issues.iterator(); it.hasNext();) {
 			Issue issue = (Issue)it.next();
@@ -23,12 +23,16 @@ public class AreIssuesUnresolvedPredicate implements JiraPredicate {
 
 			// reject if any issue is resolved
 			if (resolution != null)	{
-				throw new PredicateViolatedException("Issue [" + issue.getKey() + "] must be in UNRESOLVED.");
+				throw new PredicateViolatedException(getErrorMessageWhenIssueIsResolved(issue));
 			}
 		}
 	}
 
 	public void evaluate(Set issues, Project project) {
 		evaluate(issues);
+	}
+	
+	public String getErrorMessageWhenIssueIsResolved(final Issue issue) {
+		return getI18nBean().getText("commitAcceptance.predicate.issueUnresolved.errorMessageWhenIssueIsResolved", issue.getKey());
 	}
 }

@@ -10,10 +10,15 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolate
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class HasIssuePredicate implements JiraPredicate {
+public class HasIssuePredicate extends AbstractPredicate {
+	
 	public void evaluate(Set issues) {
 		if (issues.isEmpty()) {
-			throw new PredicateViolatedException("Commit message must contain at least one valid issue key.");
+			throw new PredicateViolatedException(getErrorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey());
 		}
+	}
+	
+	protected String getErrorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey() {
+		return getI18nBean().getText("commitAcceptance.predicate.hasIssue.errorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey");
 	}
 }

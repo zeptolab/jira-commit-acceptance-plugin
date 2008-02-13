@@ -1,14 +1,16 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
-import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.project.Project;
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
+import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.project.Project;
 
 public class HasIssueInProjectPredicateTest extends MockObjectTestCase {
 
@@ -20,11 +22,21 @@ public class HasIssueInProjectPredicateTest extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
+        
         mockProject = new Mock(Project.class);
-        mockProject.expects(once()).method("getKey").withNoArguments().will(returnValue("TST-1"));
-
         project = (Project) mockProject.proxy();
-        hasIssueInProjectPredicate = new HasIssueInProjectPredicate(project);
+        
+        hasIssueInProjectPredicate = new HasIssueInProjectPredicate(project) {
+
+			protected String getErrorMessageWhenThereIsNoIssueInProject() {
+				return StringUtils.EMPTY;
+			}
+
+			protected String getErrorMessageWhenUsedInGlobalContext() {
+				return StringUtils.EMPTY;
+			}
+        	
+        };
     }
 
     public void testEvaluateWithEmptyIssues() {

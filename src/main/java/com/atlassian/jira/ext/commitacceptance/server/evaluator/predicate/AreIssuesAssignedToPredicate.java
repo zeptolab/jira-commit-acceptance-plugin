@@ -6,6 +6,7 @@ import java.util.Set;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.web.bean.I18nBean;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
 
@@ -16,7 +17,8 @@ import com.opensymphony.user.User;
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
-public class AreIssuesAssignedToPredicate implements JiraPredicate {
+public class AreIssuesAssignedToPredicate extends AbstractPredicate {
+	
 	private String assigneeName;
 
 	public AreIssuesAssignedToPredicate(String assigneeName) {
@@ -29,20 +31,34 @@ public class AreIssuesAssignedToPredicate implements JiraPredicate {
 
 			// if at least one issue is not assigned to the correct person.
 			if ((issue.getAssigneeId() == null) || (!issue.getAssigneeId().equals(assigneeName))) {
-				String cause = null;
+				User assignee = null;
+				
 				try {
-					User assignee = getUser();
-					cause = "Issue [" + issue.getKey() + "] must be assigned to " + assigneeName + " (" + assignee.getFullName() + ").";
+					assignee = getUser();
+//					cause = "Issue [" + issue.getKey() + "] must be assigned to " + assigneeName + " (" + assignee.getFullName() + ").";
 				} catch (EntityNotFoundException e) {
-					cause = "Issue [" + issue.getKey() + "] is not assigned to the correct person.";
+//					cause = "Issue [" + issue.getKey() + "] is not assigned to the correct person.";
 				}
 
-				throw new PredicateViolatedException(cause);
+				throw new PredicateViolatedException(getErrorMessage(issue, assignee));
 			}
 		}
 	}
 
     protected User getUser() throws EntityNotFoundException {
         return UserUtils.getUser(assigneeName);
+    }
+    
+    protected String getErrorMessage(final Issue issue, final User assignee) {
+    	final I18nBean i18nBean = getI18nBean();
+    	
+    	if (null != assignee) {
+    		return i18nBean.getText(
+    				"commitAcceptance.predicate.issuesAssigned.errorMessageWhenUserWithAssigneeNameExists",
+    				issue.getKey(), assigneeName, assignee.getFullName());
+    	} else {
+    		return i18nBean.getText(
+    				"commitAcceptance.predicate.issuesAssigned.errorMessageWhenUserWithAssigneeNameDoesNotExist", issue.getKey());
+    	}
     }
 }

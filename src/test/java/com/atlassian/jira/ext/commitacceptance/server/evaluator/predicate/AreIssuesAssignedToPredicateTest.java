@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -16,7 +17,6 @@ import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.ProviderAccessor;
 import com.opensymphony.user.User;
 import com.opensymphony.user.provider.CredentialsProvider;
-import com.opensymphony.user.provider.ProfileProvider;
 
 public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
@@ -30,13 +30,9 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
     private Mock mockCredentialsProvider;
 
-    private Mock mockProfileProvider;
-
     private ProviderAccessor providerAccessor;
 
     private CredentialsProvider credentialsProvider;
-
-    private ProfileProvider profileProvider;
 
     private PropertySet propertySet;
 
@@ -49,6 +45,10 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
             protected User getUser() throws EntityNotFoundException {
                 return targetAssignee;
             }
+
+			protected String getErrorMessage(final Issue issue, final User assignee) {
+				return StringUtils.EMPTY;
+			}
         };
 
         mockCredentialsProvider = new Mock(CredentialsProvider.class);
@@ -58,11 +58,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
         propertySet = new MemoryPropertySet();
         propertySet.init(new HashMap(), new HashMap());
 
-        mockProfileProvider = new Mock(ProfileProvider.class);
-        mockProfileProvider.expects(once()).method("handles").withAnyArguments().will(returnValue(true));
-        mockProfileProvider.expects(once()).method("getPropertySet").withAnyArguments().will(returnValue(propertySet));
-        profileProvider = (ProfileProvider) mockProfileProvider.proxy();
-
         mockProviderAccessor = new Mock(ProviderAccessor.class);
         mockProviderAccessor.expects(once()).method("getCredentialsProvider").withAnyArguments().will(returnValue(credentialsProvider));
         providerAccessor = (ProviderAccessor) mockProviderAccessor.proxy();
@@ -70,7 +65,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
     }
 
     public void testEvaluateWithEmptyIssues() {
-        mockProfileProvider.reset(); /* Reset expectations */
         areIssuesAssignedToPredicate.evaluate(Collections.EMPTY_SET);
         /* No exceptions should be raised */
     }
@@ -81,8 +75,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
         Set issues = new HashSet();
 
         issues.add(issue);
-
-        mockProviderAccessor.expects(once()).method("getProfileProvider").withAnyArguments().will(returnValue(profileProvider));
 
         mockIssue.expects(once()).method("getAssigneeId").withNoArguments().will(returnValue(null));
         mockIssue.expects(once()).method("getKey").withNoArguments().will(returnValue("TST-1"));
@@ -104,7 +96,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
         /* Reset expectations */
         mockCredentialsProvider.reset();
-        mockProfileProvider.reset();
         mockProviderAccessor.reset();
 
         mockIssue.expects(once()).method("getAssigneeId").withNoArguments().will(returnValue(null));
@@ -115,6 +106,10 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
                 protected User getUser() throws EntityNotFoundException {
                     throw new EntityNotFoundException("Fake EntityNotFoundException.");
                 }
+
+    			protected String getErrorMessage(final Issue issue, final User assignee) {
+    				return StringUtils.EMPTY;
+    			}
             };
             areIssuesAssignedToPredicate.evaluate(issues);
             
