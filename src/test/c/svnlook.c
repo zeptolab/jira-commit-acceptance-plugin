@@ -9,5 +9,7 @@ int main(int argc, char **argv) {
 		printf("%s\n", getenv("COMMITER"));
 	if (0 == strcmp("log", argv[1]) && getenv("COMMITMESSAGE"))
 		printf("%s\n", getenv("COMMITMESSAGE"));
+	if (0 == strcmp("changed", argv[1]) && getenv("CHANGELIST"))
+		printf("%s\n", getenv("CHANGELIST"));
 	return 0;
 }

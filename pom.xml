@@ -60,8 +60,10 @@
                 <includes>
                     <include>atlassian-plugin.xml</include>
                     <include>client/perl/svn/*.*</include>
+                    <include>client/python/svn/advanced/*.*</include>
                     <include>client/python/svn/*.*</include>
                     <include>client/perl/cvs/*</include>
+                    <include>client/python/cvs/advanced/*.*</include>
                     <include>client/python/cvs/*</include>
                 </includes>
             </resource>

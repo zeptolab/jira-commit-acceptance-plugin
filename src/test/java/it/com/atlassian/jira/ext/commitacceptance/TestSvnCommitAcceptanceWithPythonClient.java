@@ -5,7 +5,11 @@ import java.io.InputStream;
 public class TestSvnCommitAcceptanceWithPythonClient extends AbstractSvnCommitAcceptanceTest {
 
     public TestSvnCommitAcceptanceWithPythonClient() {
-        super(TestSvnCommitAcceptanceWithPythonClient.class.getName());
+        this(TestSvnCommitAcceptanceWithPythonClient.class.getName());
+    }
+    
+    public TestSvnCommitAcceptanceWithPythonClient(final String name) {
+        super(name);
     }
 
     protected String getScriptExecutor() {

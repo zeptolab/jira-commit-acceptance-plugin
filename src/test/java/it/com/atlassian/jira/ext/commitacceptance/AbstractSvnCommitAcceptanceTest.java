@@ -22,6 +22,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.atlassian.core.util.FileUtils;
+
 public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcceptanceTest {
 	
 	private static final String LOCK_FILE_NAME = ".jira-commitacceptance-test.lock";
@@ -59,10 +61,16 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
 		commiterNameToReturnInSvnLook = ADMIN_USERNAME;
 		commitStandardOutputBuffer = new StringBuffer();
 		commitStandardErrorBuffer = new StringBuffer();
+		
+		/* Fake SVN repository */
+		svnRepositoryDirectory = new File(SystemUtils.USER_DIR, "svn-repository");
+		assertTrue(svnRepositoryDirectory.mkdirs());
 	}
 
 	public void tearDown() {
 		try {
+			if (svnRepositoryDirectory.isDirectory())
+				FileUtils.deleteDir(svnRepositoryDirectory);
 			releaseLock();
 		} finally {
 			super.tearDown();
@@ -183,12 +191,13 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
     			new String[] {
 		    			getScriptExecutor(),
 		    			scriptFile.getAbsolutePath(),
-		    			filePath,
+		    			svnRepositoryDirectory.getAbsolutePath(),
 		    			RandomStringUtils.randomAlphanumeric(8)
     			},
     			new String[] {
     					new StringBuffer("COMMITER=").append(commiterNameToReturnInSvnLook).toString(),
-    					new StringBuffer("COMMITMESSAGE=").append(commitMessageToReturnInSvnLook).toString()
+    					new StringBuffer("COMMITMESSAGE=").append(commitMessageToReturnInSvnLook).toString(),
+    					new StringBuffer("CHANGELIST=").append("A ").append(filePath).toString()
     			}
 		);
     	processExitValue = process.waitFor();
