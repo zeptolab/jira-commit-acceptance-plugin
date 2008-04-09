@@ -14,13 +14,13 @@ import xmlrpclib
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify "projectKey = '*'" to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-jiraBaseURL = 'http://127.0.0.1:${jira.http.port}/jira'
-jiraLogin = '${client.scm.username}'
-jiraPassword = '${client.scm.password}'
-projectKey = '${client.scm.projectkey}'
+jiraBaseURL = 'http://127.0.0.1:${http.port}/jira'
+jiraLogin = '<JIRA user name>'
+jiraPassword = '<JIRA password>'
+projectKey = '<JIRA project key>'
 
 # configure svnlook path
-svnlookPath = '${client.scm.svn.svnlook.path}'
+svnlookPath = '<Full path to svnlook>'
 
 # get committer
 try:

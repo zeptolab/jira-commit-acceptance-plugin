@@ -82,33 +82,17 @@
                 </excludes>
             </resource>
         </resources>
-
-        <filters>
-            <filter>src/main/filters/${filter.name}</filter>
-        </filters>
+        
         <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>perl-xmlrpc-test.pl</include>
-                    <include>test-configuration.properties</include>
-                </includes>
-            </testResource>
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>false</filtering>
                 <includes>
                     <include>**/*</include>
                 </includes>
-                <excludes>
-                    <exclude>perl-xmlrpc-test.pl</exclude>
-                    <exclude>test-configuration.properties</exclude>
-                </excludes>
             </testResource>
         </testResources>
-
-
+        
         <!--
               The following plugin definitions are required to invoke functions that
               build run-time environment for running integration tests against JIRA
@@ -118,7 +102,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.4.2</version>
             </plugin>
 
             <plugin>
@@ -140,6 +124,62 @@
                                      basedir="${project.build.directory}/classes/client"/>
                             </tasks>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>filter-scripts-for-tests</id>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <tasks>
+                                <!-- Perl + CVS -->
+                                <replace file="${project.build.directory}/classes/client/perl/cvs/jira-client.pl">
+                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
+                                </replace>
+
+                                <!-- Perl + SVN -->
+                                <replace file="${project.build.directory}/classes/client/perl/svn/jira-client.pl">
+                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
+                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
+                                </replace>
+                                
+                                <!-- Python + CVS -->
+                                <replace file="${project.build.directory}/classes/client/python/cvs/jira-client.py">
+                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
+                                </replace>
+
+                                <!-- Python + SVN -->
+                                <replace file="${project.build.directory}/classes/client/python/svn/jira-client.py">
+                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
+                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
+                                </replace>
+
+                                <!-- Python + SVN (Advanced) -->
+                                <replace file="${project.build.directory}/classes/client/python/svn/advanced/commitacceptance.conf">
+                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
+                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
+                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
+                                </replace>
+
+                                <echo file="${project.build.directory}/test-classes/test-configuration.properties">
+<![CDATA[
+client.scm.svn.svnlook.path=${project.build.directory}/test-classes/svnlook
+client.scm.python.path=${test.python.path}
+client.scm.perl.path=${test.perl.path}
+]]>
+                                </echo>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -178,22 +218,7 @@
                 <unpack.jira.config.overwrite>false</unpack.jira.config.overwrite>
             </properties>
         </profile>
-
-        <!--
-        	Use this profile for integeration tests, and despite the http.port property defined here, you still need 
-        	to specify it using the -D option. This is another Maven weirdness (maybe not) which I am trying to figure out. 
-        -->
-        <profile>
-            <id>ci-bdac</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <jira.version>3.12</jira.version>
-                <filter.name>bdac.properties</filter.name>
-                <http.port>1990</http.port>
-            </properties>
-        </profile>
+        
     </profiles>
 
     <dependencies>
@@ -244,8 +269,12 @@
 
 
     <properties>
-        <jira.version>3.12</jira.version>
-        <filter.name>default.properties</filter.name>
+        <jira.version>3.12.2</jira.version>
+        <jira.test-lib.version>3.12.2</jira.test-lib.version>
+        <jvmargs>-Xms256m -Xmx512m</jvmargs>
+
+        <test.perl.path>/usr/bin/perl</test.perl.path>
+        <test.python.path>/usr/bin/python</test.python.path>
     </properties>
 
 </project>

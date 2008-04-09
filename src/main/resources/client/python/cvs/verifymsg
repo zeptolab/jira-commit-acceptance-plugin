@@ -1,1 +1,1 @@
-DEFAULT		${client.scm.python.path} ${client.scm.cvs.repository.path}/CVSROOT/jira-client.py ${USER}
+DEFAULT		python.exe jira-client.py ${USER}

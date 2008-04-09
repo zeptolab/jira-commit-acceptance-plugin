@@ -14,13 +14,13 @@ use XMLRPC::Lite;
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify 'my $projectKey = "*";' to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-my $jiraBaseURL = "http://localhost:${jira.http.port}/jira";
-my $jiraLogin = "${client.scm.username}";
-my $jiraPassword = "${client.scm.password}";
-my $projectKey = "${client.scm.projectkey}";
+my $jiraBaseURL = "http://localhost:${http.port}/jira";
+my $jiraLogin = "<JIRA user name>";
+my $jiraPassword = "<JIRA password>";
+my $projectKey = "<JIRA project key>";
 
 # configure svnlook path
-my $svnlookPath = "${client.scm.svn.svnlook.path}";
+my $svnlookPath = "<Full path to svnlook>";
 
 # get committer
 open IN, '-|', "$svnlookPath author $ARGV[0] --transaction $ARGV[1]" or die "Unable to get committer with svnlook.\n";

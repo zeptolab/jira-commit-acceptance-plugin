@@ -1,1 +1,1 @@
-DEFAULT		${client.scm.perl.path} ${client.scm.cvs.repository.path}/CVSROOT/jira-client.pl ${USER}
+DEFAULT		perl.exe jira-client.pl ${USER}

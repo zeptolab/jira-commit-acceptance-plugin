@@ -1,1 +1,1 @@
-${client.scm.python.path} jira-client.py %1 %2
+@python.exe jira-client.py %1 %2
