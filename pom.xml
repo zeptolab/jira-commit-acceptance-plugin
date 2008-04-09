@@ -271,6 +271,9 @@ client.scm.perl.path=${test.perl.path}
     <properties>
         <jira.version>3.12.2</jira.version>
         <jira.test-lib.version>3.12.2</jira.test-lib.version>
+        <atlassian.plugin.application.version.min>3.7</atlassian.plugin.application.version.min>
+        <atlassian.plugin.application.version.max>3.12</atlassian.plugin.application.version.max>
+
         <jvmargs>-Xms256m -Xmx512m</jvmargs>
 
         <test.perl.path>/usr/bin/perl</test.perl.path>
