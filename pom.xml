@@ -44,11 +44,8 @@
 
 
     <scm>
-        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/
-        </connection>
-        <developerConnection>
-            scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/
-        </developerConnection>
+        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</developerConnection>
         <url>https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</url>
     </scm>
 
@@ -82,7 +79,7 @@
                 </excludes>
             </resource>
         </resources>
-        
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
@@ -92,11 +89,11 @@
                 </includes>
             </testResource>
         </testResources>
-        
+
         <!--
-              The following plugin definitions are required to invoke functions that
-              build run-time environment for running integration tests against JIRA
-          -->
+            The following plugin definitions are required to invoke functions that
+            build run-time environment for running integration tests against JIRA
+        -->
         <plugins>
 
             <plugin>
@@ -144,7 +141,7 @@
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
                                     <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
                                 </replace>
-                                
+
                                 <!-- Python + CVS -->
                                 <replace file="${project.build.directory}/classes/client/python/cvs/jira-client.py">
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
@@ -169,7 +166,7 @@
                                 </replace>
 
                                 <echo file="${project.build.directory}/test-classes/test-configuration.properties">
-<![CDATA[
+                                    <![CDATA[
 client.scm.svn.svnlook.path=${project.build.directory}/test-classes/svnlook
 client.scm.python.path=${test.python.path}
 client.scm.perl.path=${test.perl.path}
@@ -218,7 +215,7 @@ client.scm.perl.path=${test.perl.path}
                 <unpack.jira.config.overwrite>false</unpack.jira.config.overwrite>
             </properties>
         </profile>
-        
+
     </profiles>
 
     <dependencies>

@@ -46,7 +46,7 @@ public class ConfigureAction extends JiraWebActionSupport {
     private String submitted;
 
 	public ConfigureAction(ProjectManager projectManager, AcceptanceSettingsManager acceptanceSettingsManager) {
-		this.projectManager = projectManager;
+        this.projectManager = projectManager;
 		this.acceptanceSettingsManager = acceptanceSettingsManager;
 	}
 
@@ -59,11 +59,11 @@ public class ConfigureAction extends JiraWebActionSupport {
         if (submitted == null) {
             // load old settings
         	logger.info("Loading commit acceptance settings for [" + projectKey + "]");
-    		settings = acceptanceSettingsManager.getSettings(StringUtils.trimToNull(projectKey));
+    		settings = acceptanceSettingsManager.getSettings(StringUtils.trimToNull(getProjectKey()));
         } else {
             // save new settings
         	logger.info("Saving commit acceptance settings for [" + projectKey + "]");
-           	acceptanceSettingsManager.setSettings(StringUtils.trimToNull(projectKey), settings);
+           	acceptanceSettingsManager.setSettings(StringUtils.trimToNull(getProjectKey()), settings);
         }
         return SUCCESS;
     }
