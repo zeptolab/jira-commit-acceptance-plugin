@@ -228,10 +228,10 @@ client.scm.perl.path=${test.perl.path}
     </dependencies>
 
     <properties>
-        <atlassian.product.version>3.12.2</atlassian.product.version>
-        <atlassian.product.test-lib.version>3.12.2</atlassian.product.test-lib.version>
+        <atlassian.product.version>3.13-SNAPSHOT</atlassian.product.version>
+        <atlassian.product.test-lib.version>3.13-SNAPSHOT</atlassian.product.test-lib.version>
         <atlassian.plugin.application.version.min>3.7</atlassian.plugin.application.version.min>
-        <atlassian.plugin.application.version.max>3.12</atlassian.plugin.application.version.max>
+        <atlassian.plugin.application.version.max>3.13</atlassian.plugin.application.version.max>
 
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
