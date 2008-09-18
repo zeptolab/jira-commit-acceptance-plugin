@@ -20,7 +20,7 @@ public class DisabledTestSvnCommitAcceptanceWithAdvancedPythonClient extends Tes
 	protected File svnRepositoryConfigDirectory;
 
 	public DisabledTestSvnCommitAcceptanceWithAdvancedPythonClient() {
-		super(TestSvnCommitAcceptanceWithAdvancedPythonClient.class.getName());
+		super(DisabledTestSvnCommitAcceptanceWithAdvancedPythonClient.class.getName());
 	}
 
     public void setUp() {
