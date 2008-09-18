@@ -12,12 +12,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-
-public class TestSvnCommitAcceptanceWithAdvancedPythonClient extends TestSvnCommitAcceptanceWithPythonClient {
+/**
+ * This is temporarily disabled as "advanced" scripts are not released.
+ */
+public class DisabledTestSvnCommitAcceptanceWithAdvancedPythonClient extends TestSvnCommitAcceptanceWithPythonClient {
 	
 	protected File svnRepositoryConfigDirectory;
 
-	public TestSvnCommitAcceptanceWithAdvancedPythonClient() {
+	public DisabledTestSvnCommitAcceptanceWithAdvancedPythonClient() {
 		super(TestSvnCommitAcceptanceWithAdvancedPythonClient.class.getName());
 	}
 
