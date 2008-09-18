@@ -157,14 +157,6 @@
                                     <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
                                 </replace>
 
-                                <!-- Python + SVN (Advanced) -->
-                                <replace file="${project.build.directory}/classes/client/python/svn/advanced/commitacceptance.conf">
-                                    <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
-                                    <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
-                                    <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
-                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
-                                </replace>
-
                                 <echo file="${project.build.directory}/test-classes/test-configuration.properties">
                                     <![CDATA[
 client.scm.svn.svnlook.path=${project.build.directory}/test-classes/svnlook
