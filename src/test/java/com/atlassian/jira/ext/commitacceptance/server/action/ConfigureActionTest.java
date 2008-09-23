@@ -3,9 +3,9 @@ package com.atlassian.jira.ext.commitacceptance.server.action;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
-import com.atlassian.jira.util.EasyList;
-import com.atlassian.jira.util.map.EasyMap;
 import com.atlassian.core.ofbiz.test.mock.MockGenericValue;
+import com.atlassian.core.util.collection.EasyList;
+import com.atlassian.core.util.map.EasyMap;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 

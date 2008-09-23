@@ -7,7 +7,7 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.Project;
-import com.atlassian.jira.util.EasyList;
+import com.atlassian.core.util.collection.EasyList;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.ProviderAccessor;
 import com.opensymphony.user.User;
