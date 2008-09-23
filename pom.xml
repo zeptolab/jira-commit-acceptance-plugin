@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.atlassian.jira.plugins</groupId>
         <artifactId>jira-plugin-base</artifactId>
-        <version>8</version>
+        <version>11</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -44,8 +44,11 @@
 
 
     <scm>
-        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</developerConnection>
+        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/
+        </connection>
+        <developerConnection>
+            scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/
+        </developerConnection>
         <url>http://svn.atlassian.com/fisheye/browse/public/contrib/jira/jira-commitacceptance-plugin/trunk/</url>
     </scm>
 
@@ -95,16 +98,6 @@
             build run-time environment for running integration tests against JIRA
         -->
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.4.2</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -123,8 +116,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>filter-scripts-for-tests</id>
-                        <phase>pre-integration-test</phase>
+                        <id>pre-integration-test-user-ant-tasks</id>
                         <configuration>
                             <tasks>
                                 <!-- Perl + CVS -->
@@ -139,7 +131,8 @@
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
-                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
+                                    <replacefilter token="&lt;Full path to svnlook&gt;"
+                                                   value="${project.build.directory}/test-classes/svnlook"/>
                                 </replace>
 
                                 <!-- Python + CVS -->
@@ -154,7 +147,8 @@
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin"/>
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin"/>
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*"/>
-                                    <replacefilter token="&lt;Full path to svnlook&gt;" value="${project.build.directory}/test-classes/svnlook"/>
+                                    <replacefilter token="&lt;Full path to svnlook&gt;"
+                                                   value="${project.build.directory}/test-classes/svnlook"/>
                                 </replace>
 
                                 <echo file="${project.build.directory}/test-classes/test-configuration.properties">
@@ -173,12 +167,8 @@ client.scm.perl.path=${test.perl.path}
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover-plugin</artifactId>
+                <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <targetPercentage>50%</targetPercentage>
                 </configuration>
@@ -188,27 +178,9 @@ client.scm.perl.path=${test.perl.path}
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jmock</groupId>
-            <artifactId>jmock</artifactId>
-            <version>1.2.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>jmock</groupId>
             <artifactId>jmock-cglib</artifactId>
             <version>1.2.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>2.1_3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -220,8 +192,6 @@ client.scm.perl.path=${test.perl.path}
     </dependencies>
 
     <properties>
-        <atlassian.product.version>3.13-SNAPSHOT</atlassian.product.version>
-        <atlassian.product.test-lib.version>3.13-SNAPSHOT</atlassian.product.test-lib.version>
         <atlassian.plugin.application.version.min>3.7</atlassian.plugin.application.version.min>
         <atlassian.plugin.application.version.max>3.13</atlassian.plugin.application.version.max>
 
