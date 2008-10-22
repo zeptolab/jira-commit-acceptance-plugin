@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.atlassian.jira.plugins</groupId>
         <artifactId>jira-plugin-base</artifactId>
-        <version>11</version>
+        <version>12</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -151,9 +151,6 @@ client.scm.perl.path=${test.perl.path}
                                 </echo>
                             </tasks>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
