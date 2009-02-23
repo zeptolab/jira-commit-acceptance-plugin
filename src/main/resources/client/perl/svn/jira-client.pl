@@ -8,6 +8,7 @@ use strict;
 use warnings;
 
 use XMLRPC::Lite;
+use HTML::Entities ();
 
 # configure JIRA access
 # ($projectKey can contain multiple comma-separated JIRA project keys like 'my $projectKey = "TST,ARP";'.
@@ -68,6 +69,7 @@ if($acceptance eq 'true') {
 	print "Commit accepted.\n";
 	exit 0;
 } else {
+    $comment = HTML::Entities::decode($comment);
 	print "Commit rejected: " . $comment . "\n";
 	exit 1;
 }
