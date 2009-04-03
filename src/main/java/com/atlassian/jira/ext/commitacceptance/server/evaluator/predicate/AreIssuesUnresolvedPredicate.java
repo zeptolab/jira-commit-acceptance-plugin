@@ -33,6 +33,6 @@ public class AreIssuesUnresolvedPredicate extends AbstractPredicate {
 	}
 	
 	public String getErrorMessageWhenIssueIsResolved(final Issue issue) {
-		return getI18nBean().getText("commitAcceptance.predicate.issueUnresolved.errorMessageWhenIssueIsResolved", issue.getKey());
+		return getI18nHelper().getText("commitAcceptance.predicate.issueUnresolved.errorMessageWhenIssueIsResolved", issue.getKey());
 	}
 }

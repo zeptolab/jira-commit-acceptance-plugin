@@ -6,7 +6,7 @@ import java.util.Set;
 import com.atlassian.core.user.UserUtils;
 import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;
 
@@ -50,14 +50,14 @@ public class AreIssuesAssignedToPredicate extends AbstractPredicate {
     }
     
     protected String getErrorMessage(final Issue issue, final User assignee) {
-    	final I18nBean i18nBean = getI18nBean();
+    	final I18nHelper i18nHelper = getI18nHelper();
     	
     	if (null != assignee) {
-    		return i18nBean.getText(
+    		return i18nHelper.getText(
     				"commitAcceptance.predicate.issuesAssigned.errorMessageWhenUserWithAssigneeNameExists",
     				issue.getKey(), assigneeName, assignee.getFullName());
     	} else {
-    		return i18nBean.getText(
+    		return i18nHelper.getText(
     				"commitAcceptance.predicate.issuesAssigned.errorMessageWhenUserWithAssigneeNameDoesNotExist", issue.getKey());
     	}
     }

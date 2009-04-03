@@ -19,6 +19,6 @@ public class HasIssuePredicate extends AbstractPredicate {
 	}
 	
 	protected String getErrorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey() {
-		return getI18nBean().getText("commitAcceptance.predicate.hasIssue.errorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey");
+		return getI18nHelper().getText("commitAcceptance.predicate.hasIssue.errorMessageWhenCommitMessageDoesNotMentionEvenOneValidIssueKey");
 	}
 }

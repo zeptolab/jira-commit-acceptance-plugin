@@ -40,10 +40,10 @@ public class HasIssueInProjectPredicate extends AbstractPredicate {
 	}
 	
 	protected String getErrorMessageWhenUsedInGlobalContext() {
-		return getI18nBean().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenUsedInGlobalContext");
+		return getI18nHelper().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenUsedInGlobalContext");
 	}
 	
 	protected String getErrorMessageWhenThereIsNoIssueInProject() {
-		return getI18nBean().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenIssueIsNotInProject", project.getKey());
+		return getI18nHelper().getText("commitAcceptance.predicate.oneIssueInProject.errorMessageWhenIssueIsNotInProject", project.getKey());
 	}
 }

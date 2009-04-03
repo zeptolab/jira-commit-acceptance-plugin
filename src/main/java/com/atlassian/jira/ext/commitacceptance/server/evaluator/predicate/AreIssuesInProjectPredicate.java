@@ -36,11 +36,11 @@ public class AreIssuesInProjectPredicate extends AbstractPredicate {
 	}
 	
 	protected String getErrorMessageWhenUsedInGlobalContext() {
-		return getI18nBean().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenUsedInGlobalContext");
+		return getI18nHelper().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenUsedInGlobalContext");
 	}
 	
 	protected String getErrorMessageWhenIssueIsNotInProject(final Issue issue) {
-		return getI18nBean().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenIssueIsNotInProject",
+		return getI18nHelper().getText("commitAcceptance.predicate.issuesInProject.errorMessageWhenIssueIsNotInProject",
 				project.getKey(),
 				issue.getKey());
 	}
