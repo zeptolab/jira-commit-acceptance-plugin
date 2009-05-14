@@ -189,6 +189,7 @@ client.scm.perl.path=${test.perl.path}
         <atlassian.product.version>4.0-SNAPSHOT</atlassian.product.version>
         <atlassian.product.test-lib.version>4.0-SNAPSHOT</atlassian.product.test-lib.version>
         <atlassian.product.data.version>4.0-SNAPSHOT</atlassian.product.data.version>
+        <atlassian.test.harness.version>0.11-SNAPSHOT</atlassian.test.harness.version>
         <jdkLevel>1.5</jdkLevel>
     </properties>
 
