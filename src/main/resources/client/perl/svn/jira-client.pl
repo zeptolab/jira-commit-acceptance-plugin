@@ -15,7 +15,7 @@ use HTML::Entities ();
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify 'my $projectKey = "*";' to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-my $jiraBaseURL = "http://localhost:${http.port}/jira";
+my $jiraBaseURL = "<JIRA base URL>";
 my $jiraLogin = "<JIRA user name>";
 my $jiraPassword = "<JIRA password>";
 my $projectKey = "<JIRA project key>";

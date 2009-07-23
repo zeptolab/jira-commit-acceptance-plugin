@@ -14,7 +14,7 @@ import xmlrpclib
 # If you specify multiple keys, the commit will be accepted if at least one project listed accepts it.
 # Or you can specify "projectKey = '*'" to force using the global commit acceptance settings if you don't
 # want to specify any exact project key.)
-jiraBaseURL = 'http://127.0.0.1:${http.port}/jira'
+jiraBaseURL = '<JIRA base URL>'
 jiraLogin = '<JIRA user name>'
 jiraPassword = '<JIRA password>'
 projectKey = '<JIRA project key>'

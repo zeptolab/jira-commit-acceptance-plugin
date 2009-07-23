@@ -114,6 +114,7 @@
                             <tasks>
                                 <!-- Perl + CVS -->
                                 <replace file="${project.build.directory}/classes/client/perl/cvs/jira-client.pl">
+                                    <replacefilter token="&lt;JIRA base URL&gt;" value="${atlassian.product.url}" />
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*" />
@@ -121,6 +122,7 @@
 
                                 <!-- Perl + SVN -->
                                 <replace file="${project.build.directory}/classes/client/perl/svn/jira-client.pl">
+                                    <replacefilter token="&lt;JIRA base URL&gt;" value="${atlassian.product.url}" />
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*" />
@@ -129,6 +131,7 @@
 
                                 <!-- Python + CVS -->
                                 <replace file="${project.build.directory}/classes/client/python/cvs/jira-client.py">
+                                    <replacefilter token="&lt;JIRA base URL&gt;" value="${atlassian.product.url}" />
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*" />
@@ -136,6 +139,7 @@
 
                                 <!-- Python + SVN -->
                                 <replace file="${project.build.directory}/classes/client/python/svn/jira-client.py">
+                                    <replacefilter token="&lt;JIRA base URL&gt;" value="${atlassian.product.url}" />
                                     <replacefilter token="&lt;JIRA user name&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA password&gt;" value="admin" />
                                     <replacefilter token="&lt;JIRA project key&gt;" value="*" />
