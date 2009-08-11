@@ -195,6 +195,8 @@ client.scm.perl.path=${test.perl.path}
         <atlassian.product.data.version>4.0-SNAPSHOT</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-SNAPSHOT</atlassian.test.harness.version>
         <jdkLevel>1.5</jdkLevel>
+
+        <jvmargs>-XX:MaxPermSize=384m -Xms128m -Xmx564m</jvmargs>
     </properties>
 
 </project>
