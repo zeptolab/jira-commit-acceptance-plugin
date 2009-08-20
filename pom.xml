@@ -190,10 +190,10 @@ client.scm.perl.path=${test.perl.path}
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
 
-        <atlassian.product.version>4.0-SNAPSHOT</atlassian.product.version>
-        <atlassian.product.test-lib.version>4.0-SNAPSHOT</atlassian.product.test-lib.version>
-        <atlassian.product.data.version>4.0-SNAPSHOT</atlassian.product.data.version>
-        <atlassian.test.harness.version>0.11-SNAPSHOT</atlassian.test.harness.version>
+        <atlassian.product.version>4.0-Beta3rc1</atlassian.product.version>
+        <atlassian.product.test-lib.version>4.0-Beta3rc1</atlassian.product.test-lib.version>
+        <atlassian.product.data.version>4.0-Beta3rc1</atlassian.product.data.version>
+        <atlassian.test.harness.version>0.11-Beta3</atlassian.test.harness.version>
         <jdkLevel>1.5</jdkLevel>
 
         <jvmargs>-XX:MaxPermSize=384m -Xms128m -Xmx564m</jvmargs>
