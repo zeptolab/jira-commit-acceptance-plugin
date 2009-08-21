@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.jira.ext</groupId>
     <artifactId>commitacceptance</artifactId>
-    <version>1.4-beta1</version>
+    <version>1.4-SNAPSHOT</version>
 
     <name>JIRA Commit Acceptance Plugin</name>
     <packaging>jar</packaging>
@@ -41,9 +41,9 @@
 
 
     <scm>
-        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/tags/commitacceptance-1.4-beta1</connection>
-        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/tags/commitacceptance-1.4-beta1</developerConnection>
-        <url>http://svn.atlassian.com/fisheye/browse/public/contrib/jira/jira-commitacceptance-plugin/tags/commitacceptance-1.4-beta1</url>
+        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/jira/jira-commitacceptance-plugin/trunk/</developerConnection>
+        <url>http://svn.atlassian.com/fisheye/browse/public/contrib/jira/jira-commitacceptance-plugin/trunk/</url>
     </scm>
 
     <build>
