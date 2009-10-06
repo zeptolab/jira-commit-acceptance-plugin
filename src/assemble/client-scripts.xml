@@ -1,0 +1,18 @@
+<assembly>
+    <id>client-scripts</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources/client</directory>
+            <filtered>false</filtered>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>**/cvs/advanced/</exclude>
+                <exclude>**/svn/advanced/</exclude>
+            </excludes>
+
+        </fileSet>
+    </fileSets>
+</assembly>
