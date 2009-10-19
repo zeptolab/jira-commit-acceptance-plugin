@@ -4,7 +4,7 @@
         <description>${project.description}</description>
         <vendor name="${project.organization.name}" url="${project.organization.url}"/>
         <version>${project.version}</version>
-        <application-version min="${atlassian.plugin.application.version.min}" max="${atlassian.plugin.application.version.max}"/>
+        <application-version min="${atlassian.plugin.application.version.min}"/>
         <vendor name="Midori" url="http://www.midori.hu"/>
 	    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
     </plugin-info>
