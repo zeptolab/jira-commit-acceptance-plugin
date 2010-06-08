@@ -197,8 +197,8 @@
     <OSPropertyString id="10003" value="JIRA Commit Acceptance Functional Test"/>
     <OSPropertyString id="10004" value="http://localhost:8080/jira"/>
     <OSPropertyString id="10005" value="public"/>
-    <OSPropertyString id="10007" value="/home/dchui/opt/jira/enterprise/3.10/dat/index"/>
-    <OSPropertyString id="10008" value="/home/dchui/opt/jira/enterprise/3.10/dat/attachment"/>
+    <OSPropertyString id="10007" value="target/jira/jira-config/jira-home/indexes"/>
+    <OSPropertyString id="10008" value="target/jira/jira-config/jira-home/attachments"/>
     <OSPropertyString id="10010" value="pQRVSmpPnpOpmNPPpnstPQNMORrRNQQnNVWvvwSVsvTXostUUnnutvpnsmmmmmUUnnutvpnsmmmmmUU1qiXppfXk"/>
     <OSPropertyString id="10011" value="PprOQPFtLJrDtSbKTIirLNbnPNuSSXOJaESvgDMoBJhjVBmi2KUxBUkwZzCnSKEUc2GRyV2K0wmkJewxRMM&gt;jqXG&gt;7px"/>
     <OSPropertyString id="10012" value="admin@localhost.localdomain"/>
