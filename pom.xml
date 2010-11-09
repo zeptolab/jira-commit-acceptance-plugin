@@ -188,6 +188,12 @@ client.scm.perl.path=${test.perl.path}
             <version>1.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-tests</artifactId>
+            <version>${atlassian.product.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -196,8 +202,8 @@ client.scm.perl.path=${test.perl.path}
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
 
-        <atlassian.product.version>4.0</atlassian.product.version>
-        <atlassian.product.test-lib.version>4.0</atlassian.product.test-lib.version>
+        <atlassian.product.version>4.3-SNAPSHOT</atlassian.product.version>
+        <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
         <atlassian.product.data.version>4.0</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
         <jdkLevel>1.5</jdkLevel>
