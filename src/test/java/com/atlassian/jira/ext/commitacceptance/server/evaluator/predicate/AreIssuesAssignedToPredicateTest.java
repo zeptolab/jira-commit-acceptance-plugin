@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import mock.user.MockOSUser;
 import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -26,14 +27,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
     private String targetAssigneeName;
 
-    private Mock mockProviderAccessor;
-
-    private Mock mockCredentialsProvider;
-
-    private ProviderAccessor providerAccessor;
-
-    private CredentialsProvider credentialsProvider;
-
     private PropertySet propertySet;
 
     protected void setUp() throws Exception {
@@ -51,17 +44,9 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 			}
         };
 
-        mockCredentialsProvider = new Mock(CredentialsProvider.class);
-        mockCredentialsProvider.expects(once()).method("load").withAnyArguments().will(returnValue(true));
-        credentialsProvider = (CredentialsProvider) mockCredentialsProvider.proxy();
-
         propertySet = new MemoryPropertySet();
         propertySet.init(new HashMap(), new HashMap());
-
-        mockProviderAccessor = new Mock(ProviderAccessor.class);
-        mockProviderAccessor.expects(once()).method("getCredentialsProvider").withAnyArguments().will(returnValue(credentialsProvider));
-        providerAccessor = (ProviderAccessor) mockProviderAccessor.proxy();
-        targetAssignee = new User(targetAssigneeName, providerAccessor);
+        targetAssignee = new MockOSUser(targetAssigneeName, "David Chui", "no-reply@atlasian.com");
     }
 
     public void testEvaluateWithEmptyIssues() {
@@ -93,10 +78,6 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
         Set issues = new HashSet();
 
         issues.add(issue);
-
-        /* Reset expectations */
-        mockCredentialsProvider.reset();
-        mockProviderAccessor.reset();
 
         mockIssue.expects(once()).method("getAssigneeId").withNoArguments().will(returnValue(null));
         mockIssue.expects(once()).method("getKey").withNoArguments().will(returnValue("TST-1"));

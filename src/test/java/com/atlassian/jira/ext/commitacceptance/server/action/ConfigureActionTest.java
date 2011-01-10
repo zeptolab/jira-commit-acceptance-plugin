@@ -1,17 +1,17 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
-import com.atlassian.jira.project.ProjectManager;
-import com.atlassian.jira.security.PermissionManager;
-import com.atlassian.jira.security.Permissions;
 import com.atlassian.core.ofbiz.test.mock.MockGenericValue;
 import com.atlassian.core.util.collection.EasyList;
 import com.atlassian.core.util.map.EasyMap;
+import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.Permissions;
+import com.atlassian.jira.web.util.AuthorizationSupport;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
-import java.util.List;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ConfigureActionTest extends MockObjectTestCase
 {
@@ -26,9 +26,7 @@ public class ConfigureActionTest extends MockObjectTestCase
 
     private ConfigureAction configureAction;
 
-    private PermissionManager permissionManager;
-
-    private Mock mockPermissionManager;
+    private Mock mockAuthorizationSupport;
 
     protected void setUp() throws Exception
     {
@@ -40,25 +38,24 @@ public class ConfigureActionTest extends MockObjectTestCase
         mockAcceptanceSettingsManager = new Mock(AcceptanceSettingsManager.class);
         acceptanceSettingsManager = (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy();
 
-        mockPermissionManager = new Mock(PermissionManager.class);
-        permissionManager = (PermissionManager) mockPermissionManager.proxy();
-
-        mockPermissionManager.expects(atLeastOnce()).method("hasPermission").with(eq(Permissions.ADMINISTER), eq(null)).will(returnValue(true));
+        mockAuthorizationSupport = new Mock(AuthorizationSupport.class);
 
         configureAction = new ConfigureAction(projectManager, acceptanceSettingsManager)
         {
-            protected PermissionManager getPermissionManager()
+            @SuppressWarnings("unchecked")
+            protected <T> T getComponentInstanceOfType(Class<T> clazz)
             {
-                return permissionManager;
+                if (clazz.equals(AuthorizationSupport.class))
+                    return (T) mockAuthorizationSupport.proxy();
+
+                return null;
             }
         };
     }
 
     public void testExecuteWhenUserHasNoAdminPermission() throws Exception 
     {
-        mockPermissionManager.reset();
-        mockPermissionManager.expects(once()).method("hasPermission").with(eq(Permissions.ADMINISTER), eq(null)).will(returnValue(false));
-
+        mockAuthorizationSupport.expects(once()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(false));
         assertEquals("error", configureAction.execute());
     }
 
@@ -72,6 +69,7 @@ public class ConfigureActionTest extends MockObjectTestCase
         configureAction.setSubmitted(null);
 
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(eq("TST")).will(returnValue(loadedSettings));
+        mockAuthorizationSupport.expects(once()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(true));
 
         assertEquals("success", configureAction.execute());
         assertEquals(Integer.MAX_VALUE, loadedSettings.getAcceptIssuesFor()); /* Won't cause NPE */
@@ -92,6 +90,7 @@ public class ConfigureActionTest extends MockObjectTestCase
 
         /* This will allow the loadedSettings to be used as the loaded settings, which we will save later */
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(eq("TST")).will(returnValue(loadedSettings));
+        mockAuthorizationSupport.expects(atLeastOnce()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(true));
         assertEquals("success", configureAction.execute());
 
         /* Change acceptance settings */
@@ -127,7 +126,6 @@ public class ConfigureActionTest extends MockObjectTestCase
         Collections.reverse(sortedProjectGvs);
 
         mockProjectManager.expects(once()).method("getProjects").withNoArguments().will(returnValue(projectGvs));
-        mockPermissionManager.reset(); /* Reset expectations since we are not calling execute() */
 
 
         assertEquals(sortedProjectGvs, configureAction.getProjects());
