@@ -38,21 +38,21 @@
 <table class="jiraform maxWidth">
 	<tr>
 	    <td class="jiraformheader" colspan="2">
-	        <h3 class="formtitle">$action.getText("commitacceptance.title.versionCommitRules")</h3>
+	        <h3 class="formtitle">$i18n.getText("commitacceptance.title.versionCommitRules")</h3>
 	    </td>
 	</tr>
 	<tr>
 	    <td class="jiraformheader" colspan="2">
-		    <p>$action.getText("commitacceptance.description.0")</p>
-		    <p>$action.getText("commitacceptance.description.1")</p>
+		    <p>$i18n.getText("commitacceptance.description.0")</p>
+		    <p>$i18n.getText("commitacceptance.description.1")</p>
 	    </td>
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" colspan="2">
-			<strong>$action.getText("commitacceptance.field.projectKey.label")</strong>
+			<strong>$i18n.getText("commitacceptance.field.projectKey.label")</strong>
 	    	<select name="projectKey" onChange="return onCommitAcceptanceProjectSelectorChange()">
-	    		<option value="">$action.getText("commitacceptance.field.projectKey.values.global")</option>
-	    		<optgroup label="$action.getText('commitacceptance.field.projectKey.values.group.project')">
+	    		<option value="">$i18n.getText("commitacceptance.field.projectKey.values.global")</option>
+	    		<optgroup label="$i18n.getText('commitacceptance.field.projectKey.values.group.project')">
 	    			#foreach($project in $projects)
 		    			<option value="${project.key}" #if($project.key == $projectKey) selected="true" #end >[$project.key] ${project.name}</option>
 		    		#end
@@ -65,13 +65,13 @@
 	    	<input type="checkbox" name="useGlobalRules" value="true" #if($useGlobalRules) checked="checked" #end #if($projectKey == "") disabled #end onChange="onUseGlobalRulesChange()" />
 		</td>
 		<td class="instructions fieldValueArea">
-			$action.getText("commitacceptance.field.useGlobalRules.label")<br/>
-	   		<span class="small">$action.getText("commitacceptance.field.useGlobalRules.description")</span>
+			$i18n.getText("commitacceptance.field.useGlobalRules.label")<br/>
+	   		<span class="small">$i18n.getText("commitacceptance.field.useGlobalRules.description")</span>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
 		<td class="jiraformbody" colspan="2">
-			<strong>$action.getText("commitacceptance.rules")</strong>
+			<strong>$i18n.getText("commitacceptance.rules")</strong>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -79,7 +79,7 @@
 	    	<input type="checkbox" name="mustHaveIssue" value="true" #if($mustHaveIssue) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			$action.getText("commitacceptance.field.mustHaveIssue.label")
+			$i18n.getText("commitacceptance.field.mustHaveIssue.label")
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -87,7 +87,7 @@
 		    <input type="checkbox" name="mustBeUnresolved" value="true" #if($mustBeUnresolved) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			$action.getText("commitacceptance.field.mustBeUnresolved.label")
+			$i18n.getText("commitacceptance.field.mustBeUnresolved.label")
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">
@@ -95,30 +95,30 @@
 			<input type="checkbox" name="mustBeAssignedToCommiter" value="true" #if($mustBeAssignedToCommiter) checked="checked" #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" />
 		</td>
 		<td class="fieldValueArea">
-			$action.getText("commitacceptance.field.mustBeAssignedToCommiter.label")<br/>
-	   		<span class="small">$action.getText("commitacceptance.field.mustBeAssignedToCommiter.description")</span>
+			$i18n.getText("commitacceptance.field.mustBeAssignedToCommiter.label")<br/>
+	   		<span class="small">$i18n.getText("commitacceptance.field.mustBeAssignedToCommiter.description")</span>
 		</td>
 	</tr>
 	<tr>
 		<td class="fieldLabelArea" width="1%" nowrap>
-			$action.getText("commitacceptance.issues")
+			$i18n.getText("commitacceptance.issues")
 		</td>
 		<td class="fieldValueArea">
-			<input type="radio" name="acceptIssuesFor" value="0" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">$action.getText("commitacceptance.field.acceptIssuesFor.values.onlyForThisProject")</label>
+			<input type="radio" name="acceptIssuesFor" value="0" id="acceptIssuesFor_onlyForThis" #if($acceptIssuesFor == 0) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_onlyForThis">$i18n.getText("commitacceptance.field.acceptIssuesFor.values.onlyForThisProject")</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="1" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">$action.getText("commitacceptance.field.acceptIssuesFor.values.atLeastOneMustBeForThisProject")</label>
+			<input type="radio" name="acceptIssuesFor" value="1" id="acceptIssuesFor_oneForThis" #if($acceptIssuesFor == 1) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_oneForThis">$i18n.getText("commitacceptance.field.acceptIssuesFor.values.atLeastOneMustBeForThisProject")</label>
 			&nbsp;
-			<input type="radio" name="acceptIssuesFor" value="2" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">$action.getText("commitacceptance.field.acceptIssuesFor.values.acceptForAnyProject")</label>
+			<input type="radio" name="acceptIssuesFor" value="2" id="acceptIssuesFor_any" #if($acceptIssuesFor == 2) checked #end #if(($projectKey != "") && $useGlobalRules) disabled #end onChange="onRulesFormChange()" /><label for="acceptIssuesFor_any">$i18n.getText("commitacceptance.field.acceptIssuesFor.values.acceptForAnyProject")</label>
 			#if($projectKey == "")
 				<br/>
-				<span class="small">$action.getText("commitacceptance.field.acceptIssuesFor.description")</span>
+				<span class="small">$i18n.getText("commitacceptance.field.acceptIssuesFor.description")</span>
 			#end
 		</td>
 	</tr>
 
 	<tr bgcolor="#ffffff">
 		<td class="jiraformfooter fullyCentered" style="padding-top: 10px;" colspan="2">
-			<input type="submit" name="submitted" value="$action.getText('commitacceptance.button.updateRules')"/>
+			<input type="submit" name="submitted" value="$i18n.getText('commitacceptance.button.updateRules')"/>
 		</td>
 	</tr>
 </table>
