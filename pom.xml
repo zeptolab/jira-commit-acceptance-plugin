@@ -208,7 +208,7 @@ client.scm.perl.path=${test.perl.path}
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
         <jdkLevel>1.5</jdkLevel>
 
-        <jvmargs>-XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=384m -Xms128m -Xmx564m</jvmargs>
+        <jvmargs>-XX:MaxPermSize=384m -Xms128m -Xmx564m -Djira.dev.mode=true</jvmargs>
     </properties>
 
 </project>

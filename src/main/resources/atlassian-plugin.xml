@@ -27,7 +27,7 @@
         </actions>
     </webwork1>
 
-	<web-item key="commitAcceptancePlugin" name="Commit Acceptance Plugin Link" section="system.admin/project" weight="90">
+	<web-item key="commitAcceptancePlugin" name="Commit Acceptance Plugin Link" section="admin_plugins_menu/source_control" weight="90">
 		<label key="commitAcceptance.menu.title" />
 		<tooltip key="commitAcceptance.menu.tooltip" />
 		<link linkId="commitAcceptance">/secure/CommitAcceptanceConfigure.jspa</link>
