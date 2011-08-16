@@ -1,1 +1,1 @@
-DEFAULT		python.exe jira-client.py ${USER}
+DEFAULT		python.exe jira-client.pl ${USER}
