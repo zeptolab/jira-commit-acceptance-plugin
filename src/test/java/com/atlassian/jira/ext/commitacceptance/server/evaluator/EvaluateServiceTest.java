@@ -1,6 +1,8 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator;
 
 import com.atlassian.core.util.collection.EasyList;
+import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.bc.security.login.LoginResult;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.issue.Issue;
@@ -8,12 +10,14 @@ import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
-import com.opensymphony.user.EntityNotFoundException;
-import com.opensymphony.user.User;
-import mock.user.MockOSUser;
+import com.atlassian.jira.security.login.LoginManager;
+import com.atlassian.jira.user.MockUser;
+import com.atlassian.jira.user.util.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+import org.jmock.core.constraint.IsEqual;
+import org.jmock.core.constraint.IsInstanceOf;
 import org.jmock.core.constraint.IsNull;
 
 import java.util.Collections;
@@ -30,6 +34,10 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
     private Mock mockIssueManager;
 
+    private Mock mockUserManager;
+
+    private Mock mockLoginManager;
+
     private Mock mockAcceptanceSettingsManager;
 
     private EvaluateService evaluateService;
@@ -41,35 +49,54 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         mockProjectManager = new Mock(ProjectManager.class);
         mockIssueManager = new Mock(IssueManager.class);
+        mockUserManager = new Mock(UserManager.class);
+        mockLoginManager = new Mock(LoginManager.class);
         mockAcceptanceSettingsManager = new Mock(AcceptanceSettingsManager.class);
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) throws EntityNotFoundException {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+            protected User getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
         };
 	}
 
     protected User getUser() {
-        return new MockOSUser("dchui", "David Chui", "no-reply@atlassian.com")
-        {
-            @Override
-            public boolean authenticate(String password)
-            {
-                return userCanAuthenticate;
-            }
-        };
+        return new MockUser("dchui", "David Chui", "no-reply@atlassian.com");
     }
 
     public void testAccessCommitWithFailedUserAuthentication() {
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
+        
         assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "TST, TEST", "TST-1")));
     }
 
     public void testAccessCommitWithNoProjectKeys() {
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
+        
         assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", StringUtils.EMPTY, "TST-1")));
     }
 
     public void testAccessCommitWithInvalidProjectKeys() {
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
+
         assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "TST", "TST-1")));
     }
 
@@ -77,8 +104,8 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         userCanAuthenticate = true;
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(new IsNull()).will(returnValue(new AcceptanceSettings()));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) throws EntityNotFoundException {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+            protected User getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -86,6 +113,14 @@ public class EvaluateServiceTest extends MockObjectTestCase {
                 return Collections.EMPTY_LIST;
             }
         };
+
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
 
         /* Since no issues are referred by the commit message, there are no issues to check against. We should allow the
          * user to commit the code in this sense.
@@ -100,8 +135,8 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(null));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) throws EntityNotFoundException {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+            protected User getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -109,6 +144,14 @@ public class EvaluateServiceTest extends MockObjectTestCase {
                 return EasyList.build("TST-1");
             }
         };
+
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
 
         /* Since the commit message contains issue keys which do not point to existing issues, we don't allow to commit
          * to happen.
@@ -126,8 +169,8 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(issue));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) throws EntityNotFoundException {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+            protected User getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -143,6 +186,14 @@ public class EvaluateServiceTest extends MockObjectTestCase {
                 return null == issues || issues.size() == 0 ? "Fake commit denial" : null;
             }
         };
+
+        Mock mockLoginResult = new Mock(LoginResult.class);
+        mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
+
+        mockLoginManager.expects(once()).method("authenticate").with(
+                new IsInstanceOf(User.class),
+                new IsEqual("password")
+        ).will(returnValue(mockLoginResult.proxy()));
         
         assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "*", "TST-1")));
         mockAcceptanceSettingsManager.verify();

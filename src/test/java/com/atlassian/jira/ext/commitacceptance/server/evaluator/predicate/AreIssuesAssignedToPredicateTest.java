@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import mock.user.MockOSUser;
+import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.user.MockUser;
 import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -14,10 +15,6 @@ import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolate
 import com.atlassian.jira.issue.Issue;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
-import com.opensymphony.user.EntityNotFoundException;
-import com.opensymphony.user.ProviderAccessor;
-import com.opensymphony.user.User;
-import com.opensymphony.user.provider.CredentialsProvider;
 
 public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
@@ -35,7 +32,7 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
         targetAssigneeName = "dchui";
         
         areIssuesAssignedToPredicate = new AreIssuesAssignedToPredicate(targetAssigneeName) {
-            protected User getUser() throws EntityNotFoundException {
+            protected User getUser() {
                 return targetAssignee;
             }
 
@@ -46,7 +43,7 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
         propertySet = new MemoryPropertySet();
         propertySet.init(new HashMap(), new HashMap());
-        targetAssignee = new MockOSUser(targetAssigneeName, "David Chui", "no-reply@atlasian.com");
+        targetAssignee = new MockUser(targetAssigneeName, "David Chui", "no-reply@atlasian.com");
     }
 
     public void testEvaluateWithEmptyIssues() {
@@ -84,8 +81,8 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
         try {
             areIssuesAssignedToPredicate = new AreIssuesAssignedToPredicate(targetAssigneeName) {
-                protected User getUser() throws EntityNotFoundException {
-                    throw new EntityNotFoundException("Fake EntityNotFoundException.");
+                protected User getUser() {
+                    throw new PredicateViolatedException("Fake EntityNotFoundException.");
                 }
 
     			protected String getErrorMessage(final Issue issue, final User assignee) {

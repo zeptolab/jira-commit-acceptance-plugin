@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.jira.ext</groupId>
     <artifactId>commitacceptance</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.6.0-SNAPSHOT</version>
 
     <name>JIRA Commit Acceptance Plugin</name>
     <packaging>jar</packaging>
@@ -197,7 +197,7 @@ client.scm.perl.path=${test.perl.path}
     </dependencies>
 
     <properties>
-        <atlassian.plugin.application.version.min>4.0</atlassian.plugin.application.version.min>
+        <atlassian.plugin.application.version.min>5.0</atlassian.plugin.application.version.min>
 
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>

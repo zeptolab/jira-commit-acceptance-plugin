@@ -34,7 +34,7 @@ public abstract class AbstractCommitAcceptanceTest extends JIRAWebTest {
     public void setUp() {
         super.setUp();
         readTestConfiguration();
-        restoreData("testdata-export.xml");
+        restoreData("testdata-export.zip");
         copyScriptFile();
     }
 

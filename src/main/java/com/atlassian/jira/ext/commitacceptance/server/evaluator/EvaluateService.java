@@ -1,15 +1,6 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import com.atlassian.core.user.UserUtils;
+import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
@@ -24,9 +15,17 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.login.LoginManager;
+import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.util.JiraKeyUtils;
-import com.opensymphony.user.EntityNotFoundException;
-import com.opensymphony.user.User;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Invoked when receiving a commit request.
@@ -43,6 +42,8 @@ public class EvaluateService {
 	 */
 	private ProjectManager projectManager;
 	private IssueManager issueManager;
+    private UserManager userManager;
+    private LoginManager loginManager;
 	private AcceptanceSettingsManager settingsManager;
 	private AcceptanceSettings settings;
 
@@ -53,10 +54,14 @@ public class EvaluateService {
 
 	public EvaluateService(
 			final ProjectManager projectManager, 
-			final IssueManager issueManager, 
+			final IssueManager issueManager,
+            final UserManager userManager,
+            final LoginManager loginManager,
 			final AcceptanceSettingsManager settingsManager) {
 		this.projectManager = projectManager;
 		this.issueManager = issueManager;
+        this.userManager = userManager;
+        this.loginManager = loginManager;
 		this.settingsManager = settingsManager;
 	}
 
@@ -165,18 +170,13 @@ public class EvaluateService {
      * @param password, a password to be used.
 	 */
 	private void authenticateUser(String userName, String password) {
-		try {
-			User user = getUser(userName);
-			if ((user == null) || (!user.authenticate(password))) {
-				throw new EntityNotFoundException();
-			}
-		} catch (EntityNotFoundException e) {
-			throw new InvalidAcceptanceArgumentException("Invalid user name or password.");
-		}
+        User user = getUser(userName);
+        if (null == user || !loginManager.authenticate(user, password).isOK())
+            throw new IllegalArgumentException(String.format("Unable to log user \"%s\" in", userName));
 	}
 
-    protected User getUser(String userName) throws EntityNotFoundException {
-        return UserUtils.getUser(userName);
+    protected User getUser(String userName) {
+        return userManager.getUser(userName);
     }
 
     /**
