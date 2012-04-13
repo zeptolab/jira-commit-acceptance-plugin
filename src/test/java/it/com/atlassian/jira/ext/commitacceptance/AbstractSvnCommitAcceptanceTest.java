@@ -47,14 +47,10 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
     private StringBuffer commitStandardOutputBuffer;
     
     private StringBuffer commitStandardErrorBuffer;
-    
 
-    public AbstractSvnCommitAcceptanceTest(final String name) {
-        super(name);
-    }
-
-	public void setUp() {
-		super.setUp();
+	@Override
+    protected void setUpTest() {
+		super.setUpTest();
 		
 		assertTrue(obtainLock());
 
@@ -67,13 +63,14 @@ public abstract class AbstractSvnCommitAcceptanceTest extends AbstractCommitAcce
 		assertTrue(svnRepositoryDirectory.mkdirs());
 	}
 
-	public void tearDown() {
+	@Override
+    protected void tearDownTest() {
 		try {
 			if (svnRepositoryDirectory.isDirectory())
 				FileUtils.deleteDir(svnRepositoryDirectory);
 			releaseLock();
 		} finally {
-			super.tearDown();
+			super.tearDownTest();
 		}
 	}
 

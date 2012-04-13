@@ -13,10 +13,6 @@ public abstract class AbstractCvsCommitAcceptanceTest extends AbstractCommitAcce
 
     private static final Logger logger = Logger.getLogger(AbstractCvsCommitAcceptanceTest.class);
 
-    public AbstractCvsCommitAcceptanceTest(final String name) {
-        super(name);
-    }
-
     protected File createCommitMessageFile(final String commitMessage) throws IOException {
         File commitMessageFile;
         OutputStream out = null;

@@ -1,6 +1,6 @@
 package it.com.atlassian.jira.ext.commitacceptance;
 
-import com.atlassian.jira.webtests.JIRAWebTest;
+import com.atlassian.jira.functest.framework.FuncTestCase;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public abstract class AbstractCommitAcceptanceTest extends JIRAWebTest {
+public abstract class AbstractCommitAcceptanceTest extends FuncTestCase {
 
     public static final long COMMIT_TIMEOUT = 30000;
 
@@ -27,21 +27,19 @@ public abstract class AbstractCommitAcceptanceTest extends JIRAWebTest {
 
     protected File scriptFile;
 
-    public AbstractCommitAcceptanceTest(final String name) {
-        super(name);
-    }
-
-    public void setUp() {
-        super.setUp();
+    @Override
+    protected void setUpTest() {
+        super.setUpTest();
         readTestConfiguration();
-        restoreData("testdata-export.zip");
+        administration.restoreData("testdata-export.zip");
         copyScriptFile();
     }
 
-    public void tearDown() {
+    @Override
+    protected void tearDownTest() {
         if (scriptFile.exists())
             scriptFile.delete();
-		super.tearDown();
+		super.tearDownTest();
 	}
 
 	protected abstract String getScriptExecutor();
