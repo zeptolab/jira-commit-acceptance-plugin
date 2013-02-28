@@ -1,17 +1,16 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
+import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.Permissions;
+import com.atlassian.jira.web.action.JiraWebActionSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericValue;
 
-import com.atlassian.jira.project.ProjectManager;
-import com.atlassian.jira.security.Permissions;
-import com.atlassian.jira.web.action.JiraWebActionSupport;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Loads and saves the commit acceptance settings and handles the UI related.

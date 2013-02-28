@@ -1,20 +1,19 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.user.MockUser;
+import com.opensymphony.module.propertyset.PropertySet;
+import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
 import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
-import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
-import com.atlassian.jira.issue.Issue;
-import com.opensymphony.module.propertyset.PropertySet;
-import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
