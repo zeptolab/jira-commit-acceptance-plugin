@@ -1,19 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <parent>
-        <groupId>com.atlassian.jira.plugins</groupId>
-        <artifactId>jira-plugin-base</artifactId>
-        <version>15</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.jira.ext</groupId>
     <artifactId>commitacceptance</artifactId>
     <version>1.6.1-SNAPSHOT</version>
-
     <name>JIRA Commit Acceptance Plugin</name>
-    <packaging>jar</packaging>
-
+    <packaging>atlassian-plugin</packaging>
 
     <description>
         This plug-in lets you define certain basic rules that will determine whether a commit to your version control
@@ -45,6 +37,17 @@
         <developerConnection>scm:git:git@bitbucket.org:atlassian/jira-commit-acceptance-plugin.git</developerConnection>
         <url>https://bitbucket.org/atlassian/jira-commit-acceptance-plugin</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>atlassian-contrib</id>
+            <url>https://maven.atlassian.com/contrib</url>
+        </repository>
+        <snapshotRepository>
+            <id>atlassian-contrib-snapshot</id>
+            <url>https://maven.atlassian.com/contrib-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <resources>
@@ -114,9 +117,14 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.1</version>
                 <executions>
                     <execution>
                         <id>pre-integration-test-user-ant-tasks</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <configuration>
                             <tasks>
                                 <!-- Perl + CVS -->
@@ -164,12 +172,44 @@ client.scm.perl.path=${test.perl.path}
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-nodeps</artifactId>
+                        <version>1.6.5</version>
+                        <scope>compile</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-optional</artifactId>
+                        <version>1.5.2</version>
+                        <scope>compile</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <targetPercentage>50%</targetPercentage>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jira-plugin</artifactId>
+                <version>3.3.4</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${atlassian.product.version}</productVersion>
+                    <productDataVersion>${atlassian.product.data.version}</productDataVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdkLevel}</source>
+                    <target>${jdkLevel}</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -212,6 +252,24 @@ client.scm.perl.path=${test.perl.path}
             <version>1.6.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-core</artifactId>
+            <version>${atlassian.product.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${atlassian.product.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-func-tests</artifactId>
+            <version>${atlassian.product.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -220,13 +278,13 @@ client.scm.perl.path=${test.perl.path}
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
 
-        <atlassian.product.version>5.0</atlassian.product.version>
+        <atlassian.product.version>6.0-m07.1</atlassian.product.version>
         <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
-        <atlassian.product.data.version>4.0</atlassian.product.data.version>
+        <atlassian.product.data.version>${atlassian.product.version}</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
-        <jdkLevel>1.5</jdkLevel>
-
+        <jdkLevel>1.6</jdkLevel>
         <jvmargs>-XX:MaxPermSize=384m -Xms128m -Xmx564m -Djira.dev.mode=true</jvmargs>
+        <atlassian.product.url>http://localhost:2990/jira</atlassian.product.url>
     </properties>
 
 </project>
