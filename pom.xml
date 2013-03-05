@@ -206,7 +206,7 @@ client.scm.perl.path=${test.perl.path}
                     <instructions>
                         <Import-Package>
                             com.atlassian.jira*;version="6.0",
-                            com.atlassian.jira.plugins*;version="6.0";
+                            com.atlassian.jira.plugins*;version="6.0"
                         </Import-Package>
                     </instructions>
                 </configuration>
