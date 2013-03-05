@@ -203,6 +203,12 @@ client.scm.perl.path=${test.perl.path}
                 <configuration>
                     <productVersion>${atlassian.product.version}</productVersion>
                     <productDataVersion>${atlassian.product.data.version}</productDataVersion>
+                    <instructions>
+                        <Import-Package>
+                            com.atlassian.jira*;version="6.0",
+                            com.atlassian.jira.plugins*;version="6.0";
+                        </Import-Package>
+                    </instructions>
                 </configuration>
             </plugin>
             <plugin>
