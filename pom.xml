@@ -207,7 +207,8 @@ client.scm.perl.path=${test.perl.path}
                         <Import-Package>
                             com.atlassian.jira*;version="6.0",
                             com.atlassian.jira.plugin*;version="6.0",
-                            com.atlassian.jira.plugin.ext*;version="6.0"
+                            com.atlassian.jira.plugin.ext*;version="6.0",
+                            com.atlassian.jira.plugin.ext.bamboo*;version="6.0"
                         </Import-Package>
                     </instructions>
                 </configuration>
