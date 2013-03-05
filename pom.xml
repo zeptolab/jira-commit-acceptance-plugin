@@ -278,7 +278,7 @@ client.scm.perl.path=${test.perl.path}
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
 
-        <atlassian.product.version>6.0-m07.1</atlassian.product.version>
+        <atlassian.product.version>5.0</atlassian.product.version>
         <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
         <atlassian.product.data.version>${atlassian.product.version}</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
