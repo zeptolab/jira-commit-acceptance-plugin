@@ -203,14 +203,6 @@ client.scm.perl.path=${test.perl.path}
                 <configuration>
                     <productVersion>${atlassian.product.version}</productVersion>
                     <productDataVersion>${atlassian.product.data.version}</productDataVersion>
-                    <instructions>
-                        <Import-Package>
-                            com.atlassian.jira*;version="6.0",
-                            com.atlassian.jira.plugin*;version="6.0",
-                            com.atlassian.jira.plugin.ext*;version="6.0",
-                            com.atlassian.jira.plugin.ext.bamboo*;version="6.0"
-                        </Import-Package>
-                    </instructions>
                 </configuration>
             </plugin>
             <plugin>
@@ -286,7 +278,7 @@ client.scm.perl.path=${test.perl.path}
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
 
-        <atlassian.product.version>5.0</atlassian.product.version>
+        <atlassian.product.version>6.0-m07.1</atlassian.product.version>
         <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
         <atlassian.product.data.version>${atlassian.product.version}</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
