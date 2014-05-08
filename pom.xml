@@ -237,19 +237,19 @@ client.scm.perl.path=${test.perl.path}
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
-            <version>1.6.1</version>
+            <version>${jackson.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>1.6.1</version>
+            <version>${jackson.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.6.1</version>
+            <version>${jackson.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -277,8 +277,9 @@ client.scm.perl.path=${test.perl.path}
 
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
+        <jackson.version>1.9.1</jackson.version>
 
-        <atlassian.product.version>6.0-m07.1</atlassian.product.version>
+        <atlassian.product.version>6.2.4</atlassian.product.version>
         <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
         <atlassian.product.data.version>${atlassian.product.version}</atlassian.product.data.version>
         <atlassian.test.harness.version>0.11-beta3</atlassian.test.harness.version>
