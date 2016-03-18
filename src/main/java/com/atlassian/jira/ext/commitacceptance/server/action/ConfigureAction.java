@@ -1,8 +1,11 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
+import com.atlassian.jira.permission.GlobalPermissionKey;
+import com.atlassian.jira.permission.ProjectPermission;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
+import com.atlassian.jira.web.action.admin.permission.ProjectPermissions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.ofbiz.core.entity.GenericValue;
@@ -51,7 +54,7 @@ public class ConfigureAction extends JiraWebActionSupport {
 
     public String execute() throws Exception {
     	// reject if user has no admin rights
-    	if(!isHasPermission(Permissions.ADMINISTER)) {
+    	if(!hasGlobalPermission(GlobalPermissionKey.ADMINISTER)) {
     		return ERROR;
     	}
 

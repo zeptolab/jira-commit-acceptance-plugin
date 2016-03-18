@@ -1,11 +1,11 @@
 package com.atlassian.jira.ext.commitacceptance.server.action;
 
-import com.atlassian.core.util.collection.EasyList;
-import com.atlassian.core.util.map.EasyMap;
 import com.atlassian.jira.mock.ofbiz.MockGenericValue;
+import com.atlassian.jira.permission.GlobalPermissionKey;
 import com.atlassian.jira.project.ProjectManager;
-import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.util.AuthorizationSupport;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -55,7 +55,7 @@ public class ConfigureActionTest extends MockObjectTestCase
 
     public void testExecuteWhenUserHasNoAdminPermission() throws Exception 
     {
-        mockAuthorizationSupport.expects(once()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(false));
+        mockAuthorizationSupport.expects(once()).method("hasGlobalPermission").with(eq(GlobalPermissionKey.ADMINISTER)).will(returnValue(false));
         assertEquals("error", configureAction.execute());
     }
 
@@ -69,7 +69,7 @@ public class ConfigureActionTest extends MockObjectTestCase
         configureAction.setSubmitted(null);
 
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(eq("TST")).will(returnValue(loadedSettings));
-        mockAuthorizationSupport.expects(once()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(true));
+        mockAuthorizationSupport.expects(once()).method("hasGlobalPermission").with(eq(GlobalPermissionKey.ADMINISTER)).will(returnValue(true));
 
         assertEquals("success", configureAction.execute());
         assertEquals(Integer.MAX_VALUE, loadedSettings.getAcceptIssuesFor()); /* Won't cause NPE */
@@ -90,7 +90,7 @@ public class ConfigureActionTest extends MockObjectTestCase
 
         /* This will allow the loadedSettings to be used as the loaded settings, which we will save later */
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(eq("TST")).will(returnValue(loadedSettings));
-        mockAuthorizationSupport.expects(atLeastOnce()).method("isHasPermission").with(eq(Permissions.ADMINISTER)).will(returnValue(true));
+        mockAuthorizationSupport.expects(atLeastOnce()).method("hasGlobalPermission").with(eq(GlobalPermissionKey.ADMINISTER)).will(returnValue(true));
         assertEquals("success", configureAction.execute());
 
         /* Change acceptance settings */
@@ -117,9 +117,9 @@ public class ConfigureActionTest extends MockObjectTestCase
     }
 
     public void testGetProjectSortedByKey() {
-        final List projectGvs = EasyList.build(
-                new MockGenericValue("Project", EasyMap.build("key", "ZZZ")),
-                new MockGenericValue("Project", EasyMap.build("key", "AAA"))
+        final List projectGvs = Lists.newArrayList(
+                new MockGenericValue("Project", ImmutableMap.of("key", "ZZZ")),
+                new MockGenericValue("Project", ImmutableMap.of("key", "AAA"))
         );
         final List sortedProjectGvs = new ArrayList(projectGvs);
 

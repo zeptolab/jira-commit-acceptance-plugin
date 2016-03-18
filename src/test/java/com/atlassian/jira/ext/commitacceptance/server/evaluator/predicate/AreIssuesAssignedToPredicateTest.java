@@ -1,9 +1,9 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 
-import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.user.MockUser;
+import com.atlassian.jira.user.ApplicationUser;
+import com.atlassian.jira.user.MockApplicationUser;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
-    private User targetAssignee;
+    private ApplicationUser targetAssignee;
 
     private AreIssuesAssignedToPredicate areIssuesAssignedToPredicate;
 
@@ -31,18 +31,18 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
         targetAssigneeName = "dchui";
         
         areIssuesAssignedToPredicate = new AreIssuesAssignedToPredicate(targetAssigneeName) {
-            protected User getUser() {
+            protected ApplicationUser getUser() {
                 return targetAssignee;
             }
 
-			protected String getErrorMessage(final Issue issue, final User assignee) {
+			protected String getErrorMessage(final Issue issue, final ApplicationUser assignee) {
 				return StringUtils.EMPTY;
 			}
         };
 
         propertySet = new MemoryPropertySet();
         propertySet.init(new HashMap(), new HashMap());
-        targetAssignee = new MockUser(targetAssigneeName, "David Chui", "no-reply@atlasian.com");
+        targetAssignee = new MockApplicationUser(targetAssigneeName, "David Chui", "no-reply@atlasian.com");
     }
 
     public void testEvaluateWithEmptyIssues() {
@@ -80,11 +80,11 @@ public class AreIssuesAssignedToPredicateTest extends MockObjectTestCase {
 
         try {
             areIssuesAssignedToPredicate = new AreIssuesAssignedToPredicate(targetAssigneeName) {
-                protected User getUser() {
+                protected ApplicationUser getUser() {
                     throw new PredicateViolatedException("Fake EntityNotFoundException.");
                 }
 
-    			protected String getErrorMessage(final Issue issue, final User assignee) {
+    			protected String getErrorMessage(final Issue issue, final ApplicationUser assignee) {
     				return StringUtils.EMPTY;
     			}
             };

@@ -3,10 +3,10 @@ package com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.ext.commitacceptance.server.exception.PredicateViolatedException;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.util.I18nHelper;
 
@@ -36,11 +36,11 @@ public class AreIssuesAssignedToPredicate extends AbstractPredicate {
 		}
 	}
 
-    protected User getUser() {
+    protected ApplicationUser getUser() {
         return ComponentManager.getComponentInstanceOfType(UserManager.class).getUser(assigneeName);
     }
     
-    protected String getErrorMessage(final Issue issue, final User assignee) {
+    protected String getErrorMessage(final Issue issue, final ApplicationUser assignee) {
     	final I18nHelper i18nHelper = getI18nHelper();
     	
     	if (null != assignee) {

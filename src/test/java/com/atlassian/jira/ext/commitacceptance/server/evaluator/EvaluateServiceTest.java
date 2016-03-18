@@ -1,7 +1,6 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator;
 
 import com.atlassian.core.util.collection.EasyList;
-import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.bc.security.login.LoginResult;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
@@ -11,7 +10,8 @@ import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.login.LoginManager;
-import com.atlassian.jira.user.MockUser;
+import com.atlassian.jira.user.ApplicationUser;
+import com.atlassian.jira.user.MockApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.jmock.Mock;
@@ -54,14 +54,14 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockAcceptanceSettingsManager = new Mock(AcceptanceSettingsManager.class);
 
         evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) {
+            protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
         };
 	}
 
-    protected User getUser() {
-        return new MockUser("dchui", "David Chui", "no-reply@atlassian.com");
+    protected ApplicationUser getUser() {
+        return new MockApplicationUser("dchui", "David Chui", "no-reply@atlassian.com");
     }
 
     public void testAccessCommitWithFailedUserAuthentication() {
@@ -69,7 +69,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
         
@@ -81,7 +81,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
         
@@ -93,7 +93,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
 
@@ -105,7 +105,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(new IsNull()).will(returnValue(new AcceptanceSettings()));
 
         evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) {
+            protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -118,7 +118,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
 
@@ -136,7 +136,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(null));
 
         evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) {
+            protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -149,7 +149,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
 
@@ -170,7 +170,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(issue));
 
         evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
-            protected User getUser(String userName) {
+            protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
 
@@ -191,7 +191,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
         mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(User.class),
+                new IsInstanceOf(ApplicationUser.class),
                 new IsEqual("password")
         ).will(returnValue(mockLoginResult.proxy()));
         

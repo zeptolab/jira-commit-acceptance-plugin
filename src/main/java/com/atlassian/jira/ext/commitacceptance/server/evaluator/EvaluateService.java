@@ -16,11 +16,14 @@ import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.login.LoginManager;
+import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.util.JiraKeyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -76,7 +79,13 @@ public class EvaluateService {
 	 * @param commitMessage a message that a committer entered before commiting.
 	 * @return a string like <code>"status|comment"</code>, where <code>status true</code> if the commit is accepted and <code>false</code> if rejected.
 	 */
-	public String acceptCommit(String userName, String password, String committerName, String projectKeys, String commitMessage) {// FIXME change in scripts
+    @GET
+    @Path("/")
+	public String acceptCommit(@QueryParam("userName") String userName,
+                               @QueryParam("password") String password,
+                               @QueryParam("committerName") String committerName,
+                               @QueryParam("projectKeys") String projectKeys,
+                               @QueryParam("commitMessage") String commitMessage) {// FIXME change in scripts
 		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKeys + "]");
 
 		String result = null;
@@ -170,12 +179,12 @@ public class EvaluateService {
      * @param password, a password to be used.
 	 */
 	private void authenticateUser(String userName, String password) {
-        User user = getUser(userName);
+        ApplicationUser user = getUser(userName);
         if (null == user || !loginManager.authenticate(user, password).isOK())
             throw new IllegalArgumentException(String.format("Unable to log user \"%s\" in", userName));
 	}
 
-    protected User getUser(String userName) {
+    protected ApplicationUser getUser(String userName) {
         return userManager.getUser(userName);
     }
 

@@ -1,41 +1,37 @@
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}">
+<?xml version="1.0" encoding="UTF-8"?>
 
-	<plugin-info>
-        <description>${project.description}</description>
-        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
-        <version>${project.version}</version>
-        <application-version min="${atlassian.plugin.application.version.min}"/>
-        <vendor name="Midori" url="http://www.midori.hu"/>
-	    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
-    </plugin-info>
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+  <plugin-info>
+    <description>${project.description}</description>
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    <version>${project.version}</version>
+    <application-version min="${atlassian.plugin.application.version.min}"/>
+    <vendor name="Midori" url="http://www.midori.hu"/>
+    <param name="configure.url">/secure/CommitAcceptanceConfigure.jspa</param>
+  </plugin-info>
 
-    <component key="commitAcceptanceSettingsManager" name="Commit Acceptance Settings Manager" class="com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManagerImpl">
-        <interface>com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager</interface>
-    </component>
+  <component key="commitAcceptanceSettingsManager" name="Commit Acceptance Settings Manager" class="com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManagerImpl">
+    <interface>com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager</interface>
+  </component>
 
-    <rpc-xmlrpc key="xmlrpc" name="Commit Acceptance XML-RPC Service" class="com.atlassian.jira.ext.commitacceptance.server.evaluator.EvaluateService">
-        <description>Commit Acceptance XML-RPC service.</description>
-        <service-path>commitacc</service-path>
-    </rpc-xmlrpc>
-
-    <webwork1 key="ConfigureAction_key" name="Commit Acceptance Configuration Action" class="java.lang.Object">
-        <actions>
-            <action name="com.atlassian.jira.ext.commitacceptance.server.action.ConfigureAction" alias="CommitAcceptanceConfigure">
-                <view name="success">/templates/commitacceptance_configure.vm</view>
-                <view name="error">/secure/views/permissionviolation.jsp</view>
-            </action>
-        </actions>
-    </webwork1>
-
-	<web-item key="commitAcceptancePlugin" name="Commit Acceptance Plugin Link" section="admin_plugins_menu/source_control" weight="90">
-		<label key="commitAcceptance.menu.title" />
-		<tooltip key="commitAcceptance.menu.tooltip" />
-		<link linkId="commitAcceptance">/secure/CommitAcceptanceConfigure.jspa</link>
-		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
-		    <param name="permission">admin</param>
-		</condition>
-	</web-item>
-
-	<resource type="i18n" name="i18n" location="templates/commitacceptance-plugin"/>
-
+  <rest key="rip" path="/commitaccept" version="1.0" name="Rest For Commits">
+    <description>Commit Acceptance XML-RPC service.</description>
+    <service-path>commitacc</service-path>
+  </rest>
+  <webwork1 key="ConfigureAction_key" name="Commit Acceptance Configuration Action" class="java.lang.Object">
+    <actions>
+      <action name="com.atlassian.jira.ext.commitacceptance.server.action.ConfigureAction" alias="CommitAcceptanceConfigure">
+        <view name="success">/templates/commitacceptance_configure.vm</view>
+        <view name="error">/secure/views/permissionviolation.jsp</view>
+      </action>
+    </actions>
+  </webwork1>
+  <web-item key="commitAcceptancePlugin" name="Commit Acceptance Plugin Link" section="admin_plugins_menu/source_control" weight="90">
+    <label key="commitAcceptance.menu.title"/>
+    <tooltip key="commitAcceptance.menu.tooltip"/>
+    <link linkId="commitAcceptance">/secure/CommitAcceptanceConfigure.jspa</link>
+    <condition class="com.atlassian.jira.plugin.webfragment.conditions.IsAdminCondition">
+    </condition>
+  </web-item>
+  <resource type="i18n" name="i18n" location="templates/commitacceptance-plugin"/>
 </atlassian-plugin>
