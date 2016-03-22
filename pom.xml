@@ -278,24 +278,6 @@ client.scm.perl.path=${test.perl.path}
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
-            <version>${jackson.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>${jackson.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.atlassian.jira</groupId>
             <artifactId>jira-func-tests</artifactId>
             <version>${atlassian.product.version}</version>
@@ -344,7 +326,6 @@ client.scm.perl.path=${test.perl.path}
         <atlassian.plugin.application.version.min>5.0</atlassian.plugin.application.version.min>
         <test.perl.path>/usr/bin/perl</test.perl.path>
         <test.python.path>/usr/bin/python</test.python.path>
-        <jackson.version>1.9.1</jackson.version>
         <atlassian.product.version>7.1.2</atlassian.product.version>
         <atlassian.product.test-lib.version>${atlassian.product.version}</atlassian.product.test-lib.version>
         <atlassian.product.data.version>${atlassian.product.version}</atlassian.product.data.version>

@@ -1,6 +1,5 @@
 package com.atlassian.jira.ext.commitacceptance.server.evaluator;
 
-import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettings;
 import com.atlassian.jira.ext.commitacceptance.server.action.AcceptanceSettingsManager;
 import com.atlassian.jira.ext.commitacceptance.server.evaluator.predicate.AreIssuesAssignedToPredicate;
@@ -15,15 +14,12 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
-import com.atlassian.jira.security.login.LoginManager;
-import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.util.JiraKeyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,6 +33,7 @@ import java.util.Set;
  * @author <a href="mailto:ferenc.kiss@midori.hu">Ferenc Kiss</a>
  * @version $Id$
  */
+@Path("/")
 public class EvaluateService {
 	private static Logger logger = Logger.getLogger(EvaluateService.class);
 
@@ -46,7 +43,6 @@ public class EvaluateService {
 	private ProjectManager projectManager;
 	private IssueManager issueManager;
     private UserManager userManager;
-    private LoginManager loginManager;
 	private AcceptanceSettingsManager settingsManager;
 	private AcceptanceSettings settings;
 
@@ -59,12 +55,10 @@ public class EvaluateService {
 			final ProjectManager projectManager, 
 			final IssueManager issueManager,
             final UserManager userManager,
-            final LoginManager loginManager,
 			final AcceptanceSettingsManager settingsManager) {
 		this.projectManager = projectManager;
 		this.issueManager = issueManager;
         this.userManager = userManager;
-        this.loginManager = loginManager;
 		this.settingsManager = settingsManager;
 	}
 
@@ -72,8 +66,6 @@ public class EvaluateService {
 	 * Evaluates acceptance rules for the given commit information and accepts or rejects the commit.
 	 * This is only method that exposed and can be executed by a user through XML-RPC.
 	 *
-	 * @param userName, a login name of the SCM account.
-	 * @param password, a password of the SCM account.
 	 * @param committerName a name of the person that commiting a code.
 	 * @param projectKeys is the key(s) of JIRA project(s) where the commit belongs. This can be multiple keys separated by comma like "TST,ARP,PLG".  If a key is '*', the global settings are used.
 	 * @param commitMessage a message that a committer entered before commiting.
@@ -81,9 +73,7 @@ public class EvaluateService {
 	 */
     @GET
     @Path("/")
-	public String acceptCommit(@QueryParam("userName") String userName,
-                               @QueryParam("password") String password,
-                               @QueryParam("committerName") String committerName,
+	public String acceptCommit(@QueryParam("committerName") String committerName,
                                @QueryParam("projectKeys") String projectKeys,
                                @QueryParam("commitMessage") String commitMessage) {// FIXME change in scripts
 		logger.info("Evaluating commit from \"" + committerName + "\" in [" + projectKeys + "]");
@@ -93,14 +83,9 @@ public class EvaluateService {
 			Project project;
 
 			// prepare arguments
-			userName = StringUtils.trim(userName);
-			password = StringUtils.trim(password);
 			committerName = StringUtils.trim(committerName);
 			projectKeys = StringUtils.trim(projectKeys);
 			commitMessage = StringUtils.trim(commitMessage);
-
-			// test SCM login and password
-			authenticateUser(userName, password);
 
 			// convert committer name to lowercase (JIRA user names are lowercase)
 			committerName = StringUtils.lowerCase(committerName);
@@ -170,23 +155,6 @@ public class EvaluateService {
 		result.append(comment);
 		return result.toString();
 	}
-
-	/**
-	 * Tries to login to JIRA with given account information and
-     * throws {@link InvalidAcceptanceArgumentException} if something goes wrong.
-     *
-     * @param userName, a login name to be used.
-     * @param password, a password to be used.
-	 */
-	private void authenticateUser(String userName, String password) {
-        ApplicationUser user = getUser(userName);
-        if (null == user || !loginManager.authenticate(user, password).isOK())
-            throw new IllegalArgumentException(String.format("Unable to log user \"%s\" in", userName));
-	}
-
-    protected ApplicationUser getUser(String userName) {
-        return userManager.getUser(userName);
-    }
 
     /**
 	 * Returns an issue for the given issue key only if it exists in JIRA and a committer

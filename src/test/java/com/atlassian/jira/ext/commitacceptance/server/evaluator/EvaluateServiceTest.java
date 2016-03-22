@@ -36,8 +36,6 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
     private Mock mockUserManager;
 
-    private Mock mockLoginManager;
-
     private Mock mockAcceptanceSettingsManager;
 
     private EvaluateService evaluateService;
@@ -50,10 +48,11 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         mockProjectManager = new Mock(ProjectManager.class);
         mockIssueManager = new Mock(IssueManager.class);
         mockUserManager = new Mock(UserManager.class);
-        mockLoginManager = new Mock(LoginManager.class);
         mockAcceptanceSettingsManager = new Mock(AcceptanceSettingsManager.class);
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(),
+                (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(),
+                (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
             protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
@@ -64,47 +63,19 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         return new MockApplicationUser("dchui", "David Chui", "no-reply@atlassian.com");
     }
 
-    public void testAccessCommitWithFailedUserAuthentication() {
-        Mock mockLoginResult = new Mock(LoginResult.class);
-        mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
-
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
-        
-        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "TST, TEST", "TST-1")));
-    }
-
     public void testAccessCommitWithNoProjectKeys() {
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
-        
         assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", StringUtils.EMPTY, "TST-1")));
-    }
-
-    public void testAccessCommitWithInvalidProjectKeys() {
-        Mock mockLoginResult = new Mock(LoginResult.class);
-        mockLoginResult.expects(once()).method("isOK").will(returnValue(false));
-
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
-
-        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "TST", "TST-1")));
     }
 
     public void testAccessCommitWithWithNoIssueKeysAndGlobalSettings() {
         userCanAuthenticate = true;
         mockAcceptanceSettingsManager.expects(once()).method("getSettings").with(new IsNull()).will(returnValue(new AcceptanceSettings()));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(),
+                (UserManager) mockUserManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
             protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
@@ -116,11 +87,6 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
-
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
 
         /* Since no issues are referred by the commit message, there are no issues to check against. We should allow the
          * user to commit the code in this sense.
@@ -135,7 +101,8 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(null));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(),
+                (UserManager) mockUserManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
             protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
@@ -147,11 +114,6 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
-
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
 
         /* Since the commit message contains issue keys which do not point to existing issues, we don't allow to commit
          * to happen.
@@ -169,7 +131,8 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 
         mockIssueManager.expects(once()).method("getIssueObject").with(eq("TST-1")).will(returnValue(issue));
 
-        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(), (UserManager) mockUserManager.proxy(), (LoginManager) mockLoginManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
+        evaluateService = new EvaluateService((ProjectManager) mockProjectManager.proxy(), (IssueManager) mockIssueManager.proxy(),
+                (UserManager) mockUserManager.proxy(), (AcceptanceSettingsManager) mockAcceptanceSettingsManager.proxy()) {
             protected ApplicationUser getUser(String userName) {
                 return EvaluateServiceTest.this.getUser();
             }
@@ -190,11 +153,6 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
-        mockLoginManager.expects(once()).method("authenticate").with(
-                new IsInstanceOf(ApplicationUser.class),
-                new IsEqual("password")
-        ).will(returnValue(mockLoginResult.proxy()));
-        
         assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "*", "TST-1")));
         mockAcceptanceSettingsManager.verify();
     }
