@@ -67,7 +67,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
-        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", StringUtils.EMPTY, "TST-1")));
+        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", StringUtils.EMPTY, "TST-1")));
     }
 
     public void testAccessCommitWithWithNoIssueKeysAndGlobalSettings() {
@@ -91,7 +91,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         /* Since no issues are referred by the commit message, there are no issues to check against. We should allow the
          * user to commit the code in this sense.
          */
-        assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "*", StringUtils.EMPTY)));
+        assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "*", StringUtils.EMPTY)));
         mockAcceptanceSettingsManager.verify();
     }
 
@@ -118,7 +118,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         /* Since the commit message contains issue keys which do not point to existing issues, we don't allow to commit
          * to happen.
          */
-        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "*", "TST-1")));
+        assertFalse(isCommitAccepted(evaluateService.acceptCommit("dchui", "*", "TST-1")));
         mockAcceptanceSettingsManager.verify();
     }
 
@@ -153,7 +153,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
         Mock mockLoginResult = new Mock(LoginResult.class);
         mockLoginResult.expects(once()).method("isOK").will(returnValue(true));
 
-        assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "password", "dchui", "*", "TST-1")));
+        assertTrue(isCommitAccepted(evaluateService.acceptCommit("dchui", "*", "TST-1")));
         mockAcceptanceSettingsManager.verify();
     }
 
@@ -161,7 +161,7 @@ public class EvaluateServiceTest extends MockObjectTestCase {
 	 * Returns <code>true</code> if the result string returned by the evaluator
 	 * means the commit was accepted.
 	 */
-	protected boolean isCommitAccepted(String result) {
-		return result.startsWith(Boolean.TRUE.toString() + "|");
+	protected boolean isCommitAccepted(EvaluateService.Result result) {
+		return result.getStatus().equals("ok");
 	}
 }

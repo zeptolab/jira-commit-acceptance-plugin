@@ -1,1 +1,0 @@
-DEFAULT		perl.exe jira-client.pl ${USER}
